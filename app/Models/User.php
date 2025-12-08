@@ -4,12 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\LogsActivity;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, SoftDeletes, LogsActivity;
@@ -77,6 +79,24 @@ class User extends Authenticatable
     }
 
     /**
+     * Relationships
+     */
+    public function agent()
+    {
+        return $this->hasOne(\App\Models\Agent::class);
+    }
+
+    public function owner()
+    {
+        return $this->hasOne(\App\Models\Owner::class);
+    }
+
+    public function tenant()
+    {
+        return $this->hasOne(\App\Models\Tenant::class);
+    }
+
+    /**
      * The attributes that should be hidden for serialization.
      *
      * @var list<string>
@@ -97,5 +117,30 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Determine if the user can access the Filament panel.
+     */
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the user's avatar URL for Filament.
+     * Returns null to use Filament's default avatar (user initials).
+     */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * Get the user's display name for Filament.
+     */
+    public function getFilamentName(): string
+    {
+        return $this->name;
     }
 }

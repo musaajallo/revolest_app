@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\MaxWidth;
 use App\Filament\Pages\Auth\Login;
+use App\Filament\Pages\Dashboard;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -32,6 +33,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('SÀ Property')
             ->login(Login::class)
+            ->pages([
+                Dashboard::class,
+            ])
             ->colors([
                 'primary' => [
                     50 => '254, 242, 242',

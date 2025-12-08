@@ -109,4 +109,15 @@ class TenantResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if (!$user) {
+            return false;
+        }
+
+        return in_array($user->role, ['super_admin', 'admin']);
+    }
 }

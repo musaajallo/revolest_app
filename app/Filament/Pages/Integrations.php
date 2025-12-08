@@ -259,4 +259,15 @@ class Integrations extends Page implements Forms\Contracts\HasForms
             ->success()
             ->send();
     }
+
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if (!$user) {
+            return false;
+        }
+
+        return in_array($user->role, ['super_admin', 'admin']);
+    }
 }
