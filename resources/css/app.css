@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* SÀ Property Color Palette */
+    --color-sa-red-50: #fef2f2;
+    --color-sa-red-100: #fee2e2;
+    --color-sa-red-200: #fecaca;
+    --color-sa-red-300: #fca5a5;
+    --color-sa-red-400: #f87171;
+    --color-sa-red-500: #d41313;
+    --color-sa-red-600: #b91111;
+    --color-sa-red-700: #990e0e;
+    --color-sa-red-800: #7f0c0c;
+    --color-sa-red-900: #690a0a;
+    --color-sa-red-950: #450707;
+
+    --color-sa-green-50: #ecfdf5;
+    --color-sa-green-100: #d1fae5;
+    --color-sa-green-200: #a7f3d0;
+    --color-sa-green-300: #6ee7b7;
+    --color-sa-green-400: #34d399;
+    --color-sa-green-500: #00a676;
+    --color-sa-green-600: #008c64;
+    --color-sa-green-700: #007352;
+    --color-sa-green-800: #005b41;
+    --color-sa-green-900: #004b36;
+    --color-sa-green-950: #003224;
+
+    --color-sa-fern-500: #628b48;
+    --color-sa-black: #010101;
+    --color-sa-white: #f9fcfb;
+}
