@@ -35,16 +35,28 @@ RUN composer install --optimize-autoloader --no-dev --no-scripts --no-interactio
 # Copy the rest of the application
 COPY . .
 
+# Create storage directories and set permissions
+RUN mkdir -p storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 # Run post-install scripts
 RUN composer dump-autoload --optimize
 
 # Build assets if package.json exists
 RUN if [ -f "package.json" ]; then npm install && npm run build; fi
 
-# Cache Laravel config
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
-RUN php artisan view:cache || true
+# Generate storage link
+RUN php artisan storage:link || true
+
+# Clear any cached config before caching with production values
+RUN php artisan config:clear \
+    && php artisan route:clear \
+    && php artisan view:clear
 
 # Expose port
 EXPOSE 8080
