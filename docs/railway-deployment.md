@@ -235,7 +235,11 @@ railway shell
 
 ## Initial Database Setup
 
-After your first deployment, the database tables will be created via migrations but will be empty. Run the database seeder once to populate initial data:
+After your first deployment, the database tables will be created via migrations but will be empty. Run the database seeder once to populate initial data.
+
+### Method 1: Using Public Database URL (Recommended)
+
+The `railway run` command runs locally and cannot access Railway's internal network. Use the public database URL instead:
 
 ```bash
 # 1. Install Railway CLI if not already installed
@@ -247,16 +251,70 @@ railway login
 # 3. Link to your project (run from your project directory)
 railway link
 
-# 4. Run the database seeder
-railway run php artisan db:seed --force
+# 4. Get your PostgreSQL public URL (replace "Postgres" with your service name if different)
+railway run --service Postgres printenv DATABASE_PUBLIC_URL
 ```
 
-This will populate the database with:
+This will output something like:
+```
+postgresql://postgres:PASSWORD@hostname.proxy.rlwy.net:PORT/railway
+```
+
+Extract the credentials from the URL:
+- **Host**: `hostname.proxy.rlwy.net`
+- **Port**: `PORT` (the number after the colon)
+- **Database**: `railway`
+- **Username**: `postgres`
+- **Password**: `PASSWORD` (between `:` and `@`)
+
+```bash
+# 5. Clear local config cache
+php artisan config:clear
+
+# 6. Run seeder with Railway database credentials
+DB_CONNECTION=pgsql \
+DB_HOST=<hostname.proxy.rlwy.net> \
+DB_PORT=<PORT> \
+DB_DATABASE=railway \
+DB_USERNAME=postgres \
+DB_PASSWORD=<PASSWORD> \
+php artisan db:seed --force
+```
+
+### Method 2: Using Railway Shell
+
+If you have shell access enabled, you can run commands inside Railway's network:
+
+```bash
+railway shell
+# Inside the shell:
+php artisan db:seed --force
+```
+
+### Method 3: Temporary Start Command
+
+Add seeding to the start command temporarily:
+
+1. Edit `nixpacks.toml`:
+```toml
+[start]
+cmd = "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+```
+
+2. Push to trigger deployment
+3. After successful deployment, remove `db:seed --force` from the command
+4. Push again to prevent re-seeding on future deploys
+
+### What Gets Seeded
+
+The seeders populate the database with:
 - Default users (admin, agents, owners, tenants)
 - Sample properties and listings
+- Leases, payments, and receipts
+- Inquiries, repair requests, and complaints
 - Demo data for testing
 
-**Note:** Only run this once. Running it multiple times may create duplicate data depending on how your seeders are configured.
+**Note:** Only run seeders once. Running multiple times may create duplicate data.
 
 ## Cost Optimization
 
