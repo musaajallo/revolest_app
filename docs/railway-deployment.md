@@ -107,11 +107,14 @@ php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
 
 ## Step 5: Generate a Domain
 
-1. Go to **Settings** → **Networking**
-2. Click **"Generate Domain"** to get a `*.up.railway.app` subdomain
-3. Or add a custom domain
+1. Go to your project → click on your **app service**
+2. Go to **Settings** → **Networking**
+3. Click **"Generate Domain"** to get a free `*.up.railway.app` subdomain
+4. Or add a custom domain
 
-Update your `APP_URL` variable to match the generated domain.
+Copy this URL (e.g., `https://saproperty-production.up.railway.app`) to share with clients.
+
+**Important:** Update your `APP_URL` environment variable in Railway to match the generated domain so links and redirects work correctly.
 
 ## Step 6: Deploy
 
@@ -229,6 +232,31 @@ railway run php artisan migrate
 # SSH into your service (if enabled)
 railway shell
 ```
+
+## Initial Database Setup
+
+After your first deployment, the database tables will be created via migrations but will be empty. Run the database seeder once to populate initial data:
+
+```bash
+# 1. Install Railway CLI if not already installed
+npm install -g @railway/cli
+
+# 2. Login to Railway
+railway login
+
+# 3. Link to your project (run from your project directory)
+railway link
+
+# 4. Run the database seeder
+railway run php artisan db:seed --force
+```
+
+This will populate the database with:
+- Default users (admin, agents, owners, tenants)
+- Sample properties and listings
+- Demo data for testing
+
+**Note:** Only run this once. Running it multiple times may create duplicate data depending on how your seeders are configured.
 
 ## Cost Optimization
 
