@@ -18,7 +18,7 @@
     $whatsappShowButton = \App\Models\Setting::get('whatsapp_show_floating_button', true);
 @endphp
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' }" x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val))" :class="{ 'dark': darkMode }">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,14 +29,17 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
 </head>
-<body class="min-h-screen bg-gray-50 font-sans antialiased">
+<body class="min-h-screen bg-gray-50 dark:bg-gray-900 font-sans antialiased transition-colors duration-200">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm sticky top-0 z-50">
+    <nav class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors duration-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <!-- Logo -->
@@ -45,42 +48,81 @@
                         <div class="w-10 h-10 bg-[#d41313] rounded-lg flex items-center justify-center">
                             <span class="text-white font-bold text-xl">SÀ</span>
                         </div>
-                        <span class="text-xl font-bold text-gray-900">{{ str_replace('SÀ Property', 'Property', $siteName) }}</span>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">{{ str_replace('SÀ Property', 'Property', $siteName) }}</span>
                     </a>
+                </div>
+
+                <!-- Search Bar (Desktop) -->
+                <div class="hidden lg:flex items-center flex-1 max-w-md mx-8">
+                    <form action="{{ route('properties.index') }}" method="GET" class="w-full">
+                        <div class="relative">
+                            <input type="text"
+                                   name="search"
+                                   placeholder="Search properties..."
+                                   value="{{ request('search') }}"
+                                   class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d41313] focus:border-transparent transition-colors">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-[#d41313] font-medium transition {{ request()->routeIs('home') ? 'text-[#d41313]' : '' }}">
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#d41313] dark:hover:text-[#d41313] font-medium transition {{ request()->routeIs('home') ? 'text-[#d41313]' : '' }}">
                         Home
                     </a>
-                    <a href="{{ route('properties.index') }}" class="text-gray-700 hover:text-[#d41313] font-medium transition {{ request()->routeIs('properties.*') ? 'text-[#d41313]' : '' }}">
+                    <a href="{{ route('properties.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#d41313] dark:hover:text-[#d41313] font-medium transition {{ request()->routeIs('properties.*') ? 'text-[#d41313]' : '' }}">
                         Properties
                     </a>
-                    <a href="{{ route('agents.index') }}" class="text-gray-700 hover:text-[#d41313] font-medium transition {{ request()->routeIs('agents.*') ? 'text-[#d41313]' : '' }}">
+                    <a href="{{ route('agents.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#d41313] dark:hover:text-[#d41313] font-medium transition {{ request()->routeIs('agents.*') ? 'text-[#d41313]' : '' }}">
                         Agents
                     </a>
-                    <a href="{{ route('contact') }}" class="text-gray-700 hover:text-[#d41313] font-medium transition {{ request()->routeIs('contact') ? 'text-[#d41313]' : '' }}">
+                    <a href="{{ route('contact') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#d41313] dark:hover:text-[#d41313] font-medium transition {{ request()->routeIs('contact') ? 'text-[#d41313]' : '' }}">
                         Contact
                     </a>
-                </div>
 
-                <!-- Auth Links -->
-                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+                    <button @click="darkMode = !darkMode"
+                            class="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            :title="darkMode ? 'Switch to light mode' : 'Switch to dark mode'">
+                        <!-- Sun icon (shown in dark mode) -->
+                        <svg x-show="darkMode" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <!-- Moon icon (shown in light mode) -->
+                        <svg x-show="!darkMode" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+
                     @auth
                         <a href="/admin" class="bg-[#d41313] hover:bg-[#b91111] text-white px-4 py-2 rounded-lg font-medium transition">
                             Admin
                         </a>
                     @else
-                        <a href="/admin/login" class="text-gray-700 hover:text-[#d41313] font-medium transition">
+                        <a href="/admin/login" class="text-gray-700 dark:text-gray-300 hover:text-[#d41313] font-medium transition">
                             Login
                         </a>
                     @endauth
                 </div>
 
                 <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button type="button" id="mobile-menu-button" class="text-gray-700 hover:text-amber-600 focus:outline-none">
+                <div class="md:hidden flex items-center space-x-2">
+                    <!-- Dark Mode Toggle (Mobile) -->
+                    <button @click="darkMode = !darkMode"
+                            class="p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <svg x-show="darkMode" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        <svg x-show="!darkMode" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </button>
+                    <button type="button" id="mobile-menu-button" class="text-gray-700 dark:text-gray-300 hover:text-[#d41313] focus:outline-none">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -90,17 +132,32 @@
         </div>
 
         <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700">
             <div class="px-4 py-3 space-y-2">
-                <a href="{{ route('home') }}" class="block text-gray-700 hover:text-[#d41313] font-medium py-2">Home</a>
-                <a href="{{ route('properties.index') }}" class="block text-gray-700 hover:text-[#d41313] font-medium py-2">Properties</a>
-                <a href="{{ route('agents.index') }}" class="block text-gray-700 hover:text-[#d41313] font-medium py-2">Agents</a>
-                <a href="{{ route('contact') }}" class="block text-gray-700 hover:text-[#d41313] font-medium py-2">Contact</a>
-                <hr class="my-2">
+                <!-- Mobile Search -->
+                <form action="{{ route('properties.index') }}" method="GET" class="mb-3">
+                    <div class="relative">
+                        <input type="text"
+                               name="search"
+                               placeholder="Search properties..."
+                               value="{{ request('search') }}"
+                               class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#d41313]">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                </form>
+                <a href="{{ route('home') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#d41313] font-medium py-2">Home</a>
+                <a href="{{ route('properties.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#d41313] font-medium py-2">Properties</a>
+                <a href="{{ route('agents.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#d41313] font-medium py-2">Agents</a>
+                <a href="{{ route('contact') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#d41313] font-medium py-2">Contact</a>
+                <hr class="my-2 dark:border-gray-700">
                 @auth
                     <a href="/admin" class="block bg-[#d41313] hover:bg-[#b91111] text-white px-4 py-2 rounded-lg font-medium text-center">Admin</a>
                 @else
-                    <a href="/admin/login" class="block text-gray-700 hover:text-[#d41313] font-medium py-2">Login</a>
+                    <a href="/admin/login" class="block text-gray-700 dark:text-gray-300 hover:text-[#d41313] font-medium py-2">Login</a>
                 @endauth
             </div>
         </div>
@@ -112,7 +169,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white">
+    <footer class="bg-gray-900 dark:bg-gray-950 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Brand -->
