@@ -22,7 +22,11 @@ class LeaseResource extends Resource
     }
     public static function getGloballySearchableAttributes(): array
     {
-        return ['status'];
+        return ['property.title', 'tenant.name', 'status'];
+    }
+    public static function getGlobalSearchResultTitle($record): string
+    {
+        return ($record->property?->title ?? 'Lease') . ' - ' . ($record->tenant?->name ?? 'Unknown');
     }
     protected static ?string $model = Lease::class;
 

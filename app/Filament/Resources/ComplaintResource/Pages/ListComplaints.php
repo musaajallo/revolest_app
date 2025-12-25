@@ -33,15 +33,18 @@ class ListComplaints extends ListRecords
                         // CSV Headers
                         fputcsv($file, [
                             'ID',
+                            'Submitted By',
+                            'Submitted By Email',
+                            'Submitted By Role',
                             'Property Title',
                             'Property Address',
-                            'Tenant Name',
+                            'About Tenant',
                             'Tenant Email',
                             'Tenant Phone',
+                            'Category',
+                            'Priority',
                             'Description',
                             'Status',
-                            'Priority',
-                            'Category',
                             'Submitted At',
                             'Resolved At',
                             'Resolution Notes',
@@ -51,18 +54,21 @@ class ListComplaints extends ListRecords
                         ]);
 
                         // Get all complaints including soft deleted ones with relationships
-                        \App\Models\Complaint::withTrashed()->with(['property', 'tenant'])->get()->each(function ($complaint) use ($file) {
+                        \App\Models\Complaint::withTrashed()->with(['submittedBy', 'property', 'tenant'])->get()->each(function ($complaint) use ($file) {
                             fputcsv($file, [
                                 $complaint->id,
+                                $complaint->submittedBy?->name,
+                                $complaint->submittedBy?->email,
+                                ucwords(str_replace('_', ' ', $complaint->submittedBy?->role ?? '')),
                                 $complaint->property?->title,
                                 $complaint->property?->address,
-                                $complaint->tenant?->name,
-                                $complaint->tenant?->email,
-                                $complaint->tenant?->phone,
+                                $complaint->tenant?->name ?? 'N/A',
+                                $complaint->tenant?->email ?? 'N/A',
+                                $complaint->tenant?->phone ?? 'N/A',
+                                ucwords(str_replace('_', ' ', $complaint->complaint_category)),
+                                ucfirst($complaint->priority),
                                 $complaint->description,
-                                $complaint->status,
-                                $complaint->priority,
-                                $complaint->category,
+                                ucwords(str_replace('_', ' ', $complaint->status)),
                                 $complaint->submitted_at?->format('Y-m-d H:i:s'),
                                 $complaint->resolved_at?->format('Y-m-d H:i:s'),
                                 $complaint->resolution_notes,

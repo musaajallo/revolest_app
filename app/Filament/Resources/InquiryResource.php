@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class InquiryResource extends Resource
 {
     protected static ?string $navigationGroup = 'Communication';
+    protected static ?string $navigationLabel = 'Property Inquiries';
+
     public static function getGlobalSearchResultUrl($record): string
     {
         return static::getUrl('view', ['record' => $record->getKey()]);
@@ -97,6 +99,6 @@ class InquiryResource extends Resource
             return false;
         }
 
-        return in_array($user->role, ['super_admin', 'admin']);
+        return in_array($user->role, ['super_admin', 'owner', 'agent']);
     }
 }

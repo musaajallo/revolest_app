@@ -32,18 +32,71 @@ class ComplaintResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('submitted_by_user_id')
+                    ->relationship('submittedBy', 'name')
+                    ->label('Submitted By')
+                    ->searchable()
+                    ->required()
+                    ->default(fn () => auth()->id()),
                 Forms\Components\Select::make('property_id')
                     ->relationship('property', 'title')
                     ->searchable()
-                    ->required(),
+                    ->required()
+                    ->preload(),
                 Forms\Components\Select::make('tenant_id')
                     ->relationship('tenant', 'name')
+                    ->label('About Tenant (Optional)')
                     ->searchable()
+                    ->nullable()
+                    ->preload()
+                    ->helperText('Select a tenant if this complaint is about a specific tenant'),
+                Forms\Components\Select::make('complaint_category')
+                    ->label('Category')
+                    ->options([
+                        'property_maintenance' => 'Property Maintenance',
+                        'property_condition' => 'Property Condition',
+                        'tenant_conduct' => 'Tenant Conduct',
+                        'lease_violation' => 'Lease Violation',
+                        'noise_disturbance' => 'Noise Disturbance',
+                        'property_damage' => 'Property Damage',
+                        'cleanliness' => 'Cleanliness',
+                        'safety_concern' => 'Safety Concern',
+                        'other' => 'Other',
+                    ])
+                    ->required()
+                    ->default('property_maintenance'),
+                Forms\Components\Select::make('priority')
+                    ->options([
+                        'low' => 'Low',
+                        'medium' => 'Medium',
+                        'high' => 'High',
+                        'urgent' => 'Urgent',
+                    ])
+                    ->required()
+                    ->default('medium'),
+                Forms\Components\Textarea::make('description')
+                    ->required()
+                    ->rows(5)
+                    ->maxLength(65535),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'new' => 'New',
+                        'under_review' => 'Under Review',
+                        'in_progress' => 'In Progress',
+                        'resolved' => 'Resolved',
+                        'closed' => 'Closed',
+                    ])
+                    ->required()
+                    ->default('new'),
+                Forms\Components\DateTimePicker::make('submitted_at')
+                    ->default(now())
                     ->required(),
-                Forms\Components\Textarea::make('description')->required(),
-                Forms\Components\TextInput::make('status')->required(),
-                Forms\Components\DateTimePicker::make('submitted_at')->required(),
-                Forms\Components\DateTimePicker::make('resolved_at'),
+                Forms\Components\DateTimePicker::make('resolved_at')
+                    ->nullable(),
+                Forms\Components\Textarea::make('resolution_notes')
+                    ->rows(3)
+                    ->nullable()
+                    ->maxLength(65535),
             ]);
     }
 
@@ -51,15 +104,101 @@ class ComplaintResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('property.title')->label('Property')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('tenant.name')->label('Tenant')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('description')->searchable()->sortable()->limit(50),
-                Tables\Columns\TextColumn::make('status')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('submitted_at')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('resolved_at')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('submittedBy.name')
+                    ->label('Submitted By')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('property.title')
+                    ->label('Property')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('tenant.name')
+                    ->label('About Tenant')
+                    ->searchable()
+                    ->sortable()
+                    ->default('N/A'),
+                Tables\Columns\TextColumn::make('complaint_category')
+                    ->label('Category')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'urgent', 'safety_concern' => 'danger',
+                        'property_damage', 'lease_violation' => 'warning',
+                        'tenant_conduct', 'noise_disturbance' => 'info',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state)))
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('priority')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'urgent' => 'danger',
+                        'high' => 'warning',
+                        'medium' => 'info',
+                        'low' => 'success',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->searchable()
+                    ->sortable()
+                    ->limit(50),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'new' => 'danger',
+                        'under_review' => 'warning',
+                        'in_progress' => 'info',
+                        'resolved' => 'success',
+                        'closed' => 'gray',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => ucwords(str_replace('_', ' ', $state)))
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('submitted_at')
+                    ->dateTime()
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('resolved_at')
+                    ->dateTime()
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('submitted_at', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('complaint_category')
+                    ->label('Category')
+                    ->options([
+                        'property_maintenance' => 'Property Maintenance',
+                        'property_condition' => 'Property Condition',
+                        'tenant_conduct' => 'Tenant Conduct',
+                        'lease_violation' => 'Lease Violation',
+                        'noise_disturbance' => 'Noise Disturbance',
+                        'property_damage' => 'Property Damage',
+                        'cleanliness' => 'Cleanliness',
+                        'safety_concern' => 'Safety Concern',
+                        'other' => 'Other',
+                    ]),
+                Tables\Filters\SelectFilter::make('priority')
+                    ->options([
+                        'low' => 'Low',
+                        'medium' => 'Medium',
+                        'high' => 'High',
+                        'urgent' => 'Urgent',
+                    ]),
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'new' => 'New',
+                        'under_review' => 'Under Review',
+                        'in_progress' => 'In Progress',
+                        'resolved' => 'Resolved',
+                        'closed' => 'Closed',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->color('success'),
@@ -98,5 +237,16 @@ class ComplaintResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        if (!$user) {
+            return false;
+        }
+
+        return in_array($user->role, ['super_admin', 'owner', 'agent', 'tenant']);
     }
 }

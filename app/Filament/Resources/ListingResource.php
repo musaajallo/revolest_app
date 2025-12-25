@@ -22,7 +22,11 @@ class ListingResource extends Resource
     }
     public static function getGloballySearchableAttributes(): array
     {
-        return ['status'];
+        return ['property.title', 'agent.name', 'status'];
+    }
+    public static function getGlobalSearchResultTitle($record): string
+    {
+        return $record->property?->title ?? 'Listing #' . $record->id;
     }
     protected static ?string $model = Listing::class;
 

@@ -36,6 +36,9 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+            ->globalSearch(true)
+            ->globalSearchKeyBindings(['ctrl+k', 'cmd+k'])
+            ->darkMode(true)
             ->colors([
                 'primary' => [
                     50 => '254, 242, 242',
