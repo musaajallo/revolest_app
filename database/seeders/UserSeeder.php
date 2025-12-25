@@ -12,6 +12,7 @@ class UserSeeder extends Seeder
                     'name' => 'Mamadou A Jallow',
                     'email' => $adminEmail,
                     'password' => bcrypt('password'),
+                    'role' => User::ROLE_SUPER_ADMIN,
                 ]);
         }
         User::factory()->count(10)->create([
