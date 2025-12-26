@@ -18,10 +18,10 @@
             <form action="{{ route('properties.index') }}" method="GET" class="flex flex-col lg:flex-row gap-4">
                 <div class="flex-1">
                     <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by location or property name..."
-                           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:w-auto">
-                    <select name="type" class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                    <select name="type" class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                         <option value="">All Types</option>
                         <option value="house" {{ request('type') == 'house' ? 'selected' : '' }}>House</option>
                         <option value="apartment" {{ request('type') == 'apartment' ? 'selected' : '' }}>Apartment</option>
@@ -30,10 +30,10 @@
                         <option value="commercial" {{ request('type') == 'commercial' ? 'selected' : '' }}>Commercial</option>
                     </select>
                     <input type="number" name="min_price" value="{{ request('min_price') }}" placeholder="Min Price"
-                           class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                           class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                     <input type="number" name="max_price" value="{{ request('max_price') }}" placeholder="Max Price"
-                           class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
-                    <select name="bedrooms" class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                           class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
+                    <select name="bedrooms" class="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                         <option value="">Bedrooms</option>
                         <option value="1" {{ request('bedrooms') == '1' ? 'selected' : '' }}>1+</option>
                         <option value="2" {{ request('bedrooms') == '2' ? 'selected' : '' }}>2+</option>
@@ -43,7 +43,7 @@
                     </select>
                 </div>
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-[#d41313] hover:bg-[#b91111] text-white px-6 py-2 rounded-lg font-semibold transition">
+                    <button type="submit" class="bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-6 py-2 rounded-lg font-semibold transition">
                         Search
                     </button>
                     <a href="{{ route('properties.index') }}" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold transition">
@@ -77,7 +77,7 @@
                                         $images = is_array($property->images) ? $property->images : json_decode($property->images, true);
                                     @endphp
                                     @if(!empty($images) && isset($images[0]))
-                                        <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                        <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-property.svg') }}'">
                                     @else
                                         <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                     @endif
@@ -85,13 +85,13 @@
                                     <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                 @endif
                                 <div class="absolute top-3 left-3">
-                                    <span class="bg-[#d41313] text-white px-2 py-1 rounded-full text-xs font-medium capitalize">{{ $property->type }}</span>
+                                    <span class="bg-[#a94a2a] text-white px-2 py-1 rounded-full text-xs font-medium capitalize">{{ $property->type }}</span>
                                 </div>
                             </div>
 
                             <!-- Property Details -->
                             <div class="p-4">
-                                <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#b91111] transition mb-1 truncate">
+                                <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#a94a2a] transition mb-1 truncate">
                                     <a href="{{ route('properties.show', $property) }}">{{ $property->title }}</a>
                                 </h3>
                                 <p class="text-gray-500 text-sm mb-3 flex items-center truncate">
@@ -119,8 +119,8 @@
                                     @endif
                                 </div>
                                 <div class="flex justify-between items-center pt-3 border-t">
-                                    <span class="text-xl font-bold text-[#b91111]">D{{ number_format($property->price) }}</span>
-                                    <a href="{{ route('properties.show', $property) }}" class="text-[#b91111] hover:text-[#990e0e] text-sm font-medium">
+                                    <span class="text-xl font-bold text-[#a94a2a]">D{{ number_format($property->price) }}</span>
+                                    <a href="{{ route('properties.show', $property) }}" class="text-[#a94a2a] hover:text-[#990e0e] text-sm font-medium">
                                         Details →
                                     </a>
                                 </div>
@@ -138,7 +138,7 @@
                     <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">No Properties Found</h3>
                     <p class="text-gray-600 mb-4">Try adjusting your search criteria or filters.</p>
-                    <a href="{{ route('properties.index') }}" class="inline-block bg-[#d41313] hover:bg-[#b91111] text-white px-6 py-2 rounded-lg font-semibold transition">
+                    <a href="{{ route('properties.index') }}" class="inline-block bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-6 py-2 rounded-lg font-semibold transition">
                         Clear Filters
                     </a>
                 </div>

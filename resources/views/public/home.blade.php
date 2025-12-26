@@ -10,7 +10,7 @@
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div class="max-w-3xl">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                    {!! $page?->getContent('hero_title') ?? 'Find Your Perfect <span class="text-[#d41313]">Property</span>' !!}
+                    {!! $page?->getContent('hero_title') ?? 'Find Your Perfect <span class="text-[#1c4736]">Property</span>' !!}
                 </h1>
                 <p class="text-xl text-gray-300 mb-8">
                     {{ $page?->getContent('hero_subtitle') ?? 'Discover thousands of properties for sale and rent. Your dream home is just a click away.' }}
@@ -21,10 +21,10 @@
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
                             <input type="text" name="search" placeholder="Search by location or property name..."
-                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                         </div>
                         <div class="md:w-48">
-                            <select name="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                            <select name="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                                 <option value="">All Types</option>
                                 <option value="house">House</option>
                                 <option value="apartment">Apartment</option>
@@ -33,7 +33,7 @@
                                 <option value="commercial">Commercial</option>
                             </select>
                         </div>
-                        <button type="submit" class="bg-[#d41313] hover:bg-[#b91111] text-white px-8 py-3 rounded-lg font-semibold transition">
+                        <button type="submit" class="bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-8 py-3 rounded-lg font-semibold transition">
                             Search
                         </button>
                     </div>
@@ -47,19 +47,19 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#d41313]">{{ number_format($totalProperties) }}+</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">{{ number_format($totalProperties) }}+</div>
                     <div class="text-gray-600 mt-1">Properties</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#d41313]">{{ number_format($totalAgents) }}+</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">{{ number_format($totalAgents) }}+</div>
                     <div class="text-gray-600 mt-1">Agents</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#d41313]">{{ number_format($totalListings) }}+</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">{{ number_format($totalListings) }}+</div>
                     <div class="text-gray-600 mt-1">Active Listings</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#d41313]">500+</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">500+</div>
                     <div class="text-gray-600 mt-1">Happy Clients</div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                                         $images = is_array($property->images) ? $property->images : json_decode($property->images, true);
                                     @endphp
                                     @if(!empty($images) && isset($images[0]))
-                                        <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                        <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-property.svg') }}'">
                                     @else
                                         <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                     @endif
@@ -93,14 +93,14 @@
                                     <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                 @endif
                                 <div class="absolute top-4 left-4">
-                                    <span class="bg-[#d41313] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
+                                    <span class="bg-[#a94a2a] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
                                 </div>
                             </div>
 
                             <!-- Property Details -->
                             <div class="p-5">
                                 <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#d41313] transition">
+                                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#1c4736] transition">
                                         <a href="{{ route('properties.show', $property) }}">{{ $property->title }}</a>
                                     </h3>
                                 </div>
@@ -129,8 +129,8 @@
                                     @endif
                                 </div>
                                 <div class="flex justify-between items-center pt-4 border-t">
-                                    <span class="text-2xl font-bold text-[#d41313]">D{{ number_format($property->price) }}</span>
-                                    <a href="{{ route('properties.show', $property) }}" class="text-[#d41313] hover:text-[#b91111] font-medium">
+                                    <span class="text-2xl font-bold text-[#1c4736]">D{{ number_format($property->price) }}</span>
+                                    <a href="{{ route('properties.show', $property) }}" class="text-[#1c4736] hover:text-[#a94a2a] font-medium">
                                         View Details →
                                     </a>
                                 </div>
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="text-center mt-12">
-                    <a href="{{ route('properties.index') }}" class="inline-block bg-[#d41313] hover:bg-[#b91111] text-white px-8 py-3 rounded-lg font-semibold transition">
+                    <a href="{{ route('properties.index') }}" class="inline-block bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-8 py-3 rounded-lg font-semibold transition">
                         View All Properties
                     </a>
                 </div>
@@ -164,7 +164,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white p-8 rounded-xl shadow-md text-center">
                     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-[#d41313]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                        <svg class="w-8 h-8 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-3">Trusted & Verified</h3>
                     <p class="text-gray-600">All our properties and agents are thoroughly verified to ensure you get the best experience.</p>
@@ -172,7 +172,7 @@
 
                 <div class="bg-white p-8 rounded-xl shadow-md text-center">
                     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-[#d41313]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <svg class="w-8 h-8 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-3">Best Prices</h3>
                     <p class="text-gray-600">We offer competitive pricing and help you find properties that fit your budget.</p>
@@ -180,7 +180,7 @@
 
                 <div class="bg-white p-8 rounded-xl shadow-md text-center">
                     <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-[#d41313]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        <svg class="w-8 h-8 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-3">24/7 Support</h3>
                     <p class="text-gray-600">Our dedicated team is always ready to assist you with any questions or concerns.</p>
@@ -190,15 +190,15 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 bg-[#d41313]">
+    <section class="py-16 bg-[#a94a2a]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">{{ $page?->getContent('cta_title') ?? 'Ready to Find Your Dream Home?' }}</h2>
             <p class="text-red-100 mb-8 max-w-2xl mx-auto">{{ $page?->getContent('cta_subtitle') ?? "Whether you're buying, selling, or renting, we're here to help you every step of the way." }}</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ route('properties.index') }}" class="bg-white text-[#d41313] hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition">
+                <a href="{{ route('properties.index') }}" class="bg-white text-[#1c4736] hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition">
                     Browse Properties
                 </a>
-                <a href="{{ route('contact') }}" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#d41313] px-8 py-3 rounded-lg font-semibold transition">
+                <a href="{{ route('contact') }}" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-[#1c4736] px-8 py-3 rounded-lg font-semibold transition">
                     Contact Us
                 </a>
             </div>

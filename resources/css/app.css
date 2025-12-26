@@ -11,32 +11,31 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 
-    /* SÀ Property Color Palette */
-    --color-sa-red-50: #fef2f2;
-    --color-sa-red-100: #fee2e2;
-    --color-sa-red-200: #fecaca;
-    --color-sa-red-300: #fca5a5;
-    --color-sa-red-400: #f87171;
-    --color-sa-red-500: #d41313;
-    --color-sa-red-600: #b91111;
-    --color-sa-red-700: #990e0e;
-    --color-sa-red-800: #7f0c0c;
-    --color-sa-red-900: #690a0a;
-    --color-sa-red-950: #450707;
+    /* Revolest Color Palette */
+    --color-primary-50: #f0fdf6;
+    --color-primary-100: #dcfce9;
+    --color-primary-200: #bbf7d4;
+    --color-primary-300: #86efb4;
+    --color-primary-400: #4ade8b;
+    --color-primary-500: #22c566;
+    --color-primary-600: #1c4736;
+    --color-primary-700: #153d2b;
+    --color-primary-800: #0f2e21;
+    --color-primary-900: #0a1f16;
+    --color-primary-950: #05100b;
 
-    --color-sa-green-50: #ecfdf5;
-    --color-sa-green-100: #d1fae5;
-    --color-sa-green-200: #a7f3d0;
-    --color-sa-green-300: #6ee7b7;
-    --color-sa-green-400: #34d399;
-    --color-sa-green-500: #00a676;
-    --color-sa-green-600: #008c64;
-    --color-sa-green-700: #007352;
-    --color-sa-green-800: #005b41;
-    --color-sa-green-900: #004b36;
-    --color-sa-green-950: #003224;
+    --color-secondary-50: #fef6f3;
+    --color-secondary-100: #fde8e0;
+    --color-secondary-200: #fbcfc0;
+    --color-secondary-300: #f7ab91;
+    --color-secondary-400: #f17d56;
+    --color-secondary-500: #a94a2a;
+    --color-secondary-600: #8a3c22;
+    --color-secondary-700: #6b2e1a;
+    --color-secondary-800: #4d2113;
+    --color-secondary-900: #2f140c;
+    --color-secondary-950: #1a0b06;
 
-    --color-sa-fern-500: #628b48;
     --color-sa-black: #010101;
     --color-sa-white: #f9fcfb;
 }

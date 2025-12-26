@@ -8,9 +8,9 @@
     <section class="bg-gray-100 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex text-sm">
-                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#b91111]">Home</a>
+                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#a94a2a]">Home</a>
                 <span class="mx-2 text-gray-400">/</span>
-                <a href="{{ route('agents.index') }}" class="text-gray-500 hover:text-[#b91111]">Agents</a>
+                <a href="{{ route('agents.index') }}" class="text-gray-500 hover:text-[#a94a2a]">Agents</a>
                 <span class="mx-2 text-gray-400">/</span>
                 <span class="text-gray-900">{{ $agent->name }}</span>
             </nav>
@@ -26,7 +26,7 @@
                         <!-- Agent Photo -->
                         <div class="h-64 bg-gray-200">
                             @if($agent->photo)
-                                <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover">
+                                <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-agent.svg') }}'">
                             @else
                                 <img src="{{ asset('images/placeholder-agent.svg') }}" alt="No photo available" class="w-full h-full object-cover">
                             @endif
@@ -34,19 +34,19 @@
 
                         <div class="p-6">
                             <h1 class="text-2xl font-bold text-gray-900 mb-1">{{ $agent->name }}</h1>
-                            <p class="text-[#b91111] font-medium mb-4">Real Estate Agent</p>
+                            <p class="text-[#a94a2a] font-medium mb-4">Real Estate Agent</p>
 
                             <!-- Contact Info -->
                             <div class="space-y-3 mb-6">
                                 @if($agent->email)
-                                    <a href="mailto:{{ $agent->email }}" class="flex items-center text-gray-600 hover:text-[#b91111] transition">
-                                        <svg class="w-5 h-5 mr-3 text-[#d41313]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                    <a href="mailto:{{ $agent->email }}" class="flex items-center text-gray-600 hover:text-[#a94a2a] transition">
+                                        <svg class="w-5 h-5 mr-3 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                                         {{ $agent->email }}
                                     </a>
                                 @endif
                                 @if($agent->phone)
-                                    <a href="tel:{{ $agent->phone }}" class="flex items-center text-gray-600 hover:text-[#b91111] transition">
-                                        <svg class="w-5 h-5 mr-3 text-[#d41313]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                                    <a href="tel:{{ $agent->phone }}" class="flex items-center text-gray-600 hover:text-[#a94a2a] transition">
+                                        <svg class="w-5 h-5 mr-3 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                                         {{ $agent->phone }}
                                     </a>
                                 @endif
@@ -55,11 +55,11 @@
                             <!-- Stats -->
                             <div class="grid grid-cols-2 gap-4 py-4 border-y">
                                 <div class="text-center">
-                                    <div class="text-2xl font-bold text-[#b91111]">{{ $activeListings->count() }}</div>
+                                    <div class="text-2xl font-bold text-[#a94a2a]">{{ $activeListings->count() }}</div>
                                     <div class="text-sm text-gray-500">Active Listings</div>
                                 </div>
                                 <div class="text-center">
-                                    <div class="text-2xl font-bold text-[#b91111]">{{ $agent->listings->count() }}</div>
+                                    <div class="text-2xl font-bold text-[#a94a2a]">{{ $agent->listings->count() }}</div>
                                     <div class="text-sm text-gray-500">Total Listings</div>
                                 </div>
                             </div>
@@ -74,7 +74,7 @@
 
                             <!-- Contact Button -->
                             <div class="mt-6">
-                                <a href="mailto:{{ $agent->email }}" class="block w-full bg-[#d41313] hover:bg-[#b91111] text-white text-center py-3 rounded-lg font-semibold transition">
+                                <a href="mailto:{{ $agent->email }}" class="block w-full bg-[#a94a2a] hover:bg-[#8a3c22] text-white text-center py-3 rounded-lg font-semibold transition">
                                     Contact Agent
                                 </a>
                             </div>
@@ -101,7 +101,7 @@
                                                     $images = is_array($listing->property->images) ? $listing->property->images : json_decode($listing->property->images, true);
                                                 @endphp
                                                 @if(!empty($images) && isset($images[0]))
-                                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $listing->property->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                                    <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $listing->property->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-property.svg') }}'">
                                                 @else
                                                     <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                                 @endif
@@ -109,13 +109,13 @@
                                                 <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                             @endif
                                             <div class="absolute top-3 left-3">
-                                                <span class="bg-[#d41313] text-white px-2 py-1 rounded-full text-xs font-medium capitalize">{{ $listing->property->type }}</span>
+                                                <span class="bg-[#a94a2a] text-white px-2 py-1 rounded-full text-xs font-medium capitalize">{{ $listing->property->type }}</span>
                                             </div>
                                         </div>
 
                                         <!-- Property Details -->
                                         <div class="p-4">
-                                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#b91111] transition mb-1 truncate">
+                                            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#a94a2a] transition mb-1 truncate">
                                                 <a href="{{ route('properties.show', $listing->property) }}">{{ $listing->property->title }}</a>
                                             </h3>
                                             <p class="text-gray-500 text-sm mb-3 flex items-center truncate">
@@ -134,8 +134,8 @@
                                                 @endif
                                             </div>
                                             <div class="flex justify-between items-center pt-3 border-t">
-                                                <span class="text-xl font-bold text-[#b91111]">${{ number_format($listing->price ?? $listing->property->price) }}</span>
-                                                <a href="{{ route('properties.show', $listing->property) }}" class="text-[#b91111] hover:text-[#990e0e] text-sm font-medium">
+                                                <span class="text-xl font-bold text-[#a94a2a]">${{ number_format($listing->price ?? $listing->property->price) }}</span>
+                                                <a href="{{ route('properties.show', $listing->property) }}" class="text-[#a94a2a] hover:text-[#990e0e] text-sm font-medium">
                                                     Details →
                                                 </a>
                                             </div>

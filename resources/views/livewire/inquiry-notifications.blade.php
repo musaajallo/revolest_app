@@ -10,7 +10,7 @@
         @if($this->newInquiriesCount > 0)
             <span
                 class="flex items-center justify-center rounded-full shadow-lg"
-                style="position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 6px; z-index: 50; background-color: #d41313; color: #ffffff; font-size: 11px; font-weight: 700;"
+                style="position: absolute; top: -4px; right: -4px; min-width: 20px; height: 20px; padding: 0 6px; z-index: 50; background-color: #1c4736; color: #ffffff; font-size: 11px; font-weight: 700;"
             >
                 {{ $this->newInquiriesCount > 99 ? '99+' : $this->newInquiriesCount }}
             </span>

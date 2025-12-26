@@ -31,7 +31,7 @@ class PropertyDistributionChart extends ChartWidget
         }
 
         $colors = [
-            '#d41313', // Primary red
+            '#1c4736', // Primary green
             '#3b82f6', // Blue
             '#10b981', // Green
             '#f59e0b', // Amber

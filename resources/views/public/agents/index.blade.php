@@ -22,7 +22,7 @@
                             <!-- Agent Photo -->
                             <div class="relative h-64 bg-gray-200">
                                 @if($agent->photo)
-                                    <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                    <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-agent.svg') }}'">
                                 @else
                                     <img src="{{ asset('images/placeholder-agent.svg') }}" alt="No photo available" class="w-full h-full object-cover">
                                 @endif
@@ -31,9 +31,9 @@
                             <!-- Agent Info -->
                             <div class="p-5 text-center">
                                 <h3 class="text-xl font-semibold text-gray-900 mb-1">
-                                    <a href="{{ route('agents.show', $agent) }}" class="hover:text-[#b91111] transition">{{ $agent->name }}</a>
+                                    <a href="{{ route('agents.show', $agent) }}" class="hover:text-[#a94a2a] transition">{{ $agent->name }}</a>
                                 </h3>
-                                <p class="text-[#b91111] font-medium mb-3">Real Estate Agent</p>
+                                <p class="text-[#a94a2a] font-medium mb-3">Real Estate Agent</p>
 
                                 <div class="space-y-2 text-sm text-gray-600 mb-4">
                                     @if($agent->email)
@@ -55,7 +55,7 @@
                                     <span>{{ $agent->listings_count }} {{ Str::plural('Listing', $agent->listings_count) }}</span>
                                 </div>
 
-                                <a href="{{ route('agents.show', $agent) }}" class="inline-block w-full bg-[#d41313] hover:bg-[#b91111] text-white py-2 rounded-lg font-semibold transition">
+                                <a href="{{ route('agents.show', $agent) }}" class="inline-block w-full bg-[#a94a2a] hover:bg-[#8a3c22] text-white py-2 rounded-lg font-semibold transition">
                                     View Profile
                                 </a>
                             </div>
@@ -80,12 +80,12 @@
     <!-- Join Our Team CTA -->
     <section class="py-12 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-[#d41313] rounded-2xl p-8 md:p-12 text-center">
+            <div class="bg-[#a94a2a] rounded-2xl p-8 md:p-12 text-center">
                 <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Become an Agent</h2>
                 <p class="text-red-100 mb-6 max-w-2xl mx-auto">
                     Are you a licensed real estate professional? Join our team and connect with clients looking for their dream properties.
                 </p>
-                <a href="{{ route('contact') }}" class="inline-block bg-white text-[#b91111] hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition">
+                <a href="{{ route('contact') }}" class="inline-block bg-white text-[#a94a2a] hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition">
                     Contact Us to Apply
                 </a>
             </div>

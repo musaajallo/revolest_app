@@ -102,7 +102,7 @@
                     <div class="relative w-32 h-32">
                         <svg class="w-32 h-32 transform -rotate-90" viewBox="0 0 120 120">
                             <circle cx="60" cy="60" r="50" stroke="#e5e7eb" stroke-width="10" fill="none" class="dark:stroke-gray-700"/>
-                            <circle cx="60" cy="60" r="50" stroke="#d41313" stroke-width="10" fill="none"
+                            <circle cx="60" cy="60" r="50" stroke="#1c4736" stroke-width="10" fill="none"
                                 stroke-dasharray="{{ $this->getViewData()['occupancy']['rate'] * 3.14 }} 314"
                                 stroke-linecap="round" class="transition-all duration-1000"/>
                         </svg>

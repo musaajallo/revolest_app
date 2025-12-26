@@ -8,9 +8,9 @@
     <section class="bg-gray-100 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex text-sm">
-                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#b91111]">Home</a>
+                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#a94a2a]">Home</a>
                 <span class="mx-2 text-gray-400">/</span>
-                <a href="{{ route('properties.index') }}" class="text-gray-500 hover:text-[#b91111]">Properties</a>
+                <a href="{{ route('properties.index') }}" class="text-gray-500 hover:text-[#a94a2a]">Properties</a>
                 <span class="mx-2 text-gray-400">/</span>
                 <span class="text-gray-900">{{ $property->title }}</span>
             </nav>
@@ -30,7 +30,7 @@
                                     $images = is_array($property->images) ? $property->images : json_decode($property->images, true);
                                 @endphp
                                 @if(!empty($images) && isset($images[0]))
-                                    <img id="main-image" src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover">
+                                    <img id="main-image" src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-property.svg') }}'">
                                 @else
                                     <img id="main-image" src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                 @endif
@@ -38,7 +38,7 @@
                                 <img id="main-image" src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                             @endif
                             <div class="absolute top-4 left-4">
-                                <span class="bg-[#d41313] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
+                                <span class="bg-[#a94a2a] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
                             </div>
                             <div class="absolute top-4 right-4">
                                 <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->status }}</span>
@@ -55,7 +55,7 @@
                                     @foreach($images as $index => $image)
                                         <img src="{{ asset('storage/' . $image) }}" alt="{{ $property->title }} - Image {{ $index + 1 }}"
                                              onclick="document.getElementById('main-image').src = this.src"
-                                             class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-75 transition {{ $index === 0 ? 'ring-2 ring-[#d41313]' : '' }}">
+                                             class="w-20 h-20 object-cover rounded-lg cursor-pointer hover:opacity-75 transition {{ $index === 0 ? 'ring-2 ring-[#1c4736]' : '' }}">
                                     @endforeach
                                 </div>
                             @endif
@@ -73,7 +73,7 @@
                                 </p>
                             </div>
                             <div class="mt-4 md:mt-0">
-                                <span class="text-3xl font-bold text-[#b91111]">D{{ number_format($property->price) }}</span>
+                                <span class="text-3xl font-bold text-[#a94a2a]">D{{ number_format($property->price) }}</span>
                             </div>
                         </div>
 
@@ -81,27 +81,27 @@
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y">
                             @if($property->bedrooms)
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <svg class="w-8 h-8 mx-auto text-[#d41313] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                                    <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
                                     <div class="text-2xl font-bold text-gray-900">{{ $property->bedrooms }}</div>
                                     <div class="text-sm text-gray-500">Bedrooms</div>
                                 </div>
                             @endif
                             @if($property->bathrooms)
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <svg class="w-8 h-8 mx-auto text-[#d41313] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
+                                    <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
                                     <div class="text-2xl font-bold text-gray-900">{{ $property->bathrooms }}</div>
                                     <div class="text-sm text-gray-500">Bathrooms</div>
                                 </div>
                             @endif
                             @if($property->area)
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                    <svg class="w-8 h-8 mx-auto text-[#d41313] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
+                                    <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
                                     <div class="text-2xl font-bold text-gray-900">{{ number_format($property->area) }}</div>
                                     <div class="text-sm text-gray-500">Sq Ft</div>
                                 </div>
                             @endif
                             <div class="text-center p-4 bg-gray-50 rounded-lg">
-                                <svg class="w-8 h-8 mx-auto text-[#d41313] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                                <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
                                 <div class="text-2xl font-bold text-gray-900 capitalize">{{ $property->type }}</div>
                                 <div class="text-sm text-gray-500">Type</div>
                             </div>
@@ -122,7 +122,7 @@
                             <h2 class="text-xl font-semibold text-gray-900 mb-4">Property Owner</h2>
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                                    <span class="text-2xl font-bold text-[#b91111]">{{ substr($property->owner->name, 0, 1) }}</span>
+                                    <span class="text-2xl font-bold text-[#a94a2a]">{{ substr($property->owner->name, 0, 1) }}</span>
                                 </div>
                                 <div class="ml-4">
                                     <h3 class="text-lg font-semibold text-gray-900">{{ $property->owner->name }}</h3>
@@ -151,7 +151,7 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Your Name *</label>
                                         <input type="text" name="name" required value="{{ old('name') }}"
-                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent @error('name') border-red-500 @enderror">
+                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent @error('name') border-red-500 @enderror">
                                         @error('name')
                                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                         @enderror
@@ -160,7 +160,7 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
                                         <input type="email" name="email" required value="{{ old('email') }}"
-                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent @error('email') border-red-500 @enderror">
+                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent @error('email') border-red-500 @enderror">
                                         @error('email')
                                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                         @enderror
@@ -169,19 +169,19 @@
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                                         <input type="tel" name="phone" value="{{ old('phone') }}"
-                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent">
+                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                                     </div>
 
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 mb-1">Message *</label>
                                         <textarea name="message" rows="4" required
-                                                  class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#d41313] focus:border-transparent @error('message') border-red-500 @enderror">{{ old('message', "Hi, I'm interested in this property: " . $property->title) }}</textarea>
+                                                  class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent @error('message') border-red-500 @enderror">{{ old('message', "Hi, I'm interested in this property: " . $property->title) }}</textarea>
                                         @error('message')
                                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                         @enderror
                                     </div>
 
-                                    <button type="submit" class="w-full bg-[#d41313] hover:bg-[#b91111] text-white py-3 rounded-lg font-semibold transition">
+                                    <button type="submit" class="w-full bg-[#a94a2a] hover:bg-[#8a3c22] text-white py-3 rounded-lg font-semibold transition">
                                         Send Inquiry
                                     </button>
                                 </div>
@@ -189,7 +189,7 @@
                         @else
                             <div class="text-center py-4 bg-gray-100 rounded-lg">
                                 <p class="text-gray-600">Contact form is currently unavailable for this property.</p>
-                                <a href="{{ route('contact') }}" class="text-[#b91111] hover:text-[#990e0e] font-medium mt-2 inline-block">
+                                <a href="{{ route('contact') }}" class="text-[#a94a2a] hover:text-[#990e0e] font-medium mt-2 inline-block">
                                     Contact us directly →
                                 </a>
                             </div>
@@ -203,13 +203,13 @@
                                 <a href="{{ route('agents.show', $agent) }}" class="flex items-center group">
                                     <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
                                         @if($agent->photo)
-                                            <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover">
+                                            <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-agent.svg') }}'">
                                         @else
                                             <img src="{{ asset('images/placeholder-agent.svg') }}" alt="No photo available" class="w-full h-full object-cover">
                                         @endif
                                     </div>
                                     <div class="ml-3">
-                                        <p class="font-medium text-gray-900 group-hover:text-[#b91111] transition">{{ $agent->name }}</p>
+                                        <p class="font-medium text-gray-900 group-hover:text-[#a94a2a] transition">{{ $agent->name }}</p>
                                         <p class="text-sm text-gray-500">{{ $agent->phone ?? $agent->email }}</p>
                                     </div>
                                 </a>
@@ -232,7 +232,7 @@
                                             $images = is_array($related->images) ? $related->images : json_decode($related->images, true);
                                         @endphp
                                         @if(!empty($images) && isset($images[0]))
-                                            <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                            <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.onerror=null; this.src='{{ asset('images/placeholder-property.svg') }}'">
                                         @else
                                             <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                         @endif
@@ -241,13 +241,13 @@
                                     @endif
                                 </div>
                                 <div class="p-4">
-                                    <h3 class="font-semibold text-gray-900 group-hover:text-[#b91111] transition truncate">
+                                    <h3 class="font-semibold text-gray-900 group-hover:text-[#a94a2a] transition truncate">
                                         <a href="{{ route('properties.show', $related) }}">{{ $related->title }}</a>
                                     </h3>
                                     <p class="text-gray-500 text-sm truncate">{{ $related->address }}</p>
                                     <div class="flex justify-between items-center mt-3 pt-3 border-t">
-                                        <span class="text-lg font-bold text-[#b91111]">${{ number_format($related->price) }}</span>
-                                        <a href="{{ route('properties.show', $related) }}" class="text-[#b91111] hover:text-[#990e0e] text-sm font-medium">View →</a>
+                                        <span class="text-lg font-bold text-[#a94a2a]">${{ number_format($related->price) }}</span>
+                                        <a href="{{ route('properties.show', $related) }}" class="text-[#a94a2a] hover:text-[#990e0e] text-sm font-medium">View →</a>
                                     </div>
                                 </div>
                             </div>
