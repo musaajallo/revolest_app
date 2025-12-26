@@ -1,5 +1,5 @@
 @php
-    $siteName = \App\Models\Setting::get('site_name', 'SÀ Property');
+    $siteName = \App\Models\Setting::get('site_name', 'Revolest');
     $siteTagline = \App\Models\Setting::get('site_tagline', 'Your trusted real estate partner');
     $contactEmail = \App\Models\Setting::get('contact_email', 'info@saproperty.gm');
     $contactPhone = \App\Models\Setting::get('contact_phone', '+220 123 4567');
@@ -52,9 +52,9 @@
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
                         <div class="w-10 h-10 bg-[#d41313] rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-xl">SÀ</span>
+                            <span class="text-white font-bold text-xl">R</span>
                         </div>
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">{{ str_replace('SÀ Property', 'Property', $siteName) }}</span>
+                        <span class="text-xl font-bold text-gray-900 dark:text-white">{{ $siteName }}</span>
                     </a>
                 </div>
 
@@ -182,9 +182,9 @@
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center space-x-2 mb-4">
                         <div class="w-10 h-10 bg-[#d41313] rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-xl">SÀ</span>
+                            <span class="text-white font-bold text-xl">R</span>
                         </div>
-                        <span class="text-xl font-bold">{{ str_replace('SÀ ', '', $siteName) }}</span>
+                        <span class="text-xl font-bold">{{ $siteName }}</span>
                     </div>
                     <p class="text-gray-400 mb-4">
                         {{ $footerText }}

@@ -32,14 +32,10 @@
                                 @if(!empty($images) && isset($images[0]))
                                     <img id="main-image" src="{{ asset('storage/' . $images[0]) }}" alt="{{ $property->title }}" class="w-full h-full object-cover">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                        <svg class="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                    </div>
+                                    <img id="main-image" src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                 @endif
                             @else
-                                <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                    <svg class="w-24 h-24" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                </div>
+                                <img id="main-image" src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                             @endif
                             <div class="absolute top-4 left-4">
                                 <span class="bg-[#d41313] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
@@ -209,9 +205,7 @@
                                         @if($agent->photo)
                                             <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover">
                                         @else
-                                            <div class="w-full h-full flex items-center justify-center bg-red-100">
-                                                <span class="text-lg font-bold text-[#b91111]">{{ substr($agent->name, 0, 1) }}</span>
-                                            </div>
+                                            <img src="{{ asset('images/placeholder-agent.svg') }}" alt="No photo available" class="w-full h-full object-cover">
                                         @endif
                                     </div>
                                     <div class="ml-3">
@@ -240,14 +234,10 @@
                                         @if(!empty($images) && isset($images[0]))
                                             <img src="{{ asset('storage/' . $images[0]) }}" alt="{{ $related->title }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                         @else
-                                            <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                                <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                            </div>
+                                            <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                         @endif
                                     @else
-                                        <div class="w-full h-full flex items-center justify-center text-gray-400">
-                                            <svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                        </div>
+                                        <img src="{{ asset('images/placeholder-property.svg') }}" alt="No image available" class="w-full h-full object-cover">
                                     @endif
                                 </div>
                                 <div class="p-4">

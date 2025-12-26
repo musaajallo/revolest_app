@@ -24,7 +24,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
     public function mount(): void
     {
         $this->form->fill([
-            'site_name' => Setting::get('site_name', 'SÀ Property'),
+            'site_name' => Setting::get('site_name', 'Revolest'),
             'site_tagline' => Setting::get('site_tagline', 'Your trusted real estate partner'),
             'site_logo' => Setting::get('site_logo'),
             'site_favicon' => Setting::get('site_favicon'),

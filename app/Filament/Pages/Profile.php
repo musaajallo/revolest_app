@@ -14,7 +14,7 @@ class Profile extends Page implements Forms\Contracts\HasForms
     use Forms\Concerns\InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
-    protected static ?string $navigationGroup = null;
+    protected static ?string $navigationGroup = 'System Management';
     protected static ?string $navigationLabel = 'My Profile';
     protected static ?int $navigationSort = 999;
     protected static string $view = 'filament.pages.profile';

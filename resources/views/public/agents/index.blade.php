@@ -24,9 +24,7 @@
                                 @if($agent->photo)
                                     <img src="{{ asset('storage/' . $agent->photo) }}" alt="{{ $agent->name }}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                                 @else
-                                    <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-400 to-[#b91111]">
-                                        <span class="text-6xl font-bold text-white">{{ substr($agent->name, 0, 1) }}</span>
-                                    </div>
+                                    <img src="{{ asset('images/placeholder-agent.svg') }}" alt="No photo available" class="w-full h-full object-cover">
                                 @endif
                             </div>
 

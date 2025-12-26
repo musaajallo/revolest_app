@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->brandName('SÀ Property')
+            ->brandName('Revolest')
             ->login(Login::class)
             ->pages([
                 Dashboard::class,
@@ -110,6 +110,7 @@ class AdminPanelProvider extends PanelProvider
                 'Management',
                 'Communication',
                 'Properties',
+                'CMS',
                 'System Management',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
