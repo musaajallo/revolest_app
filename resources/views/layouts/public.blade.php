@@ -1,7 +1,7 @@
 @php
     $siteName = \App\Models\Setting::get('site_name', 'Revolest');
     $siteTagline = \App\Models\Setting::get('site_tagline', 'Your trusted real estate partner');
-    $contactEmail = \App\Models\Setting::get('contact_email', 'info@saproperty.gm');
+    $contactEmail = \App\Models\Setting::get('contact_email', 'info@revolest.com');
     $contactPhone = \App\Models\Setting::get('contact_phone', '+220 123 4567');
     $contactAddress = \App\Models\Setting::get('contact_address', 'Kairaba Avenue, Serrekunda, The Gambia');
     $footerText = \App\Models\Setting::get('footer_text', 'Your trusted partner in real estate. We help you find the perfect property for your needs.');

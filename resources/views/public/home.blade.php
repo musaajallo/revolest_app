@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', $page?->meta_title ?? 'Home')
-@section('meta_description', $page?->meta_description ?? 'Find your dream property with SÀ Property. Browse homes for sale and rent, connect with trusted agents, and make your real estate journey seamless.')
+@section('meta_description', $page?->meta_description ?? 'Find your dream property with Revolest. Browse homes for sale and rent, connect with trusted agents, and make your real estate journey seamless.')
 
 @section('content')
     <!-- Hero Section -->
@@ -157,7 +157,7 @@
     <section class="py-16 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $page?->getContent('why_choose_title') ?? 'Why Choose SÀ Property?' }}</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $page?->getContent('why_choose_title') ?? 'Why Choose Revolest?' }}</h2>
                 <p class="text-gray-600 max-w-2xl mx-auto">{{ $page?->getContent('why_choose_subtitle') ?? 'We make finding your perfect property simple, transparent, and stress-free.' }}</p>
             </div>
 

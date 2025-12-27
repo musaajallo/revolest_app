@@ -1,11 +1,11 @@
 @extends('layouts.public')
 
 @section('title', $page?->meta_title ?? 'Contact Us')
-@section('meta_description', $page?->meta_description ?? 'Get in touch with SÀ Property. We\'re here to help with all your real estate needs.')
+@section('meta_description', $page?->meta_description ?? 'Get in touch with Revolest. We\'re here to help with all your real estate needs.')
 
 @php
     // Use CMS page content first, then fall back to Site Settings
-    $contactEmail = $page?->getContent('email_1') ?? \App\Models\Setting::get('contact_email', 'info@saproperty.gm');
+    $contactEmail = $page?->getContent('email_1') ?? \App\Models\Setting::get('contact_email', 'info@revolest.com');
     $contactPhone = $page?->getContent('phone_1') ?? \App\Models\Setting::get('contact_phone', '+220 123 4567');
     $contactPhone2 = $page?->getContent('phone_2') ?? \App\Models\Setting::get('contact_phone_2');
     $contactAddress = $page?->getContent('office_address') ?? \App\Models\Setting::get('contact_address', "Kairaba Avenue\nSerrekunda, The Gambia");
@@ -235,13 +235,13 @@
                         const marker = new google.maps.Marker({
                             position: location,
                             map: map,
-                            title: "{{ \App\Models\Setting::get('site_name', 'SÀ Property') }}",
+                            title: "{{ \App\Models\Setting::get('site_name', 'Revolest') }}",
                             animation: google.maps.Animation.DROP
                         });
 
                         const infowindow = new google.maps.InfoWindow({
                             content: `<div class="p-2">
-                                <strong>{{ \App\Models\Setting::get('site_name', 'SÀ Property') }}</strong><br>
+                                <strong>{{ \App\Models\Setting::get('site_name', 'Revolest') }}</strong><br>
                                 {{ \App\Models\Setting::get('contact_address', '') }}
                             </div>`
                         });

@@ -28,7 +28,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
             'site_tagline' => Setting::get('site_tagline', 'Your trusted real estate partner'),
             'site_logo' => Setting::get('site_logo'),
             'site_favicon' => Setting::get('site_favicon'),
-            'contact_email' => Setting::get('contact_email', 'info@saproperty.gm'),
+            'contact_email' => Setting::get('contact_email', 'info@revolest.com'),
             'contact_phone' => Setting::get('contact_phone', '+220 123 4567'),
             'contact_phone_2' => Setting::get('contact_phone_2'),
             'contact_address' => Setting::get('contact_address', 'Kairaba Avenue, Serrekunda, The Gambia'),

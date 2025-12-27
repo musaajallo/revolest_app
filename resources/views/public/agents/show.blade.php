@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', $agent->name . ' - Agent Profile')
-@section('meta_description', $agent->bio ? Str::limit($agent->bio, 160) : 'View ' . $agent->name . '\'s profile and property listings at SÀ Property.')
+@section('meta_description', $agent->bio ? Str::limit($agent->bio, 160) : 'View ' . $agent->name . '\'s profile and property listings at Revolest.')
 
 @section('content')
     <!-- Breadcrumb -->
