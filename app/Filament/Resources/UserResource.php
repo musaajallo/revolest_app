@@ -57,11 +57,27 @@ class UserResource extends Resource
                     ->required()
                     ->default('user'),
                 Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required(fn (string $operation): bool => $operation === 'create')
-                    ->dehydrated(fn (?string $state) => filled($state))
-                    ->maxLength(255),
+                Forms\Components\Section::make('Change Password')
+                    ->description('Leave empty if you do not want to change the password.')
+                    ->schema([
+                        Forms\Components\TextInput::make('password')
+                            ->label('New Password')
+                            ->password()
+                            ->revealable()
+                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->dehydrated(fn (?string $state) => filled($state))
+                            ->confirmed()
+                            ->minLength(8)
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('password_confirmation')
+                            ->label('Confirm New Password')
+                            ->password()
+                            ->revealable()
+                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->dehydrated(false),
+                    ])
+                    ->columns(2)
+                    ->visible(fn (string $operation): bool => $operation === 'edit' || $operation === 'create'),
             ]);
     }
 

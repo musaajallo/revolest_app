@@ -89,7 +89,7 @@ class Profile extends Page implements Forms\Contracts\HasForms
         $user->email = $data['email'];
 
         // Update password if provided
-        if (filled($data['current_password'])) {
+        if (filled($data['new_password'])) {
             // Verify current password
             if (!Hash::check($data['current_password'], $user->password)) {
                 Notification::make()
@@ -101,9 +101,8 @@ class Profile extends Page implements Forms\Contracts\HasForms
             }
 
             // Update to new password
-            if (filled($data['new_password'])) {
-                $user->password = Hash::make($data['new_password']);
-            }
+            // Note: Since User model has 'password' => 'hashed' cast, we assign the raw password
+            $user->password = $data['new_password'];
         }
 
         $user->save();
@@ -113,7 +112,7 @@ class Profile extends Page implements Forms\Contracts\HasForms
             ->success()
             ->send();
 
-        // Clear password fields
+        // Update the form state with current data and clear password fields
         $this->form->fill([
             'name' => $user->name,
             'email' => $user->email,
