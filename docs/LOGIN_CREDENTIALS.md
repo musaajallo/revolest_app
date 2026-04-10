@@ -1,12 +1,12 @@
 # Demo Account Login Credentials
 
-This document contains the login credentials for all demo accounts in the SA Property Management System.
+This document contains the login credentials for all demo accounts in the Revolest Property Management System.
 
 ## Super Admin Account
 
 | Field    | Value                      |
 | -------- | -------------------------- |
-| Email    | `admin@saproperty.gm`      |
+| Email    | `admin@revolest.gm`      |
 | Password | `password`                 |
 | Name     | Mamadou A Jallow           |
 | Role     | Super Admin                |
@@ -19,7 +19,7 @@ This document contains the login credentials for all demo accounts in the SA Pro
 
 | Field    | Value                      |
 | -------- | -------------------------- |
-| Email    | `agent@saproperty.gm`      |
+| Email    | `agent@revolest.gm`      |
 | Password | `password`                 |
 | Name     | Agent Demo User            |
 | Role     | Agent                      |
@@ -36,7 +36,7 @@ This document contains the login credentials for all demo accounts in the SA Pro
 
 | Field    | Value                      |
 | -------- | -------------------------- |
-| Email    | `owner@saproperty.gm`      |
+| Email    | `owner@revolest.gm`      |
 | Password | `password`                 |
 | Name     | Owner Demo User            |
 | Role     | Owner                      |
@@ -54,7 +54,7 @@ This document contains the login credentials for all demo accounts in the SA Pro
 
 | Field    | Value                      |
 | -------- | -------------------------- |
-| Email    | `tenant@saproperty.gm`     |
+| Email    | `tenant@revolest.gm`     |
 | Password | `password`                 |
 | Name     | Tenant Demo User           |
 | Role     | Tenant                     |

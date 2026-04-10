@@ -1,4 +1,4 @@
-# SA Property Management System
+# Revolest Property Management System
 
 A comprehensive property management system built with Laravel and Filament, designed for managing rental properties, tenants, leases, and related operations.
 
@@ -44,8 +44,8 @@ A comprehensive property management system built with Laravel and Filament, desi
 
 1. Clone the repository:
 ```bash
-git clone git@github.com:musaajallo/saproperty.git
-cd saproperty-app
+git clone git@github.com:musaajallo/revolest.git
+cd revolest_app
 ```
 
 2. Install dependencies:
@@ -160,4 +160,4 @@ This project is proprietary software. All rights reserved.
 
 ## Support
 
-For support or inquiries, contact: info@saproperty.gm
+For support or inquiries, contact: info@revolest.gm
