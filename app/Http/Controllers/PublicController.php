@@ -74,7 +74,7 @@ class PublicController extends Controller
 
         $properties = $query->latest()->paginate(12);
 
-        return view('public.properties.index', compact('properties'));
+        return view('public.properties.index', compact('properties', 'page'));
     }
 
     /**
