@@ -90,6 +90,16 @@ class Profile extends Page implements Forms\Contracts\HasForms
 
         // Update password if provided
         if (filled($data['new_password'])) {
+            // Ensure current password is provided
+            if (blank($data['current_password'])) {
+                Notification::make()
+                    ->title('Error')
+                    ->body('The current password is required to set a new password.')
+                    ->danger()
+                    ->send();
+                return;
+            }
+
             // Verify current password
             if (!Hash::check($data['current_password'], $user->password)) {
                 Notification::make()
