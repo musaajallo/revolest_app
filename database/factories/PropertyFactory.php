@@ -8,16 +8,16 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(3),
-            'description' => fake()->paragraph(),
-            'address' => fake()->address(),
-            'price' => fake()->numberBetween(50000, 500000),
-            'type' => fake()->randomElement(['house', 'apartment', 'condo']),
-            'status' => fake()->randomElement(['available', 'sold', 'rented']),
-            'bedrooms' => fake()->numberBetween(1, 6),
-            'bathrooms' => fake()->numberBetween(1, 4),
-            'area' => fake()->numberBetween(50, 500),
-            'images' => json_encode([fake()->imageUrl()]),
+            'title' => $this->faker->sentence(3),
+            'description' => $this->faker->paragraph(),
+            'address' => $this->faker->address(),
+            'price' => $this->faker->numberBetween(50000, 500000),
+            'type' => $this->faker->randomElement(['house', 'apartment', 'condo']),
+            'status' => $this->faker->randomElement(['available', 'sold', 'rented']),
+            'bedrooms' => $this->faker->numberBetween(1, 6),
+            'bathrooms' => $this->faker->numberBetween(1, 4),
+            'area' => $this->faker->numberBetween(50, 500),
+            'images' => json_encode([$this->faker->imageUrl()]),
             'owner_id' => null,
         ];
     }

@@ -9,10 +9,10 @@ class ReceiptFactory extends Factory
     {
         return [
             'payment_id' => \App\Models\Payment::inRandomOrder()->first()?->id,
-            'issued_at' => fake()->dateTimeThisYear(),
-            'file' => fake()->filePath(),
-            'amount' => fake()->numberBetween(1000, 5000),
-            'description' => fake()->sentence(),
+            'issued_at' => $this->faker->dateTimeThisYear(),
+            'file' => $this->faker->filePath(),
+            'amount' => $this->faker->numberBetween(1000, 5000),
+            'description' => $this->faker->sentence(),
         ];
     }
 }

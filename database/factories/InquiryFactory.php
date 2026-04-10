@@ -9,11 +9,11 @@ class InquiryFactory extends Factory
     {
         return [
             'listing_id' => \App\Models\Listing::inRandomOrder()->first()?->id,
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
-            'message' => fake()->sentence(),
-            'status' => fake()->randomElement(['new', 'viewed', 'closed']),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
+            'message' => $this->faker->sentence(),
+            'status' => $this->faker->randomElement(['new', 'viewed', 'closed']),
         ];
     }
 }

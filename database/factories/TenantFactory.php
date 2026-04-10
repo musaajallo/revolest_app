@@ -8,10 +8,10 @@ class TenantFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
-            'photo' => fake()->imageUrl(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
+            'photo' => $this->faker->imageUrl(),
             'user_id' => null,
         ];
     }
