@@ -10,9 +10,9 @@ class ListingFactory extends Factory
         return [
             'property_id' => \App\Models\Property::inRandomOrder()->first()?->id,
             'agent_id' => \App\Models\Agent::inRandomOrder()->first()?->id,
-            'price' => $this->faker->numberBetween(50000, 500000),
-            'status' => $this->faker->randomElement(['active', 'inactive', 'sold']),
-            'published_at' => $this->faker->dateTimeThisYear(),
+            'price' => fake()->numberBetween(50000, 500000),
+            'status' => fake()->randomElement(['active', 'inactive', 'sold']),
+            'published_at' => fake()->dateTimeThisYear(),
         ];
     }
 }

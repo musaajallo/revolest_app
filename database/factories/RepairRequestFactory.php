@@ -10,9 +10,9 @@ class RepairRequestFactory extends Factory
         return [
             'property_id' => \App\Models\Property::inRandomOrder()->first()?->id,
             'tenant_id' => \App\Models\Tenant::inRandomOrder()->first()?->id,
-            'description' => $this->faker->sentence(),
-            'status' => $this->faker->randomElement(['open', 'closed', 'in_progress']),
-            'submitted_at' => $this->faker->dateTimeThisYear(),
+            'description' => fake()->sentence(),
+            'status' => fake()->randomElement(['open', 'closed', 'in_progress']),
+            'submitted_at' => fake()->dateTimeThisYear(),
             'resolved_at' => null,
         ];
     }

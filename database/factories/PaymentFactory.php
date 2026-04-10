@@ -11,11 +11,11 @@ class PaymentFactory extends Factory
             'lease_id' => \App\Models\Lease::inRandomOrder()->first()?->id,
             'tenant_id' => \App\Models\Tenant::inRandomOrder()->first()?->id,
             'owner_id' => \App\Models\Owner::inRandomOrder()->first()?->id,
-            'amount' => $this->faker->numberBetween(1000, 5000),
-            'payment_date' => $this->faker->date(),
-            'method' => $this->faker->randomElement(['cash', 'bank', 'mobile']),
-            'status' => $this->faker->randomElement(['paid', 'pending', 'failed']),
-            'receipt_file' => $this->faker->filePath(),
+            'amount' => fake()->numberBetween(1000, 5000),
+            'payment_date' => fake()->date(),
+            'method' => fake()->randomElement(['cash', 'bank', 'mobile']),
+            'status' => fake()->randomElement(['paid', 'pending', 'failed']),
+            'receipt_file' => fake()->filePath(),
         ];
     }
 }

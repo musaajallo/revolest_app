@@ -10,11 +10,11 @@ class LeaseFactory extends Factory
         return [
             'property_id' => \App\Models\Property::inRandomOrder()->first()?->id,
             'tenant_id' => \App\Models\Tenant::inRandomOrder()->first()?->id,
-            'start_date' => $this->faker->date(),
-            'end_date' => $this->faker->date(),
-            'rent_amount' => $this->faker->numberBetween(1000, 5000),
-            'status' => $this->faker->randomElement(['active', 'terminated', 'pending']),
-            'contract_file' => $this->faker->filePath(),
+            'start_date' => fake()->date(),
+            'end_date' => fake()->date(),
+            'rent_amount' => fake()->numberBetween(1000, 5000),
+            'status' => fake()->randomElement(['active', 'terminated', 'pending']),
+            'contract_file' => fake()->filePath(),
         ];
     }
 }
