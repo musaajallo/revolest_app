@@ -37,16 +37,5 @@ class UserSeeder extends Seeder
                 $userData
             );
         }
-
-        // Add 10 random users for testing
-        $excludeEmails = array_column($users, 'email');
-        User::factory()->count(10)->create([
-            'email' => function () use ($excludeEmails) {
-                do {
-                    $email = fake()->unique()->safeEmail();
-                } while (in_array($email, $excludeEmails));
-                return $email;
-            },
-        ]);
     }
 }
