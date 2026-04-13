@@ -7,7 +7,6 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\Storage;
 
 class SiteSettings extends Page implements Forms\Contracts\HasForms
 {
@@ -65,6 +64,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                                         Forms\Components\FileUpload::make('site_logo')
                                             ->label('Site Logo')
                                             ->image()
+                                            ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeMode('contain')
@@ -74,6 +74,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                                         Forms\Components\FileUpload::make('site_favicon')
                                             ->label('Favicon')
                                             ->image()
+                                            ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeTargetWidth('32')

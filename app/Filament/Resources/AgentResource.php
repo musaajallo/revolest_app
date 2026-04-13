@@ -49,6 +49,7 @@ class AgentResource extends Resource
                 Forms\Components\FileUpload::make('photo')
                     ->label('Agent Photo')
                     ->image()
+                    ->disk('public')
                     ->directory('agents')
                     ->visibility('public'),
                 Forms\Components\Select::make('user_id')
