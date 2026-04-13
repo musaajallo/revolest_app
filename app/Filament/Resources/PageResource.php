@@ -55,6 +55,16 @@ class PageResource extends Resource
                             ->valueLabel('Content')
                             ->addActionLabel('Add Content Block')
                             ->reorderable()
+                            ->dehydrateStateUsing(function (?array $state): array {
+                                return collect($state ?? [])
+                                    ->filter(fn ($value, $key) => filled($key))
+                                    ->mapWithKeys(function ($value, $key) {
+                                        $normalizedKey = Str::snake(trim((string) $key));
+
+                                        return [$normalizedKey => $value];
+                                    })
+                                    ->toArray();
+                            })
                             ->columnSpanFull(),
                     ]),
 

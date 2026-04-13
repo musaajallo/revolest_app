@@ -3,9 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ListingResource\Pages;
-use App\Filament\Resources\ListingResource\RelationManagers;
 use App\Models\Listing;
+use App\Models\Property;
 use Filament\Forms;
+use Filament\Forms\Get;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -32,6 +33,11 @@ class ListingResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -39,17 +45,90 @@ class ListingResource extends Resource
                 Forms\Components\Select::make('property_id')
                     ->relationship('property', 'title')
                     ->searchable()
+                    ->live()
                     ->required(),
+                Forms\Components\TextInput::make('unit_name')
+                    ->label('Unit / Plot Name')
+                    ->placeholder('e.g. Block A - Unit 2')
+                    ->maxLength(255),
+                Forms\Components\Toggle::make('listed_by_company')
+                    ->label('List directly under company')
+                    ->default(false)
+                    ->live(),
                 Forms\Components\Select::make('agent_id')
                     ->relationship('agent', 'name')
                     ->searchable()
-                    ->required(),
+                    ->hidden(fn (Get $get): bool => (bool) $get('listed_by_company'))
+                    ->required(fn (Get $get): bool => !(bool) $get('listed_by_company')),
                 Forms\Components\TextInput::make('price')
                     ->numeric()
                     ->required()
                     ->prefix('D')
                     ->label('Price (GMD)'),
-                Forms\Components\TextInput::make('status')->required(),
+                Forms\Components\TextInput::make('security_deposit')
+                    ->numeric()
+                    ->prefix('D')
+                    ->label('Security Deposit (GMD)'),
+                Forms\Components\TextInput::make('agent_fee')
+                    ->numeric()
+                    ->prefix('D')
+                    ->label('Agent Fee (GMD)'),
+                Forms\Components\Select::make('status')
+                    ->required()
+                    ->options([
+                        'for_rent' => 'For Rent',
+                        'for_sale' => 'For Sale',
+                        'rented' => 'Rented',
+                        'sold' => 'Sold',
+                    ])
+                    ->default('for_rent'),
+                Forms\Components\TextInput::make('bedrooms')
+                    ->numeric()
+                    ->minValue(0)
+                    ->visible(fn (Get $get): bool => !static::selectedPropertyIsLand($get)),
+                Forms\Components\TextInput::make('bathrooms')
+                    ->numeric()
+                    ->minValue(0)
+                    ->visible(fn (Get $get): bool => !static::selectedPropertyIsLand($get)),
+                Forms\Components\Toggle::make('has_dining_area')
+                    ->label('Dining Area')
+                    ->inline(false)
+                    ->visible(fn (Get $get): bool => !static::selectedPropertyIsLand($get)),
+                Forms\Components\TextInput::make('boys_quarters')
+                    ->numeric()
+                    ->minValue(0)
+                    ->label('Boys Quarters')
+                    ->visible(fn (Get $get): bool => !static::selectedPropertyIsLand($get)),
+                Forms\Components\TextInput::make('kitchens')
+                    ->numeric()
+                    ->minValue(0)
+                    ->label('Kitchens')
+                    ->visible(fn (Get $get): bool => !static::selectedPropertyIsLand($get)),
+                Forms\Components\Toggle::make('has_guest_toilet')
+                    ->label('Guest Toilet')
+                    ->inline(false)
+                    ->visible(fn (Get $get): bool => !static::selectedPropertyIsLand($get)),
+                Forms\Components\CheckboxList::make('amenities')
+                    ->options([
+                        'ac' => 'AC',
+                        'borehole' => 'Borehole',
+                    ])
+                    ->columns(2),
+                Forms\Components\RichEditor::make('description')
+                    ->toolbarButtons([
+                        'bold',
+                        'italic',
+                        'underline',
+                        'bulletList',
+                        'orderedList',
+                        'h2',
+                        'h3',
+                        'link',
+                        'blockquote',
+                        'undo',
+                        'redo',
+                    ])
+                    ->columnSpanFull(),
                 Forms\Components\DateTimePicker::make('published_at'),
             ]);
     }
@@ -59,11 +138,17 @@ class ListingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('property.title')->label('Property')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('agent.name')->label('Agent')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('agent.name')
+                    ->label('Listed By')
+                    ->state(fn (Listing $record): string => $record->listed_by_company ? 'Company' : ($record->agent?->name ?? 'Company'))
+                    ->searchable()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('price')
                     ->money('GMD')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('security_deposit')->money('GMD')->label('Deposit')->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('agent_fee')->money('GMD')->label('Agent Fee')->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('status')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('published_at')->searchable()->sortable(),
             ])
@@ -107,5 +192,16 @@ class ListingResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    protected static function selectedPropertyIsLand(Get $get): bool
+    {
+        $propertyId = $get('property_id');
+
+        if (!$propertyId) {
+            return false;
+        }
+
+        return Property::query()->whereKey($propertyId)->value('type') === 'land';
     }
 }

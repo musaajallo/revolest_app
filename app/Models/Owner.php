@@ -18,7 +18,6 @@ class Owner extends Model
         'phone',
         'bio',
         'photo',
-        'user_id',
     ];
 
     protected static function booted(): void
@@ -36,8 +35,4 @@ class Owner extends Model
         return $this->hasMany(Property::class);
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 }

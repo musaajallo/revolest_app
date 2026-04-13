@@ -2,7 +2,6 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Listing;
 use App\Models\Inquiry;
 use Carbon\Carbon;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -12,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class AgentStatsWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
+    private const MARKET_STATUSES = ['for_rent', 'for_sale'];
 
     protected function getStats(): array
     {
@@ -37,7 +37,7 @@ class AgentStatsWidget extends BaseWidget
             : ($listingsThisMonth > 0 ? 100 : 0);
 
         // Active Listings
-        $activeListings = $agent->listings()->where('status', 'active')->count();
+        $activeListings = $agent->listings()->whereIn('status', self::MARKET_STATUSES)->count();
 
         // Total Inquiries
         $totalInquiries = Inquiry::whereHas('listing', function ($query) use ($agent) {

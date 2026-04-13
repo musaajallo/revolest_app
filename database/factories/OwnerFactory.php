@@ -13,7 +13,6 @@ class OwnerFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'bio' => $this->faker->paragraph(),
             'photo' => $this->faker->imageUrl(),
-            'user_id' => null,
         ];
     }
 }

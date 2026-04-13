@@ -14,6 +14,7 @@ class CircularStatsWidget extends Widget
     protected static string $view = 'filament.widgets.circular-stats-widget';
     protected static ?int $sort = 7;
     protected int | string | array $columnSpan = 'full';
+    private const MARKET_STATUSES = ['for_rent', 'for_sale'];
 
     public function getViewData(): array
     {
@@ -27,7 +28,7 @@ class CircularStatsWidget extends Widget
 
         // Listing Stats
         $totalListings = Listing::count();
-        $activeListings = Listing::where('status', 'active')->count();
+        $activeListings = Listing::whereIn('status', self::MARKET_STATUSES)->count();
         $newListings = Listing::where('created_at', '>=', $thirtyDaysAgo)->count();
 
         // Occupancy Rate
@@ -35,8 +36,8 @@ class CircularStatsWidget extends Widget
         $occupiedProperties = Lease::where('status', 'active')
             ->distinct('property_id')
             ->count('property_id');
-        $occupancyRate = $totalProperties > 0 
-            ? round(($occupiedProperties / $totalProperties) * 100, 1) 
+        $occupancyRate = $totalProperties > 0
+            ? round(($occupiedProperties / $totalProperties) * 100, 1)
             : 0;
 
         return [

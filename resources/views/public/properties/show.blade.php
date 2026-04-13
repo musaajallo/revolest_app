@@ -4,6 +4,18 @@
 @section('meta_description', Str::limit($property->description, 160))
 
 @section('content')
+    @php
+        $displayListing = $property->usesMixedUnitPricing()
+            ? ($property->listings->firstWhere('status', 'for_rent')
+                ?? $property->listings->firstWhere('status', 'for_sale')
+                ?? $property->listings->first())
+            : null;
+        $displayPrice = $property->publicPrice($displayListing);
+        $priceLabel = $property->publicPriceLabel($displayListing);
+        $displayDeposit = $property->publicDeposit($displayListing);
+        $displayAgentFee = $property->publicAgentFee($displayListing);
+    @endphp
+
     <!-- Breadcrumb -->
     <section class="bg-gray-100 py-4">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +53,7 @@
                                 <span class="bg-[#a94a2a] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
                             </div>
                             <div class="absolute top-4 right-4">
-                                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->status }}</span>
+                                <span class="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ str_replace('_', ' ', $displayListing?->status ?? $property->purpose) }}</span>
                             </div>
                         </div>
 
@@ -71,32 +83,48 @@
                                     <svg class="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                     {{ $property->address }}
                                 </p>
+                                @if($property->plus_code)
+                                    <p class="text-sm text-gray-400 mt-1">Plus Code: {{ $property->plus_code }}</p>
+                                @endif
                             </div>
                             <div class="mt-4 md:mt-0">
-                                <span class="text-3xl font-bold text-[#a94a2a]">D{{ number_format($property->price) }}</span>
+                                <div class="text-right">
+                                    <div class="text-xs uppercase tracking-wide text-gray-500">{{ $priceLabel }}</div>
+                                    <span class="text-3xl font-bold text-[#a94a2a]">D{{ number_format($displayPrice ?? 0) }}</span>
+                                </div>
+                                @if($displayDeposit || $displayAgentFee)
+                                    <div class="text-xs text-gray-500 mt-1 text-right">
+                                        @if($displayDeposit)
+                                            <div>Security Deposit: D{{ number_format($displayDeposit) }}</div>
+                                        @endif
+                                        @if($displayAgentFee)
+                                            <div>Agent Fee: D{{ number_format($displayAgentFee) }}</div>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
                         <!-- Features Grid -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y">
-                            @if($property->bedrooms)
+                            @if(($displayListing?->bedrooms ?? $property->bedrooms))
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
                                     <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                    <div class="text-2xl font-bold text-gray-900">{{ $property->bedrooms }}</div>
+                                    <div class="text-2xl font-bold text-gray-900">{{ $displayListing?->bedrooms ?? $property->bedrooms }}</div>
                                     <div class="text-sm text-gray-500">Bedrooms</div>
                                 </div>
                             @endif
-                            @if($property->bathrooms)
+                            @if(($displayListing?->bathrooms ?? $property->bathrooms))
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
                                     <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
-                                    <div class="text-2xl font-bold text-gray-900">{{ $property->bathrooms }}</div>
+                                    <div class="text-2xl font-bold text-gray-900">{{ $displayListing?->bathrooms ?? $property->bathrooms }}</div>
                                     <div class="text-sm text-gray-500">Bathrooms</div>
                                 </div>
                             @endif
-                            @if($property->area)
+                            @if(($displayListing?->area ?? $property->area))
                                 <div class="text-center p-4 bg-gray-50 rounded-lg">
                                     <svg class="w-8 h-8 mx-auto text-[#1c4736] mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" /></svg>
-                                    <div class="text-2xl font-bold text-gray-900">{{ number_format($property->area) }}</div>
+                                    <div class="text-2xl font-bold text-gray-900">{{ number_format($displayListing?->area ?? $property->area) }}</div>
                                     <div class="text-sm text-gray-500">Sq Ft</div>
                                 </div>
                             @endif
@@ -107,11 +135,41 @@
                             </div>
                         </div>
 
+                        @if($displayListing)
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
+                                @if($displayListing->has_dining_area)
+                                    <div class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">Dining Area</div>
+                                @endif
+                                @if($displayListing->boys_quarters)
+                                    <div class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">Boys Quarters: {{ $displayListing->boys_quarters }}</div>
+                                @endif
+                                @if($displayListing->kitchens)
+                                    <div class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">Kitchens: {{ $displayListing->kitchens }}</div>
+                                @endif
+                                @if(($displayListing->guest_toilets ?? 0) > 0)
+                                    <div class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">Guest Toilets: {{ $displayListing->guest_toilets }}</div>
+                                @elseif($displayListing->has_guest_toilet)
+                                    <div class="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">Guest Toilet</div>
+                                @endif
+                            </div>
+
+                            @if(!empty($displayListing->amenities))
+                                <div class="mt-4">
+                                    <h3 class="text-sm font-semibold text-gray-900 mb-2">Amenities</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        @foreach($displayListing->amenities as $amenity)
+                                            <span class="text-xs bg-red-100 text-[#a94a2a] px-2 py-1 rounded-full uppercase">{{ $amenity }}</span>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+
                         <!-- Description -->
                         <div class="mt-6">
                             <h2 class="text-xl font-semibold text-gray-900 mb-4">Description</h2>
                             <div class="prose prose-gray max-w-none">
-                                {!! nl2br(e($property->description)) !!}
+                                {!! $displayListing?->description ?: ($property->description ?? '') !!}
                             </div>
                         </div>
                     </div>
@@ -142,10 +200,10 @@
                         <h2 class="text-xl font-semibold text-gray-900 mb-4">Interested in this property?</h2>
                         <p class="text-gray-600 mb-6">Send us an inquiry and we'll get back to you shortly.</p>
 
-                        @if($property->listings->first())
+                        @if($displayListing)
                             <form action="{{ route('inquiry.store') }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="listing_id" value="{{ $property->listings->first()->id }}">
+                                <input type="hidden" name="listing_id" value="{{ $displayListing->id }}">
 
                                 <div class="space-y-4">
                                     <div>
@@ -196,8 +254,8 @@
                         @endif
 
                         <!-- Agent Info -->
-                        @if($property->listings->first() && $property->listings->first()->agent)
-                            @php $agent = $property->listings->first()->agent; @endphp
+                        @if($displayListing && !$displayListing->listed_by_company && $displayListing->agent)
+                            @php $agent = $displayListing->agent; @endphp
                             <div class="mt-6 pt-6 border-t">
                                 <h3 class="font-semibold text-gray-900 mb-3">Listed by</h3>
                                 <a href="{{ route('agents.show', $agent) }}" class="flex items-center group">
@@ -213,6 +271,11 @@
                                         <p class="text-sm text-gray-500">{{ $agent->phone ?? $agent->email }}</p>
                                     </div>
                                 </a>
+                            </div>
+                        @elseif($displayListing?->listed_by_company)
+                            <div class="mt-6 pt-6 border-t">
+                                <h3 class="font-semibold text-gray-900 mb-3">Listed by</h3>
+                                <p class="text-gray-600">Revolest Company Listing</p>
                             </div>
                         @endif
                     </div>
@@ -246,7 +309,7 @@
                                     </h3>
                                     <p class="text-gray-500 text-sm truncate">{{ $related->address }}</p>
                                     <div class="flex justify-between items-center mt-3 pt-3 border-t">
-                                        <span class="text-lg font-bold text-[#a94a2a]">${{ number_format($related->price) }}</span>
+                                        <span class="text-lg font-bold text-[#a94a2a]">D{{ number_format($related->listings->first()?->price ?? $related->price) }}</span>
                                         <a href="{{ route('properties.show', $related) }}" class="text-[#a94a2a] hover:text-[#990e0e] text-sm font-medium">View →</a>
                                     </div>
                                 </div>

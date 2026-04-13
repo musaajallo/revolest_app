@@ -3,20 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\InquiryResource\Pages;
-use App\Filament\Resources\InquiryResource\RelationManagers;
 use App\Models\Inquiry;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class InquiryResource extends Resource
 {
     protected static ?string $navigationGroup = 'Communication';
-    protected static ?string $navigationLabel = 'Property Inquiries';
+    protected static ?string $navigationLabel = 'Enquiries';
 
     public static function getGlobalSearchResultUrl($record): string
     {

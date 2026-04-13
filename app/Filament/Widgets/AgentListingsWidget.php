@@ -47,10 +47,10 @@ class AgentListingsWidget extends BaseWidget
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
-                        'success' => 'active',
-                        'warning' => 'pending',
-                        'danger' => 'inactive',
+                        'success' => 'for_sale',
+                        'warning' => 'for_rent',
                         'gray' => 'rented',
+                        'danger' => 'sold',
                     ]),
 
                 Tables\Columns\TextColumn::make('inquiries_count')

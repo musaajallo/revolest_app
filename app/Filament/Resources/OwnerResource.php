@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\OwnerResource\Pages;
-use App\Filament\Resources\OwnerResource\RelationManagers;
 use App\Models\Owner;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -47,10 +46,12 @@ class OwnerResource extends Resource
                     ->tel()
                     ->placeholder('+220 123 4567'),
                 Forms\Components\Textarea::make('bio'),
-                Forms\Components\TextInput::make('photo'),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->searchable(),
+                Forms\Components\FileUpload::make('photo')
+                    ->label('Owner Photo')
+                    ->image()
+                    ->disk('public')
+                    ->directory('owners')
+                    ->visibility('public'),
             ]);
     }
 

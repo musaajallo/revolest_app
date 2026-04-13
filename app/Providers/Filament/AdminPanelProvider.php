@@ -10,8 +10,6 @@ use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -19,7 +17,6 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Support\Enums\MaxWidth;
 use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\Dashboard;
 
@@ -33,6 +30,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Revolest')
             ->login(Login::class)
+            ->sidebarCollapsibleOnDesktop()
+            ->sidebarWidth('18rem')
+            ->collapsedSidebarWidth('4.5rem')
             ->pages([
                 Dashboard::class,
             ])
@@ -76,30 +76,28 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 'panels::head.end',
-                fn () => '<style>
-                    .fi-global-search {
-                        position: absolute !important;
-                        left: 50% !important;
-                        transform: translateX(-50%) !important;
-                        width: 100% !important;
-                        max-width: 600px !important;
-                    }
-                    @media (max-width: 1024px) {
-                        .fi-global-search {
-                            position: relative !important;
-                            left: auto !important;
-                            transform: none !important;
-                            max-width: 350px !important;
+                fn () => <<<'HTML'
+                <style>
+                    @media (min-width: 1024px) {
+                        .fi-topbar .fi-global-search-field {
+                            width: 32rem !important;
+                            max-width: 32rem !important;
+                        }
+                        .fi-sidebar {
+                            resize: horizontal;
+                            overflow: auto;
+                            min-width: 4.5rem;
+                            max-width: 32rem;
                         }
                     }
-                </style>'
-            )
-            ->renderHook(
-                'panels::global-search.before',
-                fn () => Blade::render('<a href="/" target="_blank" class="fi-btn fi-btn-size-sm inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold outline-none transition duration-75 hover:bg-gray-50 dark:hover:bg-white/5 text-gray-700 dark:text-gray-200">
-                    <x-heroicon-o-globe-alt class="h-5 w-5" />
-                    <span>Visit Website</span>
-                </a>')
+                    @media (max-width: 1024px) {
+                        .fi-topbar .fi-global-search-field {
+                            width: min(72vw, 26rem) !important;
+                            max-width: 26rem !important;
+                        }
+                    }
+                </style>
+                HTML
             )
             ->renderHook(
                 'panels::user-menu.before',

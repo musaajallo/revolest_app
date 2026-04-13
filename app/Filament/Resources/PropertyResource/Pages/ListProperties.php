@@ -4,11 +4,26 @@ namespace App\Filament\Resources\PropertyResource\Pages;
 
 use App\Filament\Resources\PropertyResource;
 use Filament\Actions;
+use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Auth;
 
 class ListProperties extends ListRecords
 {
     protected static string $resource = PropertyResource::class;
+
+    public function getTabs(): array
+    {
+        return [
+            'all' => Tab::make('All'),
+            'sale' => Tab::make('Sales')
+                ->query(fn ($query) => $query->where('purpose', 'sale')),
+            'mixed' => Tab::make('Mixed')
+                ->query(fn ($query) => $query->where('purpose', 'mixed')),
+            'rent' => Tab::make('Rent')
+                ->query(fn ($query) => $query->where('purpose', 'rent')),
+        ];
+    }
 
     protected function getHeaderActions(): array
     {
@@ -18,7 +33,7 @@ class ListProperties extends ListRecords
                 ->label('Export to CSV')
                 ->icon('heroicon-o-arrow-down-tray')
                 ->color('success')
-                ->visible(fn () => auth()->check() && auth()->user()->role === 'super_admin')
+                ->visible(fn () => Auth::check() && Auth::user()?->role === 'super_admin')
                 ->action(function () {
                     $filename = 'properties_' . now()->format('Y-m-d_H-i-s') . '.csv';
 
@@ -77,4 +92,5 @@ class ListProperties extends ListRecords
                 }),
         ];
     }
+
 }

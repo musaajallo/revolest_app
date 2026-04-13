@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AgentResource\Pages;
-use App\Filament\Resources\AgentResource\RelationManagers;
 use App\Models\Agent;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -47,7 +46,11 @@ class AgentResource extends Resource
                     ->tel()
                     ->placeholder('+220 123 4567'),
                 Forms\Components\Textarea::make('bio'),
-                Forms\Components\TextInput::make('photo'),
+                Forms\Components\FileUpload::make('photo')
+                    ->label('Agent Photo')
+                    ->image()
+                    ->directory('agents')
+                    ->visibility('public'),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
                     ->searchable(),
@@ -91,6 +94,11 @@ class AgentResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
     }
 
     public static function getPages(): array

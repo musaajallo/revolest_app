@@ -123,18 +123,24 @@
                                                 {{ $listing->property->address }}
                                             </p>
                                             <div class="flex items-center gap-3 text-xs text-gray-600 mb-3">
-                                                @if($listing->property->bedrooms)
-                                                    <span>{{ $listing->property->bedrooms }} Beds</span>
+                                                @if($listing->bedrooms || $listing->property->bedrooms)
+                                                    <span>{{ $listing->bedrooms ?? $listing->property->bedrooms }} Beds</span>
                                                 @endif
-                                                @if($listing->property->bathrooms)
-                                                    <span>{{ $listing->property->bathrooms }} Baths</span>
+                                                @if($listing->bathrooms || $listing->property->bathrooms)
+                                                    <span>{{ $listing->bathrooms ?? $listing->property->bathrooms }} Baths</span>
                                                 @endif
                                                 @if($listing->property->area)
                                                     <span>{{ number_format($listing->property->area) }} sqft</span>
                                                 @endif
                                             </div>
                                             <div class="flex justify-between items-center pt-3 border-t">
-                                                <span class="text-xl font-bold text-[#a94a2a]">${{ number_format($listing->price ?? $listing->property->price) }}</span>
+                                                @php
+                                                    $isMixedProperty = $listing->property->purpose === 'mixed';
+                                                    $displayPrice = $isMixedProperty
+                                                        ? $listing->price
+                                                        : $listing->property->publicPrice($listing);
+                                                @endphp
+                                                <span class="text-xl font-bold text-[#a94a2a]">D{{ number_format($displayPrice ?? 0) }}</span>
                                                 <a href="{{ route('properties.show', $listing->property) }}" class="text-[#a94a2a] hover:text-[#990e0e] text-sm font-medium">
                                                     Details →
                                                 </a>

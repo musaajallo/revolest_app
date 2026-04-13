@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
+    private const PUBLIC_LISTING_STATUSES = ['for_rent', 'for_sale'];
+
     /**
      * Display the homepage
      */
@@ -18,14 +20,22 @@ class PublicController extends Controller
     {
         $page = Page::findBySlug('home');
 
-        $featuredProperties = Property::where('status', 'available')
+        $featuredProperties = Property::where('status', 'active')
+            ->where('is_featured', true)
+            ->where(function ($query) {
+                $query->whereNull('available_from')
+                    ->orWhere('available_from', '<=', now());
+            })
+            ->with(['listings' => function ($query) {
+                $query->whereIn('status', self::PUBLIC_LISTING_STATUSES)->latest();
+            }])
             ->latest()
-            ->take(6)
+            ->take(10)
             ->get();
 
         $totalProperties = Property::count();
         $totalAgents = Agent::count();
-        $totalListings = Listing::where('status', 'active')->count();
+        $totalListings = Listing::whereIn('status', self::PUBLIC_LISTING_STATUSES)->count();
 
         return view('public.home', compact(
             'page',
@@ -43,7 +53,16 @@ class PublicController extends Controller
     {
         $page = Page::findBySlug('properties');
 
-        $query = Property::where('status', 'available');
+        $query = Property::where(function ($propertyQuery) {
+                $propertyQuery->where('status', 'active')
+                    ->where(function ($availabilityQuery) {
+                        $availabilityQuery->whereNull('available_from')
+                            ->orWhere('available_from', '<=', now());
+                    });
+            })
+            ->with(['listings' => function ($listingQuery) {
+                $listingQuery->whereIn('status', self::PUBLIC_LISTING_STATUSES)->latest();
+            }]);
 
         // Search by title or address
         if ($request->filled('search')) {
@@ -61,15 +80,71 @@ class PublicController extends Controller
 
         // Filter by price range
         if ($request->filled('min_price')) {
-            $query->where('price', '>=', $request->min_price);
+            $query->where(function ($priceQuery) use ($request) {
+                $priceQuery
+                    ->where(function ($saleQuery) use ($request) {
+                        $saleQuery->where('purpose', 'sale')
+                            ->where(function ($fieldQuery) use ($request) {
+                                $fieldQuery->where('sale_price', '>=', $request->min_price)
+                                    ->orWhere('price', '>=', $request->min_price);
+                            });
+                    })
+                    ->orWhere(function ($rentQuery) use ($request) {
+                        $rentQuery->where('purpose', 'rent')
+                            ->where(function ($fieldQuery) use ($request) {
+                                $fieldQuery->where('rental_price', '>=', $request->min_price)
+                                    ->orWhere('price', '>=', $request->min_price);
+                            });
+                    })
+                    ->orWhere(function ($mixedQuery) use ($request) {
+                        $mixedQuery->where('purpose', 'mixed')
+                            ->whereHas('listings', function ($listingQuery) use ($request) {
+                                $listingQuery
+                                    ->whereIn('status', self::PUBLIC_LISTING_STATUSES)
+                                    ->where('price', '>=', $request->min_price);
+                            });
+                    });
+            });
         }
         if ($request->filled('max_price')) {
-            $query->where('price', '<=', $request->max_price);
+            $query->where(function ($priceQuery) use ($request) {
+                $priceQuery
+                    ->where(function ($saleQuery) use ($request) {
+                        $saleQuery->where('purpose', 'sale')
+                            ->where(function ($fieldQuery) use ($request) {
+                                $fieldQuery->where('sale_price', '<=', $request->max_price)
+                                    ->orWhere('price', '<=', $request->max_price);
+                            });
+                    })
+                    ->orWhere(function ($rentQuery) use ($request) {
+                        $rentQuery->where('purpose', 'rent')
+                            ->where(function ($fieldQuery) use ($request) {
+                                $fieldQuery->where('rental_price', '<=', $request->max_price)
+                                    ->orWhere('price', '<=', $request->max_price);
+                            });
+                    })
+                    ->orWhere(function ($mixedQuery) use ($request) {
+                        $mixedQuery->where('purpose', 'mixed')
+                            ->whereHas('listings', function ($listingQuery) use ($request) {
+                                $listingQuery
+                                    ->whereIn('status', self::PUBLIC_LISTING_STATUSES)
+                                    ->where('price', '<=', $request->max_price);
+                            });
+                    });
+            });
         }
 
         // Filter by bedrooms
         if ($request->filled('bedrooms')) {
-            $query->where('bedrooms', '>=', $request->bedrooms);
+            $query->where(function ($bedroomQuery) use ($request) {
+                $bedroomQuery
+                    ->where('bedrooms', '>=', $request->bedrooms)
+                    ->orWhereHas('listings', function ($listingQuery) use ($request) {
+                        $listingQuery
+                            ->whereIn('status', self::PUBLIC_LISTING_STATUSES)
+                            ->where('bedrooms', '>=', $request->bedrooms);
+                    });
+            });
         }
 
         $properties = $query->latest()->paginate(12);
@@ -82,9 +157,23 @@ class PublicController extends Controller
      */
     public function propertyShow(Property $property)
     {
-        $property->load(['owner', 'listings.agent']);
+        $property->load([
+            'owner',
+            'listings' => function ($query) {
+                $query->with('agent')->latest();
+            },
+        ]);
 
-        $relatedProperties = Property::where('status', 'available')
+        $relatedProperties = Property::where(function ($propertyQuery) {
+                $propertyQuery->where('status', 'active')
+                    ->where(function ($availabilityQuery) {
+                        $availabilityQuery->whereNull('available_from')
+                            ->orWhere('available_from', '<=', now());
+                    });
+            })
+            ->with(['listings' => function ($query) {
+                $query->whereIn('status', self::PUBLIC_LISTING_STATUSES)->latest();
+            }])
             ->where('id', '!=', $property->id)
             ->where('type', $property->type)
             ->take(3)
@@ -112,7 +201,7 @@ class PublicController extends Controller
         $agent->load(['listings.property']);
 
         $activeListings = $agent->listings()
-            ->where('status', 'active')
+            ->whereIn('status', self::PUBLIC_LISTING_STATUSES)
             ->with('property')
             ->get();
 

@@ -9,7 +9,6 @@ use App\Filament\Widgets\PropertyDistributionChart;
 use App\Filament\Widgets\RevenueChart;
 use App\Filament\Widgets\LeaseStatusChart;
 use App\Filament\Widgets\CircularStatsWidget;
-use App\Filament\Widgets\RecentInquiriesWidget;
 use App\Filament\Widgets\UpcomingLeaseExpirations;
 use App\Filament\Widgets\RecentPaymentsTable;
 use App\Filament\Widgets\AlertsWidget;
@@ -23,9 +22,9 @@ class Dashboard extends BaseDashboard
 
     protected static ?int $navigationSort = -2;
 
-    protected static ?string $title = 'Main Dashboard';
+    protected static ?string $title = 'Dashboard';
 
-    protected static ?string $navigationLabel = 'Main Dashboard';
+    protected static ?string $navigationLabel = 'Dashboard';
 
     public function getWidgets(): array
     {

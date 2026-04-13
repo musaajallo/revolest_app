@@ -46,10 +46,10 @@ class OwnerPropertiesWidget extends BaseWidget
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
-                        'success' => 'available',
-                        'danger' => 'unavailable',
-                        'warning' => 'maintenance',
+                        'warning' => 'for_rent',
+                        'success' => 'for_sale',
                         'primary' => 'rented',
+                        'danger' => 'sold',
                     ]),
 
                 Tables\Columns\TextColumn::make('price')

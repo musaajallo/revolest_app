@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Page extends Model
 {
@@ -29,7 +30,9 @@ class Page extends Model
      */
     public static function findBySlug(string $slug): ?self
     {
-        return static::where('slug', $slug)->where('is_published', true)->first();
+        return static::where('slug', Str::slug($slug))
+            ->where('is_published', true)
+            ->first();
     }
 
     /**
@@ -37,6 +40,19 @@ class Page extends Model
      */
     public function getContent(string $key, $default = null)
     {
-        return data_get($this->content, $key, $default);
+        $content = $this->content ?? [];
+
+        if (array_key_exists($key, $content)) {
+            return $content[$key] ?? $default;
+        }
+
+        $normalized = Str::snake(trim($key));
+        foreach ($content as $contentKey => $value) {
+            if (Str::snake(trim((string) $contentKey)) === $normalized) {
+                return $value;
+            }
+        }
+
+        return $default;
     }
 }

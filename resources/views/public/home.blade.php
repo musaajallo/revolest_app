@@ -28,7 +28,8 @@
                                 <option value="">All Types</option>
                                 <option value="house">House</option>
                                 <option value="apartment">Apartment</option>
-                                <option value="condo">Condo</option>
+                                <option value="compound">Compound</option>
+                                <option value="duplex">Duplex</option>
                                 <option value="land">Land</option>
                                 <option value="commercial">Commercial</option>
                             </select>
@@ -77,6 +78,13 @@
             @if($featuredProperties->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($featuredProperties as $property)
+                        @php
+                            $primaryListing = $property->usesMixedUnitPricing() ? $property->listings->first() : null;
+                            $displayPrice = $property->publicPrice($primaryListing);
+                            $priceLabel = $property->publicPriceLabel($primaryListing);
+                            $displayDeposit = $property->publicDeposit($primaryListing);
+                            $displayAgentFee = $property->publicAgentFee($primaryListing);
+                        @endphp
                         <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
                             <!-- Property Image -->
                             <div class="relative h-56 bg-gray-200">
@@ -109,16 +117,16 @@
                                     {{ $property->address }}
                                 </p>
                                 <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
-                                    @if($property->bedrooms)
+                                    @if(($primaryListing?->bedrooms ?? $property->bedrooms))
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                                            {{ $property->bedrooms }} Beds
+                                            {{ $primaryListing?->bedrooms ?? $property->bedrooms }} Beds
                                         </span>
                                     @endif
-                                    @if($property->bathrooms)
+                                    @if(($primaryListing?->bathrooms ?? $property->bathrooms))
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
-                                            {{ $property->bathrooms }} Baths
+                                            {{ $primaryListing?->bathrooms ?? $property->bathrooms }} Baths
                                         </span>
                                     @endif
                                     @if($property->area)
@@ -129,11 +137,24 @@
                                     @endif
                                 </div>
                                 <div class="flex justify-between items-center pt-4 border-t">
-                                    <span class="text-2xl font-bold text-[#1c4736]">D{{ number_format($property->price) }}</span>
+                                    <div class="text-right">
+                                        <div class="text-xs uppercase tracking-wide text-gray-500">{{ $priceLabel }}</div>
+                                        <span class="text-2xl font-bold text-[#1c4736]">D{{ number_format($displayPrice ?? 0) }}</span>
+                                    </div>
                                     <a href="{{ route('properties.show', $property) }}" class="text-[#1c4736] hover:text-[#a94a2a] font-medium">
                                         View Details →
                                     </a>
                                 </div>
+                                @if($displayDeposit || $displayAgentFee)
+                                    <div class="mt-2 text-xs text-gray-500">
+                                        @if($displayDeposit)
+                                            <span>Deposit: D{{ number_format($displayDeposit) }}</span>
+                                        @endif
+                                        @if($displayAgentFee)
+                                            <span class="ml-2">Agent Fee: D{{ number_format($displayAgentFee) }}</span>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     @endforeach
