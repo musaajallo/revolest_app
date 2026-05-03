@@ -9,11 +9,14 @@ use App\Models\LandSaleLead;
 use App\Models\PetApplication;
 use App\Models\RentalConsultation;
 use App\Models\RepairRequest;
+use App\Support\HardensPublicForms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FormsController extends Controller
 {
+    use HardensPublicForms;
+
     public function index()
     {
         return view('public.forms.index');
@@ -42,6 +45,8 @@ class FormsController extends Controller
 
     public function storeLandPurchase(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['full_name', 'phone', 'email']);
+
         $data = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -79,6 +84,8 @@ class FormsController extends Controller
 
     public function storeLandSale(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['full_name', 'phone_primary', 'email']);
+
         $data = $request->validate([
             'full_name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -133,6 +140,8 @@ class FormsController extends Controller
 
     public function storeRentalConsultation(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['full_name', 'phone', 'email']);
+
         $data = $request->validate([
             'consultation_date' => 'nullable|date',
             'full_name' => 'required|string|max:255',
@@ -183,6 +192,8 @@ class FormsController extends Controller
 
     public function storeBuiltPropertyListing(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['first_name', 'last_name', 'phone', 'property_address']);
+
         $data = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
@@ -240,6 +251,8 @@ class FormsController extends Controller
 
     public function storeCustomerFeedback(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['full_name', 'email', 'overall_satisfaction', 'additional_comments']);
+
         $satisfaction = ['very_satisfied', 'satisfied', 'neutral', 'dissatisfied', 'very_dissatisfied'];
         $quality = ['excellent', 'good', 'average', 'poor', 'very_poor'];
         $yesNoSomewhat = ['yes', 'no', 'somewhat'];
@@ -290,6 +303,8 @@ class FormsController extends Controller
 
     public function storeMaintenanceRequest(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['first_name', 'last_name', 'phone', 'property_address', 'description']);
+
         $data = $request->validate([
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
@@ -330,6 +345,8 @@ class FormsController extends Controller
 
     public function storePetApplication(Request $request)
     {
+        $this->applyPublicFormHardening($request, signature: ['tenant_name', 'phone', 'property_address']);
+
         $data = $request->validate([
             'tenant_name' => 'required|string|max:255',
             'phone' => 'required|string|max:50',

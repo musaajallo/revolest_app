@@ -21,6 +21,7 @@
                     },
                   }">
                 @csrf
+                <x-public.forms.partials.honeypot />
 
                 <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
                     <h2 class="text-xl font-semibold text-gray-900 mb-6">Tenant & Property</h2>
@@ -146,6 +147,8 @@
                 </div>
 
                 <x-public.forms.partials.agreement :policyKeys="['policy.pet_application']" />
+
+                <x-public.forms.partials.turnstile />
 
                 <div>
                     <button type="submit" class="bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-8 py-3 rounded-lg font-semibold transition">

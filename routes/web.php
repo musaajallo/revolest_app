@@ -35,9 +35,10 @@ Route::prefix('forms')->name('forms.')->controller(FormsController::class)->grou
     Route::get('pet-application', 'petApplication')->name('pet-application');
     Route::get('thank-you/{type}', 'thankYou')->name('thank-you');
 
-    // Throttled to 5 submissions / minute / IP across all public forms
-    // to limit bot spam without blocking legitimate users.
-    Route::middleware('throttle:5,1')->group(function () {
+    // Throttled per IP + path (named limiter "public-form" defined in
+    // AppServiceProvider). Each form gets its own bucket so a user
+    // submitting two different forms back-to-back isn't blocked.
+    Route::middleware('throttle:public-form')->group(function () {
         Route::post('land-purchase', 'storeLandPurchase')->name('land-purchase.store');
         Route::post('land-sale', 'storeLandSale')->name('land-sale.store');
         Route::post('rental-consultation', 'storeRentalConsultation')->name('rental-consultation.store');

@@ -10,6 +10,7 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <form action="{{ route('forms.property-listing.store') }}" method="POST" class="space-y-8">
                 @csrf
+                <x-public.forms.partials.honeypot />
 
                 <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
                     <h2 class="text-xl font-semibold text-gray-900 mb-6">Owner Contact</h2>
@@ -148,6 +149,8 @@
                 </div>
 
                 <x-public.forms.partials.agreement :policyKeys="['policy.built_property_listing']" />
+
+                <x-public.forms.partials.turnstile />
 
                 <div>
                     <button type="submit" class="bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-8 py-3 rounded-lg font-semibold transition">
