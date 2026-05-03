@@ -7,6 +7,7 @@ use App\Models\CustomerFeedback;
 use App\Models\LandPurchaseLead;
 use App\Models\LandSaleLead;
 use App\Models\PetApplication;
+use App\Models\PurchaseBuildPropertyLead;
 use App\Models\RentalConsultation;
 use App\Models\RepairRequest;
 use App\Support\HardensPublicForms;
@@ -29,6 +30,7 @@ class FormsController extends Controller
             'land-sale' => 'Your land listing request has been received. An agent will reach out to schedule a site visit.',
             'rental-consultation' => 'Your rental consultation has been received. We will be in touch with matching properties.',
             'property-listing' => 'Your property listing request has been received. An agent will reach out to schedule a site visit.',
+            'purchase-build-property' => 'Your build property purchase consultation has been received. An agent will contact you to arrange a viewing.',
             'customer-feedback' => 'Thank you for your feedback. Your responses help us improve our service.',
             'maintenance-request' => 'Your maintenance request has been received. We will follow up to schedule the repair.',
             'pet-application' => 'Your pet application has been received. We will review it and respond shortly.',
@@ -242,6 +244,96 @@ class FormsController extends Controller
         BuiltPropertyListingLead::create($this->stamp($request, $data));
 
         return redirect()->route('forms.thank-you', ['type' => 'property-listing']);
+    }
+
+    public function purchaseBuildProperty()
+    {
+        return view('public.forms.purchase-build-property');
+    }
+
+    public function storePurchaseBuildProperty(Request $request)
+    {
+        $this->applyPublicFormHardening($request, signature: ['full_name', 'phone_primary', 'email']);
+
+        $data = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'phone_primary' => 'required|string|max:50',
+            'phone_secondary' => 'nullable|string|max:50',
+            'phone_tertiary' => 'nullable|string|max:50',
+            'current_address' => 'nullable|string|max:255',
+
+            'property_type' => 'nullable|in:house,mansion,apartment',
+            'build_status' => 'nullable|string|max:100',
+            'preferred_location' => 'nullable|string|max:500',
+            'avoid_areas' => 'nullable|string|max:1000',
+            'architectural_style' => 'nullable|string|max:255',
+            'bedrooms_bathrooms' => 'nullable|string|max:255',
+            'special_features' => 'nullable|string|max:1000',
+            'luxury_features' => 'nullable|string|max:1000',
+
+            'budget' => 'nullable|string|max:255',
+            'financing_method' => 'nullable|in:mortgage,cash,mixed,other',
+            'mortgage_preapproval' => 'nullable|string|max:255',
+            'needs_mortgage_advice' => 'nullable|boolean',
+            'open_to_negotiation' => 'nullable|boolean',
+
+            'min_square_footage' => 'nullable|string|max:100',
+            'needs_extra_space' => 'nullable|boolean',
+            'lot_size_preference' => 'nullable|string|max:255',
+            'storey_preference' => 'nullable|in:single,multi,no_preference',
+            'layout_preference' => 'nullable|string|max:1000',
+
+            'proximity_preference' => 'nullable|string|max:1000',
+            'area_kind' => 'nullable|in:city,suburban,rural',
+            'amenities_importance' => 'nullable|string|max:1000',
+            'community_type' => 'nullable|in:gated,private,open',
+            'landmarks' => 'nullable|string|max:1000',
+
+            'move_in_target' => 'nullable|string|max:100',
+            'time_sensitivity' => 'nullable|string|max:1000',
+            'readiness_preference' => 'nullable|in:ready,under_construction,renovation_ok',
+
+            'use_purpose' => 'nullable|in:primary,vacation,investment',
+            'long_term_value' => 'nullable|string|max:1000',
+            'open_to_developments' => 'nullable|boolean',
+
+            'legal_requirements' => 'nullable|string|max:1000',
+            'needs_inspection_help' => 'nullable|boolean',
+
+            'maintenance_effort' => 'nullable|string|max:255',
+            'maintenance_preference' => 'nullable|in:low,medium,high',
+            'additional_services' => 'nullable|string|max:1000',
+
+            'household_type' => 'nullable|in:alone,family,with_pets',
+            'accessibility_needs' => 'nullable|string|max:1000',
+            'pet_accommodations' => 'nullable|string|max:1000',
+
+            'eco_priority' => 'nullable|in:high,medium,low,none',
+            'smart_home_interest' => 'nullable|boolean',
+
+            'customizable_required' => 'nullable|boolean',
+            'needs_reno_design_help' => 'nullable|boolean',
+            'resale_plan' => 'nullable|string|max:1000',
+
+            'property_age_preference' => 'nullable|in:new,older,no_preference',
+            'turnkey_preference' => 'nullable|in:turnkey,personalize,either',
+            'other_considerations' => 'nullable|string|max:5000',
+
+            'previous_company_contact' => 'nullable|boolean',
+            'previous_company_experience' => 'nullable|string|max:5000',
+            'referral_source' => 'nullable|string|max:255',
+            'referral_name' => 'nullable|string|max:255',
+
+            'notes' => 'nullable|string|max:5000',
+            'details' => 'nullable|array',
+            'signed_name' => 'required|string|max:255',
+            'agree_terms' => 'accepted',
+        ]);
+
+        PurchaseBuildPropertyLead::create($this->stamp($request, $data));
+
+        return redirect()->route('forms.thank-you', ['type' => 'purchase-build-property']);
     }
 
     public function customerFeedback()

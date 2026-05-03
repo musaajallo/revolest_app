@@ -30,6 +30,7 @@ Route::prefix('forms')->name('forms.')->controller(FormsController::class)->grou
     Route::get('land-sale', 'landSale')->name('land-sale');
     Route::get('rental-consultation', 'rentalConsultation')->name('rental-consultation');
     Route::get('property-listing', 'builtPropertyListing')->name('property-listing');
+    Route::get('purchase-build-property', 'purchaseBuildProperty')->name('purchase-build-property');
     Route::get('customer-feedback', 'customerFeedback')->name('customer-feedback');
     Route::get('maintenance-request', 'maintenanceRequest')->name('maintenance-request');
     Route::get('pet-application', 'petApplication')->name('pet-application');
@@ -43,6 +44,7 @@ Route::prefix('forms')->name('forms.')->controller(FormsController::class)->grou
         Route::post('land-sale', 'storeLandSale')->name('land-sale.store');
         Route::post('rental-consultation', 'storeRentalConsultation')->name('rental-consultation.store');
         Route::post('property-listing', 'storeBuiltPropertyListing')->name('property-listing.store');
+        Route::post('purchase-build-property', 'storePurchaseBuildProperty')->name('purchase-build-property.store');
         Route::post('customer-feedback', 'storeCustomerFeedback')->name('customer-feedback.store');
         Route::post('maintenance-request', 'storeMaintenanceRequest')->name('maintenance-request.store');
         Route::post('pet-application', 'storePetApplication')->name('pet-application.store');

@@ -118,6 +118,22 @@ By submitting this application, I acknowledge and agree to the following:
 MD,
             ],
             [
+                'key' => 'policy.purchase_build',
+                'label' => 'Built Property Purchase Policy',
+                'order' => 15,
+                'value' => <<<'MD'
+**Policies and Fees Agreement**
+
+By submitting this form, I authorize SA Property and M&T Global Construction Group to review the details provided and contact me for further discussions regarding the purchase of a build property. I understand that this form is a request for services and does not constitute a binding agreement.
+
+1. **Consultation Fee:** the consultation fee is **D500 (five hundred dalasi)**, non-refundable.
+2. **Property Viewings:** after paying the consultation fee, the company will arrange for a site visit to view the properties within my budget.
+3. **Commission Charges for Property Sale:**
+   - **Leasehold Properties:** 5% commission on the sale price
+   - **Freehold Properties:** 10% commission on the sale price
+MD,
+            ],
+            [
                 'key' => 'policy.built_property_listing',
                 'label' => 'Built Property Listing Policy',
                 'order' => 40,

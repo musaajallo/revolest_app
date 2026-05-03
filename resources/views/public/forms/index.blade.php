@@ -17,6 +17,7 @@
                     ['title' => 'List Your Land for Sale', 'desc' => 'Submit details about a plot you would like us to help sell.', 'route' => 'forms.land-sale'],
                     ['title' => 'Rental Consultation', 'desc' => 'Find a rental property that matches your needs.', 'route' => 'forms.rental-consultation'],
                     ['title' => 'List Your Built Property', 'desc' => 'Submit details for a built property you wish to sell.', 'route' => 'forms.property-listing'],
+                    ['title' => 'Purchase a Built Property', 'desc' => 'Tell us about the home, mansion, or apartment you want to buy.', 'route' => 'forms.purchase-build-property'],
                     ['title' => 'Customer Feedback', 'desc' => 'Share your experience — compliments, complaints, suggestions.', 'route' => 'forms.customer-feedback'],
                     ['title' => 'Maintenance Request', 'desc' => 'Report a repair or maintenance issue at your property.', 'route' => 'forms.maintenance-request'],
                     ['title' => 'Pet Application', 'desc' => 'Apply to keep pets at your rental property.', 'route' => 'forms.pet-application'],
