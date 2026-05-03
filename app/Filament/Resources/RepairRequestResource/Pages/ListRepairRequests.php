@@ -20,14 +20,14 @@ class ListRepairRequests extends ListRecords
                 ->color('success')
                 ->visible(fn () => auth()->check() && auth()->user()->role === 'super_admin')
                 ->action(function () {
-                    $filename = 'repair_requests_' . now()->format('Y-m-d_H-i-s') . '.csv';
+                    $filename = 'repair_requests_'.now()->format('Y-m-d_H-i-s').'.csv';
 
                     $headers = [
                         'Content-Type' => 'text/csv',
                         'Content-Disposition' => "attachment; filename=\"{$filename}\"",
                     ];
 
-                    $callback = function() {
+                    $callback = function () {
                         $file = fopen('php://output', 'w');
 
                         // CSV Headers
@@ -46,7 +46,7 @@ class ListRepairRequests extends ListRecords
                             'Resolution Notes',
                             'Created At',
                             'Updated At',
-                            'Deleted At'
+                            'Deleted At',
                         ]);
 
                         // Get all repair requests including soft deleted ones with relationships
@@ -66,7 +66,7 @@ class ListRepairRequests extends ListRecords
                                 $repairRequest->resolution_notes,
                                 $repairRequest->created_at?->format('Y-m-d H:i:s'),
                                 $repairRequest->updated_at?->format('Y-m-d H:i:s'),
-                                $repairRequest->deleted_at?->format('Y-m-d H:i:s')
+                                $repairRequest->deleted_at?->format('Y-m-d H:i:s'),
                             ]);
                         });
 

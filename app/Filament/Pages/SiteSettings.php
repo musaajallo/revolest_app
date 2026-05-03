@@ -13,9 +13,13 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
     use Forms\Concerns\InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
+
     protected static ?string $navigationGroup = 'System Management';
+
     protected static ?string $navigationLabel = 'Site Settings';
+
     protected static ?int $navigationSort = 2;
+
     protected static string $view = 'filament.pages.site-settings';
 
     public ?array $data = [];
@@ -39,6 +43,13 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
             'youtube_url' => Setting::get('youtube_url'),
             'tiktok_url' => Setting::get('tiktok_url'),
             'footer_text' => Setting::get('footer_text', 'Your trusted partner in real estate. We help you find the perfect property for your needs.'),
+            'policy_land_purchase' => Setting::get('policy.land_purchase'),
+            'policy_land_sale' => Setting::get('policy.land_sale'),
+            'policy_rental_consultation' => Setting::get('policy.rental_consultation'),
+            'policy_rental_weekly_agent_fees' => Setting::get('policy.rental_weekly_agent_fees'),
+            'policy_rental_yearly_agent_fees' => Setting::get('policy.rental_yearly_agent_fees'),
+            'policy_built_property_listing' => Setting::get('policy.built_property_listing'),
+            'policy_pet_application' => Setting::get('policy.pet_application'),
         ]);
     }
 
@@ -161,8 +172,45 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                                             ->helperText('The text that appears below the logo in the footer'),
                                         Forms\Components\Placeholder::make('copyright_info')
                                             ->label('Copyright Notice')
-                                            ->content('© ' . date('Y') . ' [Site Name]. All rights reserved.')
+                                            ->content('© '.date('Y').' [Site Name]. All rights reserved.')
                                             ->helperText('The copyright year updates automatically based on the current year.'),
+                                    ]),
+                            ]),
+
+                        Forms\Components\Tabs\Tab::make('Form Policies')
+                            ->icon('heroicon-o-document-check')
+                            ->schema([
+                                Forms\Components\Section::make('Public Form Policies & Fees')
+                                    ->description('Markdown content shown above the signature block on each public form. Edits take effect immediately — no redeploy needed.')
+                                    ->schema([
+                                        Forms\Components\Textarea::make('policy_land_purchase')
+                                            ->label('Land Purchase')
+                                            ->rows(10)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('policy_land_sale')
+                                            ->label('Land Sale / Listing')
+                                            ->rows(8)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('policy_rental_consultation')
+                                            ->label('Rental Consultation')
+                                            ->rows(14)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('policy_rental_weekly_agent_fees')
+                                            ->label('Rental — Weekly Agent Fees')
+                                            ->rows(10)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('policy_rental_yearly_agent_fees')
+                                            ->label('Rental — Yearly Agent Fees')
+                                            ->rows(12)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('policy_built_property_listing')
+                                            ->label('Built Property Listing')
+                                            ->rows(8)
+                                            ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('policy_pet_application')
+                                            ->label('Pet Application')
+                                            ->rows(12)
+                                            ->columnSpanFull(),
                                     ]),
                             ]),
                     ])
@@ -176,22 +224,29 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
         $data = $this->form->getState();
 
         $settings = [
-            ['key' => 'site_name', 'label' => 'Site Name', 'group' => 'site', 'type' => 'text'],
-            ['key' => 'site_tagline', 'label' => 'Site Tagline', 'group' => 'site', 'type' => 'text'],
-            ['key' => 'site_logo', 'label' => 'Site Logo', 'group' => 'site', 'type' => 'image'],
-            ['key' => 'site_favicon', 'label' => 'Site Favicon', 'group' => 'site', 'type' => 'image'],
-            ['key' => 'contact_email', 'label' => 'Contact Email', 'group' => 'contact', 'type' => 'text'],
-            ['key' => 'contact_phone', 'label' => 'Contact Phone', 'group' => 'contact', 'type' => 'text'],
-            ['key' => 'contact_phone_2', 'label' => 'Contact Phone 2', 'group' => 'contact', 'type' => 'text'],
-            ['key' => 'contact_address', 'label' => 'Contact Address', 'group' => 'contact', 'type' => 'textarea'],
-            ['key' => 'business_hours', 'label' => 'Business Hours', 'group' => 'contact', 'type' => 'textarea'],
-            ['key' => 'facebook_url', 'label' => 'Facebook URL', 'group' => 'social', 'type' => 'text'],
-            ['key' => 'twitter_url', 'label' => 'Twitter URL', 'group' => 'social', 'type' => 'text'],
-            ['key' => 'instagram_url', 'label' => 'Instagram URL', 'group' => 'social', 'type' => 'text'],
-            ['key' => 'linkedin_url', 'label' => 'LinkedIn URL', 'group' => 'social', 'type' => 'text'],
-            ['key' => 'youtube_url', 'label' => 'YouTube URL', 'group' => 'social', 'type' => 'text'],
-            ['key' => 'tiktok_url', 'label' => 'TikTok URL', 'group' => 'social', 'type' => 'text'],
-            ['key' => 'footer_text', 'label' => 'Footer Text', 'group' => 'site', 'type' => 'textarea'],
+            ['key' => 'site_name', 'data_key' => 'site_name', 'label' => 'Site Name', 'group' => 'site', 'type' => 'text'],
+            ['key' => 'site_tagline', 'data_key' => 'site_tagline', 'label' => 'Site Tagline', 'group' => 'site', 'type' => 'text'],
+            ['key' => 'site_logo', 'data_key' => 'site_logo', 'label' => 'Site Logo', 'group' => 'site', 'type' => 'image'],
+            ['key' => 'site_favicon', 'data_key' => 'site_favicon', 'label' => 'Site Favicon', 'group' => 'site', 'type' => 'image'],
+            ['key' => 'contact_email', 'data_key' => 'contact_email', 'label' => 'Contact Email', 'group' => 'contact', 'type' => 'text'],
+            ['key' => 'contact_phone', 'data_key' => 'contact_phone', 'label' => 'Contact Phone', 'group' => 'contact', 'type' => 'text'],
+            ['key' => 'contact_phone_2', 'data_key' => 'contact_phone_2', 'label' => 'Contact Phone 2', 'group' => 'contact', 'type' => 'text'],
+            ['key' => 'contact_address', 'data_key' => 'contact_address', 'label' => 'Contact Address', 'group' => 'contact', 'type' => 'textarea'],
+            ['key' => 'business_hours', 'data_key' => 'business_hours', 'label' => 'Business Hours', 'group' => 'contact', 'type' => 'textarea'],
+            ['key' => 'facebook_url', 'data_key' => 'facebook_url', 'label' => 'Facebook URL', 'group' => 'social', 'type' => 'text'],
+            ['key' => 'twitter_url', 'data_key' => 'twitter_url', 'label' => 'Twitter URL', 'group' => 'social', 'type' => 'text'],
+            ['key' => 'instagram_url', 'data_key' => 'instagram_url', 'label' => 'Instagram URL', 'group' => 'social', 'type' => 'text'],
+            ['key' => 'linkedin_url', 'data_key' => 'linkedin_url', 'label' => 'LinkedIn URL', 'group' => 'social', 'type' => 'text'],
+            ['key' => 'youtube_url', 'data_key' => 'youtube_url', 'label' => 'YouTube URL', 'group' => 'social', 'type' => 'text'],
+            ['key' => 'tiktok_url', 'data_key' => 'tiktok_url', 'label' => 'TikTok URL', 'group' => 'social', 'type' => 'text'],
+            ['key' => 'footer_text', 'data_key' => 'footer_text', 'label' => 'Footer Text', 'group' => 'site', 'type' => 'textarea'],
+            ['key' => 'policy.land_purchase', 'data_key' => 'policy_land_purchase', 'label' => 'Land Purchase Policy', 'group' => 'policies', 'type' => 'textarea'],
+            ['key' => 'policy.land_sale', 'data_key' => 'policy_land_sale', 'label' => 'Land Sale / Listing Policy', 'group' => 'policies', 'type' => 'textarea'],
+            ['key' => 'policy.rental_consultation', 'data_key' => 'policy_rental_consultation', 'label' => 'Rental Consultation Policy', 'group' => 'policies', 'type' => 'textarea'],
+            ['key' => 'policy.rental_weekly_agent_fees', 'data_key' => 'policy_rental_weekly_agent_fees', 'label' => 'Rental — Weekly Agent Fees', 'group' => 'policies', 'type' => 'textarea'],
+            ['key' => 'policy.rental_yearly_agent_fees', 'data_key' => 'policy_rental_yearly_agent_fees', 'label' => 'Rental — Yearly Agent Fees', 'group' => 'policies', 'type' => 'textarea'],
+            ['key' => 'policy.built_property_listing', 'data_key' => 'policy_built_property_listing', 'label' => 'Built Property Listing Policy', 'group' => 'policies', 'type' => 'textarea'],
+            ['key' => 'policy.pet_application', 'data_key' => 'policy_pet_application', 'label' => 'Pet Application Agreement', 'group' => 'policies', 'type' => 'textarea'],
         ];
 
         foreach ($settings as $index => $setting) {
@@ -201,7 +256,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                     'group' => $setting['group'],
                     'label' => $setting['label'],
                     'type' => $setting['type'],
-                    'value' => $data[$setting['key']] ?? null,
+                    'value' => $data[$setting['data_key']] ?? null,
                     'order' => $index,
                 ]
             );
@@ -219,7 +274,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
     {
         $user = \Illuminate\Support\Facades\Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

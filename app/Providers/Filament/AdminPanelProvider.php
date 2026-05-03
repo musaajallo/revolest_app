@@ -107,6 +107,7 @@ class AdminPanelProvider extends PanelProvider
                 'Dashboard',
                 'Management',
                 'Communication',
+                'Submissions',
                 'Properties',
                 'CMS',
                 'System Management',

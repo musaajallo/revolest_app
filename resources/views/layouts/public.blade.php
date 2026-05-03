@@ -87,6 +87,9 @@
                     <a href="{{ route('agents.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('agents.*') ? 'text-[#1c4736]' : '' }}">
                         Agents
                     </a>
+                    <a href="{{ route('forms.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('forms.*') ? 'text-[#1c4736]' : '' }}">
+                        Forms
+                    </a>
                     <a href="{{ route('contact') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('contact') ? 'text-[#1c4736]' : '' }}">
                         Contact
                     </a>
@@ -158,6 +161,7 @@
                 <a href="{{ route('home') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Home</a>
                 <a href="{{ route('properties.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Properties</a>
                 <a href="{{ route('agents.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Agents</a>
+                <a href="{{ route('forms.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Forms</a>
                 <a href="{{ route('contact') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Contact</a>
                 <hr class="my-2 dark:border-gray-700">
                 @auth
@@ -225,6 +229,7 @@
                         <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-[#1c4736] transition">Home</a></li>
                         <li><a href="{{ route('properties.index') }}" class="text-gray-400 hover:text-[#1c4736] transition">Properties</a></li>
                         <li><a href="{{ route('agents.index') }}" class="text-gray-400 hover:text-[#1c4736] transition">Agents</a></li>
+                        <li><a href="{{ route('forms.index') }}" class="text-gray-400 hover:text-[#1c4736] transition">Forms</a></li>
                         <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-[#1c4736] transition">Contact Us</a></li>
                     </ul>
                 </div>

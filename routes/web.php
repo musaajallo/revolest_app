@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FormsController;
 use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,5 +21,31 @@ Route::post('/contact', [PublicController::class, 'storeContact'])->name('contac
 
 // Inquiries
 Route::post('/inquiry', [PublicController::class, 'storeInquiry'])->name('inquiry.store');
+
+// Public consultation / listing forms
+Route::prefix('forms')->name('forms.')->controller(FormsController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+
+    Route::get('land-purchase', 'landPurchase')->name('land-purchase');
+    Route::get('land-sale', 'landSale')->name('land-sale');
+    Route::get('rental-consultation', 'rentalConsultation')->name('rental-consultation');
+    Route::get('property-listing', 'builtPropertyListing')->name('property-listing');
+    Route::get('customer-feedback', 'customerFeedback')->name('customer-feedback');
+    Route::get('maintenance-request', 'maintenanceRequest')->name('maintenance-request');
+    Route::get('pet-application', 'petApplication')->name('pet-application');
+    Route::get('thank-you/{type}', 'thankYou')->name('thank-you');
+
+    // Throttled to 5 submissions / minute / IP across all public forms
+    // to limit bot spam without blocking legitimate users.
+    Route::middleware('throttle:5,1')->group(function () {
+        Route::post('land-purchase', 'storeLandPurchase')->name('land-purchase.store');
+        Route::post('land-sale', 'storeLandSale')->name('land-sale.store');
+        Route::post('rental-consultation', 'storeRentalConsultation')->name('rental-consultation.store');
+        Route::post('property-listing', 'storeBuiltPropertyListing')->name('property-listing.store');
+        Route::post('customer-feedback', 'storeCustomerFeedback')->name('customer-feedback.store');
+        Route::post('maintenance-request', 'storeMaintenanceRequest')->name('maintenance-request.store');
+        Route::post('pet-application', 'storePetApplication')->name('pet-application.store');
+    });
+});
 
 // Filament routes are registered automatically
