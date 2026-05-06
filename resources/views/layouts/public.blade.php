@@ -16,6 +16,14 @@
     $whatsappPhone = \App\Models\Setting::get('whatsapp_phone_number');
     $whatsappMessage = \App\Models\Setting::get('whatsapp_default_message', 'Hello! I\'m interested in your properties.');
     $whatsappShowButton = \App\Models\Setting::get('whatsapp_show_floating_button', true);
+
+    $siteLogo = \App\Models\Setting::get('site_logo');
+    $siteLogoUrl = $siteLogo ? \Illuminate\Support\Facades\Storage::url($siteLogo) : null;
+
+    $footerLogo = \App\Models\Setting::get('footer_logo');
+    $footerLogoUrl = $footerLogo
+        ? \Illuminate\Support\Facades\Storage::url($footerLogo)
+        : $siteLogoUrl;
 @endphp
 <!DOCTYPE html>
 <html lang="en" x-data="{
@@ -58,10 +66,17 @@
                 <!-- Logo -->
                 <div class="flex items-center">
                     <a href="{{ route('home') }}" class="flex items-center space-x-2">
-                        <div class="w-10 h-10 bg-[#1c4736] rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-xl">R</span>
-                        </div>
-                        <span class="text-xl font-bold text-gray-900 dark:text-white">{{ $siteName }}</span>
+                        @if ($siteLogoUrl)
+                            {{-- Light mode: dark-text logo --}}
+                            <img src="{{ $siteLogoUrl }}" alt="{{ $siteName }}" class="h-11 w-auto object-contain block dark:hidden" />
+                            {{-- Dark mode: inverse logo (falls back to site logo if no inverse uploaded) --}}
+                            <img src="{{ $footerLogoUrl ?? $siteLogoUrl }}" alt="{{ $siteName }}" class="h-11 w-auto object-contain hidden dark:block" />
+                        @else
+                            <div class="w-10 h-10 bg-[#1c4736] rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold text-xl">R</span>
+                            </div>
+                            <span class="text-xl font-bold text-gray-900 dark:text-white">{{ $siteName }}</span>
+                        @endif
                     </a>
                 </div>
 
@@ -192,10 +207,14 @@
                 <!-- Brand -->
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-10 h-10 bg-[#1c4736] rounded-lg flex items-center justify-center">
-                            <span class="text-white font-bold text-xl">R</span>
-                        </div>
-                        <span class="text-xl font-bold">{{ $siteName }}</span>
+                        @if ($footerLogoUrl)
+                            <img src="{{ $footerLogoUrl }}" alt="{{ $siteName }}" class="h-11 w-auto object-contain" />
+                        @else
+                            <div class="w-10 h-10 bg-[#1c4736] rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold text-xl">R</span>
+                            </div>
+                            <span class="text-xl font-bold">{{ $siteName }}</span>
+                        @endif
                     </div>
                     <p class="text-gray-400 mb-4">
                         {{ $footerText }}

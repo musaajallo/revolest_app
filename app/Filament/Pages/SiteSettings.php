@@ -30,6 +30,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
             'site_name' => Setting::get('site_name', 'Revolest'),
             'site_tagline' => Setting::get('site_tagline', 'Your trusted real estate partner'),
             'site_logo' => Setting::get('site_logo'),
+            'footer_logo' => Setting::get('footer_logo'),
             'site_favicon' => Setting::get('site_favicon'),
             'hero_background' => Setting::get('hero_background'),
             'banner_background' => Setting::get('banner_background'),
@@ -84,7 +85,17 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                                             ->imageResizeMode('contain')
                                             ->imageCropAspectRatio('3:1')
                                             ->imageResizeTargetWidth('300')
-                                            ->helperText('Recommended size: 300x100 pixels'),
+                                            ->helperText('Used in the public site header and admin panel. Recommended: 300×100 pixels, dark text on transparent background.'),
+                                        Forms\Components\FileUpload::make('footer_logo')
+                                            ->label('Footer Logo (white / inverse)')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('settings')
+                                            ->visibility('public')
+                                            ->imageResizeMode('contain')
+                                            ->imageCropAspectRatio('3:1')
+                                            ->imageResizeTargetWidth('300')
+                                            ->helperText('Used in the dark public-site footer. Recommended: 300×100 pixels, white/light text on transparent background. Falls back to the Site Logo if not set.'),
                                         Forms\Components\FileUpload::make('site_favicon')
                                             ->label('Favicon')
                                             ->image()
@@ -263,6 +274,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
             ['key' => 'site_name', 'data_key' => 'site_name', 'label' => 'Site Name', 'group' => 'site', 'type' => 'text'],
             ['key' => 'site_tagline', 'data_key' => 'site_tagline', 'label' => 'Site Tagline', 'group' => 'site', 'type' => 'text'],
             ['key' => 'site_logo', 'data_key' => 'site_logo', 'label' => 'Site Logo', 'group' => 'site', 'type' => 'image'],
+            ['key' => 'footer_logo', 'data_key' => 'footer_logo', 'label' => 'Footer Logo (white)', 'group' => 'site', 'type' => 'image'],
             ['key' => 'site_favicon', 'data_key' => 'site_favicon', 'label' => 'Site Favicon', 'group' => 'site', 'type' => 'image'],
             ['key' => 'hero_background', 'data_key' => 'hero_background', 'label' => 'Home Hero Background', 'group' => 'site', 'type' => 'image'],
             ['key' => 'banner_background', 'data_key' => 'banner_background', 'label' => 'Inner Page Banner Background', 'group' => 'site', 'type' => 'image'],

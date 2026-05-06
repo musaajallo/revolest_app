@@ -29,6 +29,19 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Revolest')
+            ->brandLogo(function () {
+                $logo = \App\Models\Setting::get('site_logo');
+
+                return $logo ? \Illuminate\Support\Facades\Storage::url($logo) : null;
+            })
+            ->darkModeBrandLogo(function () {
+                $footerLogo = \App\Models\Setting::get('footer_logo');
+                $siteLogo = \App\Models\Setting::get('site_logo');
+                $logo = $footerLogo ?: $siteLogo;
+
+                return $logo ? \Illuminate\Support\Facades\Storage::url($logo) : null;
+            })
+            ->brandLogoHeight('2.75rem')
             ->favicon(function () {
                 $favicon = \App\Models\Setting::get('site_favicon');
 
