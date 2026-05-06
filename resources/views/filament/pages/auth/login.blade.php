@@ -1,3 +1,19 @@
+@php
+    $loginBg = \App\Models\Setting::get('login_background');
+    $loginBgUrl = $loginBg ? \Illuminate\Support\Facades\Storage::url($loginBg) : null;
+@endphp
+
+@if($loginBgUrl)
+    <style>
+        .fi-simple-layout {
+            background-image: linear-gradient(rgba(17, 24, 39, .55), rgba(17, 24, 39, .55)), url('{{ $loginBgUrl }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+@endif
+
 <x-filament-panels::page.simple>
     @if (filament()->hasRegistration())
         <x-slot name="subheading">

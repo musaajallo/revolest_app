@@ -17,7 +17,7 @@ class SettingSeeder extends Seeder
             [
                 'group' => 'general',
                 'key' => 'site_name',
-                'value' => 'Revolest Property',
+                'value' => 'Revolest',
                 'type' => 'text',
                 'label' => 'Site Name',
                 'description' => 'The name of the website.',
@@ -58,6 +58,33 @@ class SettingSeeder extends Seeder
                 'label' => 'Contact Address',
                 'description' => 'Physical office address.',
                 'order' => 5,
+            ],
+            [
+                'group' => 'site',
+                'key' => 'hero_background',
+                'value' => null,
+                'type' => 'image',
+                'label' => 'Home Hero Background',
+                'description' => 'Image shown behind the home page hero. Upload via Site Settings.',
+                'order' => 6,
+            ],
+            [
+                'group' => 'site',
+                'key' => 'banner_background',
+                'value' => null,
+                'type' => 'image',
+                'label' => 'Inner Page Banner Background',
+                'description' => 'Image shown behind the title banner on Properties, Agents, Contact, and Forms pages.',
+                'order' => 7,
+            ],
+            [
+                'group' => 'site',
+                'key' => 'login_background',
+                'value' => null,
+                'type' => 'image',
+                'label' => 'Admin Login Background',
+                'description' => 'Image shown behind the /admin login form.',
+                'order' => 8,
             ],
 
             // Social Media

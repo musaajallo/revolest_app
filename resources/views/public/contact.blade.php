@@ -43,7 +43,14 @@
     @endif
 
     <!-- Page Header -->
-    <section class="bg-gray-900 text-white py-12">
+    @php
+        $bannerBg = \App\Models\Setting::get('banner_background');
+        $bannerBgUrl = $bannerBg ? \Illuminate\Support\Facades\Storage::url($bannerBg) : null;
+    @endphp
+    <section
+        class="bg-gray-900 bg-cover bg-center text-white py-12"
+        @if($bannerBgUrl) style="background-image: linear-gradient(rgba(17,24,39,.75), rgba(17,24,39,.75)), url('{{ $bannerBgUrl }}');" @endif
+    >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">{{ $page?->getContent('page_title') ?? 'Contact Us' }}</h1>
             <p class="text-gray-400">{{ $page?->getContent('page_subtitle') ?? "We'd love to hear from you. Get in touch with our team." }}</p>

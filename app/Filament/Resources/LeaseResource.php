@@ -105,11 +105,39 @@ class LeaseResource extends Resource
         ];
     }
 
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        return $user && in_array($user->role, ['super_admin', 'admin', 'agent', 'owner', 'tenant']);
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (! $user || in_array($user->role, ['super_admin', 'admin'])) {
+            return $query;
+        }
+
+        if ($user->role === 'tenant') {
+            return $query->where('tenant_id', $user->tenant?->id ?? 0);
+        }
+
+        if ($user->role === 'owner') {
+            $ownerId = $user->owner?->id ?? 0;
+            return $query->whereHas('property', fn ($q) => $q->where('owner_id', $ownerId));
+        }
+
+        if ($user->role === 'agent') {
+            $agentId = $user->agent?->id ?? 0;
+            return $query->whereHas('property.listings', fn ($q) => $q->where('agent_id', $agentId));
+        }
+
+        return $query->whereRaw('1=0');
     }
 }

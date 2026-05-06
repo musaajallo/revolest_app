@@ -186,12 +186,35 @@ class ListingResource extends Resource
         ];
     }
 
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        return $user && in_array($user->role, ['super_admin', 'admin', 'agent', 'owner']);
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (! $user || in_array($user->role, ['super_admin', 'admin'])) {
+            return $query;
+        }
+
+        if ($user->role === 'agent') {
+            return $query->where('agent_id', $user->agent?->id ?? 0);
+        }
+
+        if ($user->role === 'owner') {
+            $ownerId = $user->owner?->id ?? 0;
+            return $query->whereHas('property', fn ($q) => $q->where('owner_id', $ownerId));
+        }
+
+        return $query->whereRaw('1=0');
     }
 
     protected static function selectedPropertyIsLand(Get $get): bool

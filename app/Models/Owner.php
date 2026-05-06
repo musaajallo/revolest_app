@@ -13,12 +13,18 @@ class Owner extends Model
 
     protected $fillable = [
         'unique_id',
+        'user_id',
         'name',
         'email',
         'phone',
         'bio',
         'photo',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     protected static function booted(): void
     {

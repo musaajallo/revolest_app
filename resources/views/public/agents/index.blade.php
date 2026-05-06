@@ -3,9 +3,16 @@
 @section('title', $page?->meta_title ?? 'Our Agents')
 @section('meta_description', $page?->meta_description ?? 'Meet our professional real estate agents. Our experienced team is ready to help you find your perfect property.')
 
+@php
+    $bannerBg = \App\Models\Setting::get('banner_background');
+    $bannerBgUrl = $bannerBg ? \Illuminate\Support\Facades\Storage::url($bannerBg) : null;
+@endphp
 @section('content')
     <!-- Page Header -->
-    <section class="bg-gray-900 text-white py-12">
+    <section
+        class="bg-gray-900 bg-cover bg-center text-white py-12"
+        @if($bannerBgUrl) style="background-image: linear-gradient(rgba(17,24,39,.75), rgba(17,24,39,.75)), url('{{ $bannerBgUrl }}');" @endif
+    >
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">{{ $page?->getContent('page_title') ?? 'Our Agents' }}</h1>
             <p class="text-gray-400">{{ $page?->getContent('page_subtitle') ?? 'Meet our professional and dedicated real estate agents' }}</p>

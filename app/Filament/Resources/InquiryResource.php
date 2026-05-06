@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class InquiryResource extends Resource
 {
@@ -96,6 +97,28 @@ class InquiryResource extends Resource
             return false;
         }
 
-        return in_array($user->role, ['super_admin', 'owner', 'agent']);
+        return in_array($user->role, ['super_admin', 'admin', 'owner', 'agent']);
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (! $user || in_array($user->role, ['super_admin', 'admin'])) {
+            return $query;
+        }
+
+        if ($user->role === 'owner') {
+            $ownerId = $user->owner?->id ?? 0;
+            return $query->whereHas('listing.property', fn ($q) => $q->where('owner_id', $ownerId));
+        }
+
+        if ($user->role === 'agent') {
+            $agentId = $user->agent?->id ?? 0;
+            return $query->whereHas('listing', fn ($q) => $q->where('agent_id', $agentId));
+        }
+
+        return $query->whereRaw('1=0');
     }
 }

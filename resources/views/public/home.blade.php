@@ -3,9 +3,16 @@
 @section('title', $page?->meta_title ?? 'Home')
 @section('meta_description', $page?->meta_description ?? 'Find your dream property with Revolest. Browse homes for sale and rent, connect with trusted agents, and make your real estate journey seamless.')
 
+@php
+    $heroBg = \App\Models\Setting::get('hero_background');
+    $heroBgUrl = $heroBg ? \Illuminate\Support\Facades\Storage::url($heroBg) : null;
+@endphp
 @section('content')
     <!-- Hero Section -->
-    <section class="relative bg-gradient-to-r from-gray-900 to-gray-800 text-white">
+    <section
+        class="relative bg-gradient-to-r from-gray-900 to-gray-800 bg-cover bg-center text-white"
+        @if($heroBgUrl) style="background-image: url('{{ $heroBgUrl }}');" @endif
+    >
         <div class="absolute inset-0 bg-black/50"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div class="max-w-3xl">

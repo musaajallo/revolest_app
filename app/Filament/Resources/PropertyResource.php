@@ -215,12 +215,35 @@ class PropertyResource extends Resource
         ];
     }
 
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        return $user && in_array($user->role, ['super_admin', 'admin', 'agent', 'owner']);
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->with(['listings' => fn ($query) => $query->latest()])
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (! $user || in_array($user->role, ['super_admin', 'admin'])) {
+            return $query;
+        }
+
+        if ($user->role === 'owner') {
+            return $query->where('owner_id', $user->owner?->id ?? 0);
+        }
+
+        if ($user->role === 'agent') {
+            $agentId = $user->agent?->id ?? 0;
+            return $query->whereHas('listings', fn ($q) => $q->where('agent_id', $agentId));
+        }
+
+        return $query->whereRaw('1=0');
     }
 }

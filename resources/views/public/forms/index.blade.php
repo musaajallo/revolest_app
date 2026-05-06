@@ -1,8 +1,15 @@
 @extends('layouts.public')
 @section('title', 'Forms & Consultations')
 
+@php
+    $bannerBg = \App\Models\Setting::get('banner_background');
+    $bannerBgUrl = $bannerBg ? \Illuminate\Support\Facades\Storage::url($bannerBg) : null;
+@endphp
 @section('content')
-    <section class="bg-gray-900 text-white py-16">
+    <section
+        class="bg-gray-900 bg-cover bg-center text-white py-16"
+        @if($bannerBgUrl) style="background-image: linear-gradient(rgba(17,24,39,.75), rgba(17,24,39,.75)), url('{{ $bannerBgUrl }}');" @endif
+    >
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl md:text-4xl font-bold mb-2">Forms & Consultations</h1>
             <p class="text-gray-400">Submit a request and one of our agents will be in touch.</p>

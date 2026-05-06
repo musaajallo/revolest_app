@@ -87,11 +87,43 @@ class ReceiptResource extends Resource
         ];
     }
 
+    public static function canAccess(): bool
+    {
+        $user = \Illuminate\Support\Facades\Auth::user();
+
+        return $user && in_array($user->role, ['super_admin', 'admin', 'agent', 'owner', 'tenant']);
+    }
+
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        $user = \Illuminate\Support\Facades\Auth::user();
+        if (! $user || in_array($user->role, ['super_admin', 'admin'])) {
+            return $query;
+        }
+
+        if ($user->role === 'tenant') {
+            $tenantId = $user->tenant?->id ?? 0;
+            return $query->whereHas('payment', fn ($q) => $q->where('tenant_id', $tenantId));
+        }
+
+        if ($user->role === 'owner') {
+            $ownerId = $user->owner?->id ?? 0;
+            return $query->whereHas('payment', fn ($q) => $q->where('owner_id', $ownerId));
+        }
+
+        if ($user->role === 'agent') {
+            $agentId = $user->agent?->id ?? 0;
+            return $query->whereHas(
+                'payment.lease.property.listings',
+                fn ($q) => $q->where('agent_id', $agentId)
+            );
+        }
+
+        return $query->whereRaw('1=0');
     }
 }

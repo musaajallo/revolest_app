@@ -1,6 +1,14 @@
 @props(['title', 'subtitle' => null])
 
-<section class="bg-gray-900 text-white py-12">
+@php
+    $bannerBg = \App\Models\Setting::get('banner_background');
+    $bannerBgUrl = $bannerBg ? \Illuminate\Support\Facades\Storage::url($bannerBg) : null;
+@endphp
+
+<section
+    class="bg-gray-900 bg-cover bg-center text-white py-12"
+    @if($bannerBgUrl) style="background-image: linear-gradient(rgba(17,24,39,.75), rgba(17,24,39,.75)), url('{{ $bannerBgUrl }}');" @endif
+>
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <p class="text-sm uppercase tracking-wider text-[#a94a2a] mb-2">
             <a href="{{ route('forms.index') }}" class="hover:text-white">Forms</a>

@@ -52,6 +52,11 @@ class OwnerResource extends Resource
                     ->disk('public')
                     ->directory('owners')
                     ->visibility('public'),
+                Forms\Components\Select::make('user_id')
+                    ->label('Linked Login User')
+                    ->relationship('user', 'name')
+                    ->searchable()
+                    ->helperText('The User account this owner uses to log in. Required for owners who need access to /admin.'),
             ]);
     }
 

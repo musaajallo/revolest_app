@@ -31,6 +31,9 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
             'site_tagline' => Setting::get('site_tagline', 'Your trusted real estate partner'),
             'site_logo' => Setting::get('site_logo'),
             'site_favicon' => Setting::get('site_favicon'),
+            'hero_background' => Setting::get('hero_background'),
+            'banner_background' => Setting::get('banner_background'),
+            'login_background' => Setting::get('login_background'),
             'contact_email' => Setting::get('contact_email', 'info@revolest.com'),
             'contact_phone' => Setting::get('contact_phone', '+220 123 4567'),
             'contact_phone_2' => Setting::get('contact_phone_2'),
@@ -92,6 +95,39 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                                             ->imageResizeTargetHeight('32')
                                             ->helperText('Recommended size: 32x32 pixels'),
                                     ])->columns(2),
+                            ]),
+
+                        Forms\Components\Tabs\Tab::make('Backgrounds')
+                            ->icon('heroicon-o-photo')
+                            ->schema([
+                                Forms\Components\Section::make('Public Site Backgrounds')
+                                    ->description('Images shown on the public website. Each upload replaces the prior image. Leave blank to fall back to the default dark gradient.')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('hero_background')
+                                            ->label('Home Hero Background')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('settings')
+                                            ->visibility('public')
+                                            ->imageResizeMode('cover')
+                                            ->helperText('Shown behind the home page hero. Recommended: 1920×800, dark or muted (a 50% black overlay is applied automatically).'),
+                                        Forms\Components\FileUpload::make('banner_background')
+                                            ->label('Inner Page Banner Background')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('settings')
+                                            ->visibility('public')
+                                            ->imageResizeMode('cover')
+                                            ->helperText('Shown behind the title banner on Properties, Agents, Contact, and Forms pages. Recommended: 1920×400.'),
+                                        Forms\Components\FileUpload::make('login_background')
+                                            ->label('Admin Login Background')
+                                            ->image()
+                                            ->disk('public')
+                                            ->directory('settings')
+                                            ->visibility('public')
+                                            ->imageResizeMode('cover')
+                                            ->helperText('Shown behind the /admin login form. Recommended: 1920×1080.'),
+                                    ])->columns(1),
                             ]),
 
                         Forms\Components\Tabs\Tab::make('Contact')
@@ -228,6 +264,9 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
             ['key' => 'site_tagline', 'data_key' => 'site_tagline', 'label' => 'Site Tagline', 'group' => 'site', 'type' => 'text'],
             ['key' => 'site_logo', 'data_key' => 'site_logo', 'label' => 'Site Logo', 'group' => 'site', 'type' => 'image'],
             ['key' => 'site_favicon', 'data_key' => 'site_favicon', 'label' => 'Site Favicon', 'group' => 'site', 'type' => 'image'],
+            ['key' => 'hero_background', 'data_key' => 'hero_background', 'label' => 'Home Hero Background', 'group' => 'site', 'type' => 'image'],
+            ['key' => 'banner_background', 'data_key' => 'banner_background', 'label' => 'Inner Page Banner Background', 'group' => 'site', 'type' => 'image'],
+            ['key' => 'login_background', 'data_key' => 'login_background', 'label' => 'Admin Login Background', 'group' => 'site', 'type' => 'image'],
             ['key' => 'contact_email', 'data_key' => 'contact_email', 'label' => 'Contact Email', 'group' => 'contact', 'type' => 'text'],
             ['key' => 'contact_phone', 'data_key' => 'contact_phone', 'label' => 'Contact Phone', 'group' => 'contact', 'type' => 'text'],
             ['key' => 'contact_phone_2', 'data_key' => 'contact_phone_2', 'label' => 'Contact Phone 2', 'group' => 'contact', 'type' => 'text'],

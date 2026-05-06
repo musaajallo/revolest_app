@@ -29,6 +29,13 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Revolest')
+            ->favicon(function () {
+                $favicon = \App\Models\Setting::get('site_favicon');
+
+                return $favicon
+                    ? \Illuminate\Support\Facades\Storage::url($favicon)
+                    : asset('favicon.ico');
+            })
             ->login(Login::class)
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('18rem')

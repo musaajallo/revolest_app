@@ -61,6 +61,6 @@ class Dashboard extends BaseDashboard
             return false;
         }
 
-        return $user->role === 'super_admin';
+        return in_array($user->role, ['super_admin', 'admin']);
     }
 }
