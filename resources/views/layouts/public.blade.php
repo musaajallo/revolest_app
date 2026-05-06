@@ -3,6 +3,7 @@
     $siteTagline = \App\Models\Setting::get('site_tagline', 'Your trusted real estate partner');
     $contactEmail = \App\Models\Setting::get('contact_email', 'info@revolest.com');
     $contactPhone = \App\Models\Setting::get('contact_phone', '+220 123 4567');
+    $contactPhone2 = \App\Models\Setting::get('contact_phone_2');
     $contactAddress = \App\Models\Setting::get('contact_address', 'Kairaba Avenue, Serrekunda, The Gambia');
     $footerText = \App\Models\Setting::get('footer_text', 'Your trusted partner in real estate. We help you find the perfect property for your needs.');
     $facebookUrl = \App\Models\Setting::get('facebook_url');
@@ -276,6 +277,12 @@
                             <svg class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
                             <span>{{ $contactPhone }}</span>
                         </li>
+                        @if ($contactPhone2)
+                        <li class="flex items-center space-x-2">
+                            <svg class="h-5 w-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            <span>{{ $contactPhone2 }}</span>
+                        </li>
+                        @endif
                     </ul>
                 </div>
             </div>
