@@ -16,9 +16,6 @@
     $whatsappPhone = \App\Models\Setting::get('whatsapp_phone_number');
     $whatsappMessage = \App\Models\Setting::get('whatsapp_default_message', 'Hello! I\'m interested in your properties.');
     $whatsappShowButton = \App\Models\Setting::get('whatsapp_show_floating_button', true);
-
-    $favicon = \App\Models\Setting::get('site_favicon');
-    $faviconUrl = $favicon ? \Illuminate\Support\Facades\Storage::url($favicon) : asset('favicon.ico');
 @endphp
 <!DOCTYPE html>
 <html lang="en" x-data="{
@@ -34,8 +31,12 @@
     <meta name="description" content="@yield('meta_description', $siteName . ' - ' . $siteTagline)">
     <title>@yield('title', $siteName) - Real Estate Management</title>
 
-    <link rel="icon" href="{{ $faviconUrl }}" />
-    <link rel="shortcut icon" href="{{ $faviconUrl }}" />
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Revolest" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">

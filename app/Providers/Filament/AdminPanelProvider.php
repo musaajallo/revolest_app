@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
 
                 return $favicon
                     ? \Illuminate\Support\Facades\Storage::url($favicon)
-                    : asset('favicon.ico');
+                    : asset('favicon.svg');
             })
             ->login(Login::class)
             ->sidebarCollapsibleOnDesktop()
@@ -86,6 +86,19 @@ class AdminPanelProvider extends PanelProvider
                 fn () => <<<'HTML'
                 <style>
                     @media (min-width: 1024px) {
+                        /* Center the global search in the topbar.
+                           The default Filament v3 topbar wraps search + notifications +
+                           user-menu in a single .ms-auto right-aligned cluster. We pull
+                           the search out of flow and absolute-center it; notifications,
+                           Visit Site link, and user-menu stay on the right. */
+                        .fi-topbar > nav {
+                            position: relative;
+                        }
+                        .fi-topbar .fi-global-search {
+                            position: absolute;
+                            left: 50%;
+                            transform: translateX(-50%);
+                        }
                         .fi-topbar .fi-global-search-field {
                             width: 32rem !important;
                             max-width: 32rem !important;
@@ -103,12 +116,51 @@ class AdminPanelProvider extends PanelProvider
                             max-width: 26rem !important;
                         }
                     }
+                    /* Visit Site link in topbar */
+                    .fi-topbar-visit-site {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 0.375rem;
+                        padding: 0.375rem 0.75rem;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        line-height: 1.25rem;
+                        color: rgb(75 85 99);
+                        border-radius: 0.5rem;
+                        transition: background-color .15s, color .15s;
+                    }
+                    .fi-topbar-visit-site:hover {
+                        background-color: rgb(243 244 246);
+                        color: rgb(28 71 54);
+                    }
+                    .dark .fi-topbar-visit-site {
+                        color: rgb(209 213 219);
+                    }
+                    .dark .fi-topbar-visit-site:hover {
+                        background-color: rgb(255 255 255 / 0.05);
+                        color: rgb(74 222 139);
+                    }
                 </style>
                 HTML
             )
             ->renderHook(
                 'panels::user-menu.before',
-                fn () => Blade::render('@livewire(\'inquiry-notifications\')')
+                fn () => Blade::render(<<<'BLADE'
+                <a
+                    href="{{ url('/') }}"
+                    target="_blank"
+                    rel="noopener"
+                    class="fi-topbar-visit-site"
+                    title="Open the public website in a new tab"
+                >
+                    <x-filament::icon
+                        icon="heroicon-o-arrow-top-right-on-square"
+                        class="h-4 w-4"
+                    />
+                    <span class="hidden sm:inline">Visit Site</span>
+                </a>
+                @livewire('inquiry-notifications')
+                BLADE)
             )
             ->navigationGroups([
                 'Dashboard',
