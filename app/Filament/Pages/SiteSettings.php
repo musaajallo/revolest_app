@@ -79,32 +79,38 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                                         Forms\Components\FileUpload::make('site_logo')
                                             ->label('Site Logo')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'])
+                                            ->maxSize(5120)
                                             ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeMode('contain')
                                             ->imageCropAspectRatio('3:1')
                                             ->imageResizeTargetWidth('300')
-                                            ->helperText('Used in the public site header and admin panel. Recommended: 300×100 pixels, dark text on transparent background.'),
+                                            ->helperText('Used in the public site header and admin panel. Recommended: 300×100 px, dark text on transparent. Max 5 MB. JPG, PNG, WebP, or SVG.'),
                                         Forms\Components\FileUpload::make('footer_logo')
                                             ->label('Footer Logo (white / inverse)')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'])
+                                            ->maxSize(5120)
                                             ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeMode('contain')
                                             ->imageCropAspectRatio('3:1')
                                             ->imageResizeTargetWidth('300')
-                                            ->helperText('Used in the dark public-site footer. Recommended: 300×100 pixels, white/light text on transparent background. Falls back to the Site Logo if not set.'),
+                                            ->helperText('Used in the dark public-site footer. Recommended: 300×100 px, white/light text on transparent. Falls back to the Site Logo if not set. Max 5 MB.'),
                                         Forms\Components\FileUpload::make('site_favicon')
                                             ->label('Favicon')
                                             ->image()
+                                            ->acceptedFileTypes(['image/png', 'image/svg+xml', 'image/x-icon', 'image/vnd.microsoft.icon'])
+                                            ->maxSize(512)
                                             ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeTargetWidth('32')
                                             ->imageResizeTargetHeight('32')
-                                            ->helperText('Recommended size: 32x32 pixels'),
+                                            ->helperText('Recommended: 32×32 px. PNG, SVG, or ICO. Max 512 KB.'),
                                     ])->columns(2),
                             ]),
 
@@ -112,32 +118,38 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
                             ->icon('heroicon-o-photo')
                             ->schema([
                                 Forms\Components\Section::make('Public Site Backgrounds')
-                                    ->description('Images shown on the public website. Each upload replaces the prior image. Leave blank to fall back to the default dark gradient.')
+                                    ->description('Images shown on the public website. Each upload replaces the prior image. Leave blank to fall back to the default dark gradient. Max file size 15 MB per image; if your photo is larger, compress it first (try squoosh.app or tinypng.com).')
                                     ->schema([
                                         Forms\Components\FileUpload::make('hero_background')
                                             ->label('Home Hero Background')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                            ->maxSize(15360)
                                             ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeMode('cover')
-                                            ->helperText('Shown behind the home page hero. Recommended: 1920×800, dark or muted (a 50% black overlay is applied automatically).'),
+                                            ->helperText('Shown behind the home page hero. Recommended: 1920×800 px, dark or muted (a 50% black overlay is applied automatically). JPG, PNG, or WebP. Max 15 MB.'),
                                         Forms\Components\FileUpload::make('banner_background')
                                             ->label('Inner Page Banner Background')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                            ->maxSize(15360)
                                             ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeMode('cover')
-                                            ->helperText('Shown behind the title banner on Properties, Agents, Contact, and Forms pages. Recommended: 1920×400.'),
+                                            ->helperText('Shown behind the title banner on Properties, Agents, Contact, and Forms pages. Recommended: 1920×400 px. JPG, PNG, or WebP. Max 15 MB.'),
                                         Forms\Components\FileUpload::make('login_background')
                                             ->label('Admin Login Background')
                                             ->image()
+                                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                            ->maxSize(15360)
                                             ->disk('public')
                                             ->directory('settings')
                                             ->visibility('public')
                                             ->imageResizeMode('cover')
-                                            ->helperText('Shown behind the /admin login form. Recommended: 1920×1080.'),
+                                            ->helperText('Shown behind the /admin login form. Recommended: 1920×1080 px. JPG, PNG, or WebP. Max 15 MB.'),
                                     ])->columns(1),
                             ]),
 
