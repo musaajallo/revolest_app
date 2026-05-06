@@ -5,11 +5,11 @@
 
 @php
     // Use CMS page content first, then fall back to Site Settings
-    $contactEmail = $page?->getContent('email_1') ?? \App\Models\Setting::get('contact_email', 'info@revolest.com');
-    $contactPhone = $page?->getContent('phone_1') ?? \App\Models\Setting::get('contact_phone', '+220 123 4567');
-    $contactPhone2 = $page?->getContent('phone_2') ?? \App\Models\Setting::get('contact_phone_2');
-    $contactAddress = $page?->getContent('office_address') ?? \App\Models\Setting::get('contact_address', "Kairaba Avenue\nSerrekunda, The Gambia");
-    $businessHours = $page?->getContent('business_hours') ?? \App\Models\Setting::get('business_hours', "Mon - Fri: 9:00 AM - 6:00 PM\nSat: 10:00 AM - 4:00 PM\nSun: Closed");
+    $contactEmail = \App\Models\Setting::get('contact_email', 'info@revolest.com');
+    $contactPhone = \App\Models\Setting::get('contact_phone', '+220 123 4567');
+    $contactPhone2 = \App\Models\Setting::get('contact_phone_2');
+    $contactAddress = \App\Models\Setting::get('contact_address', "Kairaba Avenue\nSerrekunda, The Gambia");
+    $businessHours = \App\Models\Setting::get('business_hours', "Mon - Fri: 9:00 AM - 6:00 PM\nSat: 10:00 AM - 4:00 PM\nSun: Closed");
 @endphp
 
 @section('content')
