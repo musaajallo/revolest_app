@@ -24,14 +24,14 @@
                 </p>
 
                 <!-- Search Form -->
-                <form action="{{ route('properties.index') }}" method="GET" class="bg-white rounded-lg p-4 shadow-lg">
+                <form action="{{ route('properties.index') }}" method="GET" class="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-lg">
                     <div class="flex flex-col md:flex-row gap-4">
                         <div class="flex-1">
                             <input type="text" name="search" placeholder="Search by location or property name..."
-                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
+                                   class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                         </div>
                         <div class="md:w-48">
-                            <select name="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
+                            <select name="type" class="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#1c4736] focus:border-transparent">
                                 <option value="">All Types</option>
                                 <option value="house">House</option>
                                 <option value="apartment">Apartment</option>
@@ -51,24 +51,24 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="bg-white py-12 border-b">
+    <section class="bg-white dark:bg-gray-800 py-12 border-b dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">{{ number_format($totalProperties) }}+</div>
-                    <div class="text-gray-600 mt-1">Properties</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736] dark:text-emerald-400">{{ number_format($totalProperties) }}+</div>
+                    <div class="text-gray-600 dark:text-gray-300 mt-1">Properties</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">{{ number_format($totalAgents) }}+</div>
-                    <div class="text-gray-600 mt-1">Agents</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736] dark:text-emerald-400">{{ number_format($totalAgents) }}+</div>
+                    <div class="text-gray-600 dark:text-gray-300 mt-1">Agents</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">{{ number_format($totalListings) }}+</div>
-                    <div class="text-gray-600 mt-1">Active Listings</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736] dark:text-emerald-400">{{ number_format($totalListings) }}+</div>
+                    <div class="text-gray-600 dark:text-gray-300 mt-1">Active Listings</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736]">500+</div>
-                    <div class="text-gray-600 mt-1">Happy Clients</div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#1c4736] dark:text-emerald-400">{{ number_format($successfulDeals) }}+</div>
+                    <div class="text-gray-600 dark:text-gray-300 mt-1">Successful Deals</div>
                 </div>
             </div>
         </div>
@@ -78,8 +78,8 @@
     <section class="py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $page?->getContent('featured_title') ?? 'Featured Properties' }}</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">{{ $page?->getContent('featured_subtitle') ?? 'Explore our handpicked selection of premium properties available for sale and rent.' }}</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ $page?->getContent('featured_title') ?? 'Featured Properties' }}</h2>
+                <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">{{ $page?->getContent('featured_subtitle') ?? 'Explore our handpicked selection of premium properties available for sale and rent.' }}</p>
             </div>
 
             @if($featuredProperties->count() > 0)
@@ -91,10 +91,15 @@
                             $priceLabel = $property->publicPriceLabel($primaryListing);
                             $displayDeposit = $property->publicDeposit($primaryListing);
                             $displayAgentFee = $property->publicAgentFee($primaryListing);
+
+                            $hasSale = $property->purpose === 'sale'
+                                || ($property->purpose === 'mixed' && $property->listings->contains(fn ($l) => $l->status === 'for_sale'));
+                            $hasRent = $property->purpose === 'rent'
+                                || ($property->purpose === 'mixed' && $property->listings->contains(fn ($l) => $l->status === 'for_rent'));
                         @endphp
-                        <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
                             <!-- Property Image -->
-                            <div class="relative h-56 bg-gray-200">
+                            <div class="relative h-56 bg-gray-200 dark:bg-gray-700">
                                 @if($property->images)
                                     @php
                                         $images = is_array($property->images) ? $property->images : json_decode($property->images, true);
@@ -110,20 +115,28 @@
                                 <div class="absolute top-4 left-4">
                                     <span class="bg-[#a94a2a] text-white px-3 py-1 rounded-full text-sm font-medium capitalize">{{ $property->type }}</span>
                                 </div>
+                                <div class="absolute top-4 right-4 flex flex-col items-end gap-1">
+                                    @if($hasSale)
+                                        <span class="bg-[#1c4736] text-white px-3 py-1 rounded-full text-sm font-semibold shadow">For Sale</span>
+                                    @endif
+                                    @if($hasRent)
+                                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow">For Rent</span>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Property Details -->
                             <div class="p-5">
                                 <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-[#1c4736] transition">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#1c4736] dark:group-hover:text-emerald-400 transition">
                                         <a href="{{ route('properties.show', $property) }}">{{ $property->title }}</a>
                                     </h3>
                                 </div>
-                                <p class="text-gray-500 text-sm mb-3 flex items-center">
+                                <p class="text-gray-500 dark:text-gray-400 text-sm mb-3 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                     {{ $property->address }}
                                 </p>
-                                <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                                <div class="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-300 mb-4">
                                     @if(($primaryListing?->bedrooms ?? $property->bedrooms))
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
@@ -143,17 +156,17 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="flex justify-between items-center pt-4 border-t">
+                                <div class="flex justify-between items-center pt-4 border-t dark:border-gray-700">
                                     <div class="text-right">
-                                        <div class="text-xs uppercase tracking-wide text-gray-500">{{ $priceLabel }}</div>
-                                        <span class="text-2xl font-bold text-[#1c4736]">D{{ number_format($displayPrice ?? 0) }}</span>
+                                        <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $priceLabel }}</div>
+                                        <span class="text-2xl font-bold text-[#1c4736] dark:text-emerald-400">D{{ number_format($displayPrice ?? 0) }}</span>
                                     </div>
-                                    <a href="{{ route('properties.show', $property) }}" class="text-[#1c4736] hover:text-[#a94a2a] font-medium">
+                                    <a href="{{ route('properties.show', $property) }}" class="text-[#1c4736] dark:text-emerald-400 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium">
                                         View Details →
                                     </a>
                                 </div>
                                 @if($displayDeposit || $displayAgentFee)
-                                    <div class="mt-2 text-xs text-gray-500">
+                                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                                         @if($displayDeposit)
                                             <span>Deposit: D{{ number_format($displayDeposit) }}</span>
                                         @endif
@@ -173,45 +186,45 @@
                     </a>
                 </div>
             @else
-                <div class="text-center py-12 bg-gray-100 rounded-lg">
-                    <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                    <p class="text-gray-600">No properties available at the moment. Check back soon!</p>
+                <div class="text-center py-12 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                    <svg class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                    <p class="text-gray-600 dark:text-gray-300">No properties available at the moment. Check back soon!</p>
                 </div>
             @endif
         </div>
     </section>
 
     <!-- Why Choose Us -->
-    <section class="py-16 bg-gray-100">
+    <section class="py-16 bg-gray-100 dark:bg-gray-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $page?->getContent('why_choose_title') ?? 'Why Choose Revolest?' }}</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">{{ $page?->getContent('why_choose_subtitle') ?? 'We make finding your perfect property simple, transparent, and stress-free.' }}</p>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{{ $page?->getContent('why_choose_title') ?? 'Why Choose Revolest?' }}</h2>
+                <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">{{ $page?->getContent('why_choose_subtitle') ?? 'We make finding your perfect property simple, transparent, and stress-free.' }}</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-xl shadow-md text-center">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-red-100 dark:bg-[#a94a2a]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-[#1c4736] dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Trusted & Verified</h3>
-                    <p class="text-gray-600">All our properties and agents are thoroughly verified to ensure you get the best experience.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Trusted & Verified</h3>
+                    <p class="text-gray-600 dark:text-gray-300">All our properties and agents are thoroughly verified to ensure you get the best experience.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-md text-center">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-red-100 dark:bg-[#a94a2a]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-[#1c4736] dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Best Prices</h3>
-                    <p class="text-gray-600">We offer competitive pricing and help you find properties that fit your budget.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">Best Prices</h3>
+                    <p class="text-gray-600 dark:text-gray-300">We offer competitive pricing and help you find properties that fit your budget.</p>
                 </div>
 
-                <div class="bg-white p-8 rounded-xl shadow-md text-center">
-                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-[#1c4736]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md text-center">
+                    <div class="w-16 h-16 bg-red-100 dark:bg-[#a94a2a]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-8 h-8 text-[#1c4736] dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-3">24/7 Support</h3>
-                    <p class="text-gray-600">Our dedicated team is always ready to assist you with any questions or concerns.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">24/7 Support</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Our dedicated team is always ready to assist you with any questions or concerns.</p>
                 </div>
             </div>
         </div>

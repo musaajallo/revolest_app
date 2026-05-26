@@ -101,19 +101,16 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('home') ? 'text-[#1c4736]' : '' }}">
+                    <a href="{{ route('home') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium transition {{ request()->routeIs('home') ? 'text-[#a94a2a]' : '' }}">
                         Home
                     </a>
-                    <a href="{{ route('properties.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('properties.*') ? 'text-[#1c4736]' : '' }}">
+                    <a href="{{ route('properties.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium transition {{ request()->routeIs('properties.*') ? 'text-[#a94a2a]' : '' }}">
                         Properties
                     </a>
-                    <a href="{{ route('agents.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('agents.*') ? 'text-[#1c4736]' : '' }}">
+                    <a href="{{ route('agents.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium transition {{ request()->routeIs('agents.*') ? 'text-[#a94a2a]' : '' }}">
                         Agents
                     </a>
-                    <a href="{{ route('forms.index') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('forms.*') ? 'text-[#1c4736]' : '' }}">
-                        Forms
-                    </a>
-                    <a href="{{ route('contact') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] dark:hover:text-[#1c4736] font-medium transition {{ request()->routeIs('contact') ? 'text-[#1c4736]' : '' }}">
+                    <a href="{{ route('contact') }}" class="text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium transition {{ request()->routeIs('contact') ? 'text-[#a94a2a]' : '' }}">
                         Contact
                     </a>
 
@@ -132,11 +129,11 @@
                     </button>
 
                     @auth
-                        <a href="/admin" class="bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-4 py-2 rounded-lg font-medium transition">
+                        <a href="/admin" target="_blank" rel="noopener" class="bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-4 py-2 rounded-lg font-medium transition">
                             Admin
                         </a>
                     @else
-                        <a href="/admin/login" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium transition">
+                        <a href="/admin/login" class="text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] font-medium transition">
                             Login
                         </a>
                     @endauth
@@ -154,7 +151,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                     </button>
-                    <button type="button" id="mobile-menu-button" class="text-gray-700 dark:text-gray-300 hover:text-[#1c4736] focus:outline-none">
+                    <button type="button" id="mobile-menu-button" class="text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] focus:outline-none">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -181,16 +178,15 @@
                         </div>
                     </div>
                 </form>
-                <a href="{{ route('home') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Home</a>
-                <a href="{{ route('properties.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Properties</a>
-                <a href="{{ route('agents.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Agents</a>
-                <a href="{{ route('forms.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Forms</a>
-                <a href="{{ route('contact') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Contact</a>
+                <a href="{{ route('home') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] font-medium py-2">Home</a>
+                <a href="{{ route('properties.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] font-medium py-2">Properties</a>
+                <a href="{{ route('agents.index') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] font-medium py-2">Agents</a>
+                <a href="{{ route('contact') }}" class="block text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] font-medium py-2">Contact</a>
                 <hr class="my-2 dark:border-gray-700">
                 @auth
-                    <a href="/admin" class="block bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-4 py-2 rounded-lg font-medium text-center">Admin</a>
+                    <a href="/admin" target="_blank" rel="noopener" class="block bg-[#a94a2a] hover:bg-[#8a3c22] text-white px-4 py-2 rounded-lg font-medium text-center">Admin</a>
                 @else
-                    <a href="/admin/login" class="block text-gray-700 dark:text-gray-300 hover:text-[#1c4736] font-medium py-2">Login</a>
+                    <a href="/admin/login" class="block text-gray-700 dark:text-gray-300 hover:text-[#a94a2a] font-medium py-2">Login</a>
                 @endauth
             </div>
         </div>
@@ -256,7 +252,6 @@
                         <li><a href="{{ route('home') }}" class="text-gray-400 hover:text-[#1c4736] transition">Home</a></li>
                         <li><a href="{{ route('properties.index') }}" class="text-gray-400 hover:text-[#1c4736] transition">Properties</a></li>
                         <li><a href="{{ route('agents.index') }}" class="text-gray-400 hover:text-[#1c4736] transition">Agents</a></li>
-                        <li><a href="{{ route('forms.index') }}" class="text-gray-400 hover:text-[#1c4736] transition">Forms</a></li>
                         <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-[#1c4736] transition">Contact Us</a></li>
                     </ul>
                 </div>

@@ -174,23 +174,6 @@
                         </div>
                     </div>
 
-                    <!-- Owner Info -->
-                    @if($property->owner)
-                        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-                            <h2 class="text-xl font-semibold text-gray-900 mb-4">Property Owner</h2>
-                            <div class="flex items-center">
-                                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                                    <span class="text-2xl font-bold text-[#a94a2a]">{{ substr($property->owner->name, 0, 1) }}</span>
-                                </div>
-                                <div class="ml-4">
-                                    <h3 class="text-lg font-semibold text-gray-900">{{ $property->owner->name }}</h3>
-                                    @if($property->owner->email)
-                                        <p class="text-gray-500">{{ $property->owner->email }}</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    @endif
                 </div>
 
                 <!-- Sidebar -->

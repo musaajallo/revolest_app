@@ -35,14 +35,16 @@ class PublicController extends Controller
 
         $totalProperties = Property::count();
         $totalAgents = Agent::count();
-        $totalListings = Listing::whereIn('status', self::PUBLIC_LISTING_STATUSES)->count();
+        $totalListings = Listing::count();
+        $successfulDeals = Listing::whereIn('status', ['rented', 'sold'])->count();
 
         return view('public.home', compact(
             'page',
             'featuredProperties',
             'totalProperties',
             'totalAgents',
-            'totalListings'
+            'totalListings',
+            'successfulDeals'
         ));
     }
 

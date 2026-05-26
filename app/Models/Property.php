@@ -6,6 +6,7 @@ use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Property extends Model
 {
@@ -13,6 +14,7 @@ class Property extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'address',
         'plus_code',
@@ -50,6 +52,10 @@ class Property extends Model
     protected static function booted(): void
     {
         static::saving(function (Property $property): void {
+            if (blank($property->slug) || $property->isDirty('title')) {
+                $property->slug = static::generateUniqueSlug($property->title ?? 'property', $property->getKey());
+            }
+
             if ($property->purpose === 'sale') {
                 $property->sale_price = $property->sale_price ?? $property->price;
                 $property->rental_price = null;
@@ -89,6 +95,28 @@ class Property extends Model
     public function listings()
     {
         return $this->hasMany(Listing::class);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    protected static function generateUniqueSlug(string $title, mixed $ignoreId = null): string
+    {
+        $base = Str::slug($title) ?: 'property';
+        $slug = $base;
+        $i = 2;
+
+        while (static::withTrashed()
+            ->where('slug', $slug)
+            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
+            ->exists()
+        ) {
+            $slug = $base . '-' . $i++;
+        }
+
+        return $slug;
     }
 
     public function usesMixedUnitPricing(): bool
