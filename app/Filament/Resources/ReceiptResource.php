@@ -22,7 +22,12 @@ class ReceiptResource extends Resource
     }
     public static function getGloballySearchableAttributes(): array
     {
-        return ['description'];
+        return ['receipt_number', 'description'];
+    }
+
+    public static function getGlobalSearchResultTitle($record): string
+    {
+        return $record->receipt_number ?? ('Receipt #' . $record->id);
     }
     protected static ?string $model = Receipt::class;
 
@@ -32,14 +37,24 @@ class ReceiptResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('receipt_number')
+                    ->label('Receipt #')
+                    ->disabled()
+                    ->dehydrated(false)
+                    ->visible(fn ($record) => $record !== null)
+                    ->helperText('Auto-generated on create (RCV-{year}-{sequence}).'),
                 Forms\Components\Select::make('payment_id')
                     ->relationship('payment', 'id')
+                    ->getOptionLabelFromRecordUsing(fn ($record) => 'Payment #' . $record->id . ' — D' . number_format((float) $record->amount, 2))
                     ->searchable()
                     ->required(),
-                Forms\Components\DateTimePicker::make('issued_at')->required(),
-                Forms\Components\TextInput::make('file'),
-                Forms\Components\TextInput::make('amount')->numeric()->required(),
-                Forms\Components\Textarea::make('description'),
+                Forms\Components\DateTimePicker::make('issued_at')->required()->default(now()),
+                Forms\Components\TextInput::make('amount')->numeric()->prefix('D')->required(),
+                Forms\Components\FileUpload::make('file')
+                    ->label('Receipt File')
+                    ->disk('public')
+                    ->directory('receipts'),
+                Forms\Components\Textarea::make('description')->rows(3),
             ]);
     }
 
@@ -47,12 +62,18 @@ class ReceiptResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('payment.id')->label('Payment')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('issued_at')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('file')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('amount')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('description')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('receipt_number')
+                    ->label('Receipt #')
+                    ->searchable()
+                    ->copyable()
+                    ->badge()
+                    ->color('primary'),
+                Tables\Columns\TextColumn::make('issued_at')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('payment.tenant.name')->label('Tenant')->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('amount')->money('GMD')->sortable(),
+                Tables\Columns\TextColumn::make('description')->limit(40)->toggleable(),
             ])
+            ->defaultSort('issued_at', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

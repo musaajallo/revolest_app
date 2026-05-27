@@ -32,27 +32,110 @@ class PaymentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('lease_id')
-                    ->relationship('lease', 'id')
-                    ->searchable()
-                    ->required(),
-                Forms\Components\Select::make('tenant_id')
-                    ->relationship('tenant', 'name')
-                    ->searchable()
-                    ->required(),
-                Forms\Components\Select::make('owner_id')
-                    ->relationship('owner', 'name')
-                    ->searchable()
-                    ->required(),
-                Forms\Components\TextInput::make('amount')
-                    ->numeric()
-                    ->required()
-                    ->prefix('D')
-                    ->label('Amount (GMD)'),
-                Forms\Components\DatePicker::make('payment_date')->required(),
-                Forms\Components\TextInput::make('method')->required(),
-                Forms\Components\TextInput::make('status')->required(),
-                Forms\Components\TextInput::make('receipt_file'),
+                Forms\Components\Section::make('Parties')
+                    ->columns(3)
+                    ->schema([
+                        Forms\Components\Select::make('lease_id')
+                            ->relationship('lease', 'id')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => ($record->property?->title ?? 'Property')
+                                . ' — ' . ($record->tenant?->name ?? 'Tenant'))
+                            ->searchable(['property.title', 'tenant.name'])
+                            ->preload()
+                            ->required()
+                            ->live()
+                            ->afterStateUpdated(function ($state, callable $set) {
+                                if ($state) {
+                                    $lease = \App\Models\Lease::with('property')->find($state);
+                                    if ($lease) {
+                                        $set('tenant_id', $lease->tenant_id);
+                                        $set('owner_id', $lease->property?->owner_id);
+                                        if ($lease->rent_amount) {
+                                            $set('expected_amount', $lease->rent_amount);
+                                        }
+                                    }
+                                }
+                            }),
+                        Forms\Components\Select::make('tenant_id')
+                            ->relationship('tenant', 'name')
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\Select::make('owner_id')
+                            ->relationship('owner', 'name')
+                            ->searchable()
+                            ->required(),
+                    ]),
+
+                Forms\Components\Section::make('Payment')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('purpose')
+                            ->options(\App\Models\Payment::PURPOSES)
+                            ->default('rent')
+                            ->required(),
+                        Forms\Components\DatePicker::make('payment_date')
+                            ->default(now())
+                            ->required(),
+                        Forms\Components\TextInput::make('amount')
+                            ->numeric()
+                            ->required()
+                            ->prefix('D')
+                            ->label('Amount Paid (GMD)'),
+                        Forms\Components\TextInput::make('expected_amount')
+                            ->numeric()
+                            ->prefix('D')
+                            ->label('Expected (GMD)')
+                            ->helperText('Defaulted from lease rent when a lease is selected.'),
+                        Forms\Components\Select::make('method')
+                            ->options([
+                                'cash' => 'Cash',
+                                'bank_transfer' => 'Bank Transfer',
+                                'cheque' => 'Cheque',
+                                'mobile_money' => 'Mobile Money',
+                                'card' => 'Card',
+                                'other' => 'Other',
+                            ])
+                            ->required(),
+                        Forms\Components\Select::make('status')
+                            ->options(\App\Models\Payment::STATUSES)
+                            ->default('complete')
+                            ->required(),
+                    ]),
+
+                Forms\Components\Section::make('Period Covered')
+                    ->columns(3)
+                    ->collapsible()
+                    ->schema([
+                        Forms\Components\DatePicker::make('period_start')->label('From'),
+                        Forms\Components\DatePicker::make('period_end')->label('To'),
+                        Forms\Components\TextInput::make('period_label')
+                            ->placeholder('e.g. Jan 2026, Q1 2026, 2026 annual'),
+                    ]),
+
+                Forms\Components\Section::make('Attribution')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('paid_by_name')
+                            ->label('Paid by')
+                            ->helperText('Name of the actual payer if different from the tenant (e.g. employer, parent, guarantor).'),
+                        Forms\Components\Select::make('received_by_user_id')
+                            ->label('Received by')
+                            ->relationship('receivedBy', 'name')
+                            ->searchable(),
+                        Forms\Components\TextInput::make('commission_amount')
+                            ->numeric()
+                            ->prefix('D')
+                            ->label('Commission (GMD)')
+                            ->helperText('Auto-calculated on create from owner commission %; override here to lock a different amount.'),
+                    ]),
+
+                Forms\Components\Section::make('Attachment & Notes')
+                    ->schema([
+                        Forms\Components\FileUpload::make('receipt_file')
+                            ->label('Proof / Bank slip')
+                            ->disk('public')
+                            ->directory('payment-proofs'),
+                        Forms\Components\Textarea::make('notes')->rows(3),
+                    ]),
             ]);
     }
 
@@ -60,18 +143,49 @@ class PaymentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('lease.id')->label('Lease')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('tenant.name')->label('Tenant')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('owner.name')->label('Owner')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('amount')
-                    ->money('GMD')
+                Tables\Columns\TextColumn::make('receipt.receipt_number')
+                    ->label('Receipt #')
                     ->searchable()
+                    ->copyable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('payment_date')->date()->sortable(),
+                Tables\Columns\TextColumn::make('tenant.name')->label('Tenant')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('lease.property.title')->label('Property')->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('purpose')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => $state ? (\App\Models\Payment::PURPOSES[$state] ?? $state) : null),
+                Tables\Columns\TextColumn::make('amount')->money('GMD')->sortable(),
+                Tables\Columns\TextColumn::make('expected_amount')
+                    ->label('Expected')
+                    ->money('GMD')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('outstandingBalance')
+                    ->label('Outstanding')
+                    ->money('GMD')
+                    ->getStateUsing(fn ($record) => $record->outstandingBalance())
+                    ->color(fn ($state) => $state !== null && $state > 0 ? 'danger' : 'gray')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('commission_amount')
+                    ->label('CMS Earn')
+                    ->money('GMD')
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('method')
+                    ->badge()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('paid_by_name')->label('Paid by')->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('receivedBy.name')->label('Received by')->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (?string $state) => match ($state) {
+                        'complete' => 'success',
+                        'pending' => 'warning',
+                        'incomplete' => 'danger',
+                        'failed' => 'danger',
+                        default => 'gray',
+                    })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('payment_date')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('method')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('status')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('receipt_file')->searchable()->sortable(),
             ])
+            ->defaultSort('payment_date', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
