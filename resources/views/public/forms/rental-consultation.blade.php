@@ -31,7 +31,7 @@
                 <div class="bg-white rounded-xl shadow-sm p-6 md:p-8">
                     <h2 class="text-xl font-semibold text-gray-900 mb-6">Property Details</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <x-public.forms.partials.field name="preferred_areas" label="Preferred location(s) / area(s)" />
+                        <x-public.forms.partials.field name="preferred_locations" label="Preferred location(s) / area(s)" />
                         <x-public.forms.partials.field name="property_kind" label="Property kind" type="select" :options="[
                             'full_compound' => 'Full Compound',
                             'apartment' => 'Apartment',
@@ -92,6 +92,7 @@
                             <x-public.forms.partials.field name="previous_company_experience" label="If yes, describe the experience" type="textarea" />
                         </div>
                         <x-public.forms.partials.field name="referral_name" label="Name of person / media (if referral)" />
+                        <x-public.forms.partials.field name="referred_by_name" label="Referred by (staff member or source)" />
                     </div>
                 </div>
 

@@ -200,6 +200,7 @@
                         <x-public.forms.partials.field name="previous_company_experience" label="Describe that experience (if any)" type="textarea" />
                         <x-public.forms.partials.field name="referral_source" label="How did you learn about us?" />
                         <x-public.forms.partials.field name="referral_name" label="Name of person / media (if applicable)" />
+                        <x-public.forms.partials.field name="referred_by_name" label="Referred by (staff member or source)" />
                         <div class="md:col-span-2">
                             <x-public.forms.partials.field name="notes" label="Internal notes (optional)" type="textarea" />
                         </div>

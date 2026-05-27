@@ -66,7 +66,14 @@ class LandPurchaseLeadResource extends Resource
             Forms\Components\Section::make('Budget & Timeline')
                 ->columns(2)
                 ->schema([
-                    Forms\Components\TextInput::make('budget')->maxLength(100),
+                    Forms\Components\TextInput::make('budget')
+                        ->label('Budget (free text)')
+                        ->maxLength(100)
+                        ->helperText('Legacy single field; prefer Min / Max below for new records.'),
+                    Forms\Components\TextInput::make('budget_min')
+                        ->numeric()->prefix('D')->label('Budget Min'),
+                    Forms\Components\TextInput::make('budget_max')
+                        ->numeric()->prefix('D')->label('Budget Max'),
                     Forms\Components\TextInput::make('payment_plan')->maxLength(100),
                     Forms\Components\Select::make('payment_method')->options([
                         'bank' => 'Bank',
@@ -77,6 +84,25 @@ class LandPurchaseLeadResource extends Resource
                     ]),
                     Forms\Components\TextInput::make('timeframe')->maxLength(100),
                     Forms\Components\TextInput::make('completion_target')->maxLength(100),
+                ]),
+            Forms\Components\Section::make('Property Characteristics')
+                ->columns(2)
+                ->schema([
+                    Forms\Components\TextInput::make('bathrooms')->numeric()->minValue(0)->maxValue(20),
+                    Forms\Components\Select::make('property_condition')->options([
+                        'new' => 'New',
+                        'existing' => 'Existing',
+                        'needs_renovation' => 'Needs renovation',
+                    ]),
+                    Forms\Components\Select::make('intended_use')->options([
+                        'residential' => 'Residential',
+                        'commercial' => 'Commercial',
+                        'investment' => 'Investment',
+                        'mixed' => 'Mixed',
+                    ]),
+                    Forms\Components\TextInput::make('referred_by_name')
+                        ->label('Referred by')
+                        ->helperText('Staff member / source who brought this lead in.'),
                 ]),
             Forms\Components\Section::make('Notes & Triage')
                 ->columns(2)
@@ -146,6 +172,13 @@ class LandPurchaseLeadResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            \App\Filament\RelationManagers\LeadActivitiesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLeadActivities;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BuiltPropertyListingLead extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, HasLeadActivities, LogsActivity, SoftDeletes;
 
     public const STATUSES = ['new', 'in_review', 'contacted', 'converted', 'closed'];
 
@@ -30,11 +31,19 @@ class BuiltPropertyListingLead extends Model
         'property_type',
         'buildings_on_property',
         'asking_price',
+        'budget_min',
+        'budget_max',
         'possession',
         'showing_instructions',
         'number_of_rooms',
         'bedrooms_detail',
+        'bedrooms',
         'bathrooms_detail',
+        'bathrooms',
+        'furnished',
+        'property_condition',
+        'intended_use',
+        'plot_size',
         'age_of_house',
         'square_footage',
         'roof_type',
@@ -47,6 +56,7 @@ class BuiltPropertyListingLead extends Model
         'documents_attached',
         'referral_source',
         'referral_name',
+        'referred_by_name',
         'previous_company_contact',
         'previous_company_experience',
         'details',
@@ -63,6 +73,11 @@ class BuiltPropertyListingLead extends Model
 
     protected $casts = [
         'asking_price' => 'decimal:2',
+        'budget_min' => 'decimal:2',
+        'budget_max' => 'decimal:2',
+        'bedrooms' => 'integer',
+        'bathrooms' => 'integer',
+        'furnished' => 'boolean',
         'previous_company_contact' => 'boolean',
         'buildings_on_property' => 'array',
         'natural_features' => 'array',

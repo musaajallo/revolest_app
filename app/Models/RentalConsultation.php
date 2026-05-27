@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLeadActivities;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RentalConsultation extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, HasLeadActivities, LogsActivity, SoftDeletes;
 
     public const STATUSES = ['new', 'in_review', 'contacted', 'converted', 'closed'];
 
@@ -24,17 +25,23 @@ class RentalConsultation extends Model
         'number_of_kids',
         'phone',
         'email',
-        'preferred_areas',
+        'preferred_locations',
         'property_kind',
         'bedrooms',
+        'bathrooms',
         'furnished',
         'preferred_structure',
+        'property_condition',
+        'intended_use',
+        'plot_size',
         'desired_facilities',
         'property_suggestions',
         'reason_for_moving',
         'occupants_count',
         'move_in_window',
         'rental_duration',
+        'budget_min',
+        'budget_max',
         'payment_plan',
         'payment_method',
         'payer',
@@ -47,6 +54,7 @@ class RentalConsultation extends Model
         'previous_company_experience',
         'referral_source',
         'referral_name',
+        'referred_by_name',
         'details',
         'notes',
         'status',
@@ -63,6 +71,9 @@ class RentalConsultation extends Model
         'consultation_date' => 'date',
         'furnished' => 'boolean',
         'previous_company_contact' => 'boolean',
+        'bathrooms' => 'integer',
+        'budget_min' => 'decimal:2',
+        'budget_max' => 'decimal:2',
         'details' => 'array',
         'signed_at' => 'datetime',
         'submitted_at' => 'datetime',

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLeadActivities;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PurchaseBuildPropertyLead extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, HasLeadActivities, LogsActivity, SoftDeletes;
 
     public const STATUSES = ['new', 'in_review', 'contacted', 'converted', 'closed'];
 
@@ -22,13 +23,20 @@ class PurchaseBuildPropertyLead extends Model
         'current_address',
         'property_type',
         'build_status',
+        'property_condition',
+        'intended_use',
         'preferred_location',
         'avoid_areas',
         'architectural_style',
         'bedrooms_bathrooms',
+        'bedrooms',
+        'bathrooms',
+        'plot_size',
         'special_features',
         'luxury_features',
         'budget',
+        'budget_min',
+        'budget_max',
         'financing_method',
         'mortgage_preapproval',
         'needs_mortgage_advice',
@@ -69,6 +77,7 @@ class PurchaseBuildPropertyLead extends Model
         'previous_company_experience',
         'referral_source',
         'referral_name',
+        'referred_by_name',
         'details',
         'notes',
         'status',
@@ -91,6 +100,10 @@ class PurchaseBuildPropertyLead extends Model
         'customizable_required' => 'boolean',
         'needs_reno_design_help' => 'boolean',
         'previous_company_contact' => 'boolean',
+        'bedrooms' => 'integer',
+        'bathrooms' => 'integer',
+        'budget_min' => 'decimal:2',
+        'budget_max' => 'decimal:2',
         'details' => 'array',
         'signed_at' => 'datetime',
         'submitted_at' => 'datetime',

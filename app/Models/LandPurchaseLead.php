@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLeadActivities;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LandPurchaseLead extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, HasLeadActivities, LogsActivity, SoftDeletes;
 
     public const STATUSES = ['new', 'in_review', 'contacted', 'converted', 'closed'];
 
@@ -27,6 +28,11 @@ class LandPurchaseLead extends Model
         'future_development',
         'land_type',
         'budget',
+        'budget_min',
+        'budget_max',
+        'bathrooms',
+        'property_condition',
+        'intended_use',
         'payment_plan',
         'payment_method',
         'timeframe',
@@ -36,6 +42,7 @@ class LandPurchaseLead extends Model
         'special_requirements',
         'status',
         'agent_id',
+        'referred_by_name',
         'signed_name',
         'signed_at',
         'ip_address',
@@ -49,6 +56,9 @@ class LandPurchaseLead extends Model
         'details' => 'array',
         'signed_at' => 'datetime',
         'submitted_at' => 'datetime',
+        'budget_min' => 'decimal:2',
+        'budget_max' => 'decimal:2',
+        'bathrooms' => 'integer',
     ];
 
     public function agent()

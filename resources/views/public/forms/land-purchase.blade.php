@@ -70,6 +70,7 @@
                     <div class="space-y-6">
                         <x-public.forms.partials.field name="special_requirements" label="Special requirements or requests" type="textarea" />
                         <x-public.forms.partials.field name="notes" label="Other questions or concerns about the buying process" type="textarea" />
+                        <x-public.forms.partials.field name="referred_by_name" label="Referred by (staff member or source)" />
                     </div>
                 </div>
 

@@ -122,6 +122,29 @@ class LandSaleLeadResource extends Resource
                     ->searchable(),
                 Forms\Components\Textarea::make('notes')->label('Internal notes')->columnSpanFull(),
             ]),
+            Forms\Components\Section::make('Standardized Fields')
+                ->description('Common fields shared across all lead types — match the Excel oversight columns.')
+                ->columns(2)
+                ->collapsible()
+                ->schema([
+                    Forms\Components\TextInput::make('budget_min')->numeric()->prefix('D')->label('Budget Min'),
+                    Forms\Components\TextInput::make('budget_max')->numeric()->prefix('D')->label('Budget Max'),
+                    Forms\Components\TextInput::make('bathrooms')->numeric()->minValue(0)->maxValue(20),
+                    Forms\Components\Select::make('property_condition')->options([
+                        'new' => 'New',
+                        'existing' => 'Existing',
+                        'needs_renovation' => 'Needs renovation',
+                    ]),
+                    Forms\Components\Select::make('intended_use')->options([
+                        'residential' => 'Residential',
+                        'commercial' => 'Commercial',
+                        'investment' => 'Investment',
+                        'mixed' => 'Mixed',
+                    ]),
+                    Forms\Components\TextInput::make('referred_by_name')
+                        ->label('Referred by')
+                        ->helperText('Staff member / source who brought this lead in.'),
+                ]),
             Forms\Components\Section::make('Acknowledgement')->columns(2)->schema([
                 Forms\Components\TextInput::make('signed_name')->maxLength(255),
                 Forms\Components\DateTimePicker::make('signed_at'),
@@ -236,5 +259,12 @@ class LandSaleLeadResource extends Resource
         }
 
         return in_array($user->role, ['super_admin', 'admin', 'agent']);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            \App\Filament\RelationManagers\LeadActivitiesRelationManager::class,
+        ];
     }
 }

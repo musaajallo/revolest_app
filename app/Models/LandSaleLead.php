@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLeadActivities;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LandSaleLead extends Model
 {
-    use HasFactory, LogsActivity, SoftDeletes;
+    use HasFactory, HasLeadActivities, LogsActivity, SoftDeletes;
 
     public const STATUSES = ['new', 'in_review', 'contacted', 'converted', 'closed'];
 
@@ -43,6 +44,12 @@ class LandSaleLead extends Model
         'environmental_concerns',
         'has_recent_survey',
         'land_history',
+        'budget_min',
+        'budget_max',
+        'bathrooms',
+        'property_condition',
+        'intended_use',
+        'referred_by_name',
         'referral_source',
         'referral_notes',
         'previous_company_contact',
@@ -70,6 +77,9 @@ class LandSaleLead extends Model
         'has_recent_survey' => 'boolean',
         'previous_company_contact' => 'boolean',
         'asking_price' => 'decimal:2',
+        'budget_min' => 'decimal:2',
+        'budget_max' => 'decimal:2',
+        'bathrooms' => 'integer',
         'consultation_purpose' => 'array',
         'documents_provided' => 'array',
         'utilities' => 'array',

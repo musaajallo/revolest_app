@@ -145,6 +145,7 @@
                             <x-public.forms.partials.field name="previous_company_experience" label="If yes, describe the experience" type="textarea" />
                         </div>
                         <x-public.forms.partials.field name="referral_name" label="Name of person / media (if referral)" />
+                        <x-public.forms.partials.field name="referred_by_name" label="Referred by (staff member or source)" />
                     </div>
                 </div>
 
