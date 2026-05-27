@@ -10,6 +10,9 @@ use App\Filament\Widgets\RevenueChart;
 use App\Filament\Widgets\LeaseStatusChart;
 use App\Filament\Widgets\CircularStatsWidget;
 use App\Filament\Widgets\UpcomingLeaseExpirations;
+use App\Filament\Widgets\UpcomingRentDueWidget;
+use App\Filament\Widgets\InspectionsDueWidget;
+use App\Filament\Widgets\CmsEarningsWidget;
 use App\Filament\Widgets\RecentPaymentsTable;
 use App\Filament\Widgets\AlertsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
@@ -30,6 +33,7 @@ class Dashboard extends BaseDashboard
     {
         return [
             StatsOverviewWidget::class,
+            CmsEarningsWidget::class,
             FinancialOverviewWidget::class,
             PlatformGrowthChart::class,
             PropertyDistributionChart::class,
@@ -37,6 +41,8 @@ class Dashboard extends BaseDashboard
             LeaseStatusChart::class,
             CircularStatsWidget::class,
             UpcomingLeaseExpirations::class,
+            UpcomingRentDueWidget::class,
+            InspectionsDueWidget::class,
             RecentPaymentsTable::class,
             AlertsWidget::class,
         ];
