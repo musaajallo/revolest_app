@@ -114,10 +114,11 @@ class PageResource extends Resource
                     ->label('Published'),
             ])
             ->actions([
-                Tables\Actions\Action::make('view')
-                    ->label('View Page')
-                    ->icon('heroicon-o-eye')
-                    ->color('success')
+                Tables\Actions\ViewAction::make()->color('success'),
+                Tables\Actions\Action::make('open_public')
+                    ->label('Open Public')
+                    ->icon('heroicon-o-arrow-top-right-on-square')
+                    ->color('gray')
                     ->url(fn (Page $record): string => match($record->slug) {
                         'home' => '/',
                         'contact' => '/contact',
@@ -148,6 +149,7 @@ class PageResource extends Resource
         return [
             'index' => Pages\ListPages::route('/'),
             'create' => Pages\CreatePage::route('/create'),
+            'view' => Pages\ViewPage::route('/{record}'),
             'edit' => Pages\EditPage::route('/{record}/edit'),
         ];
     }
