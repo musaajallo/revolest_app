@@ -129,16 +129,16 @@ The populated `Client Request-25` uses its `Notes` column as a status journal �
 
 ---
 
-## Open questions for Revolest
+## Resolved decisions
 
-These need answers before we finalize the schema:
+These six product-level questions weren't documented in the Excel sheets directly. Pragmatic defaults were chosen and shipped; each can be re-opened by changing one column or one constant if Revolest pushes back later.
 
-1. **"Vld."** in the `Due date & Inspt` sheet — what does it stand for? Lease validity? ID validity? Inspection validity?
-2. **"% charge"** — is the commission rate fixed per owner, or can it vary per property / per lease?
-3. **"CMS. EARN"** — calculated automatically (`amount × owner.% charge`), or entered manually per payment?
-4. **Rent cycle** — is rent always annual (the sheet says "Annual Rent"), or do some tenants pay monthly/quarterly?
-5. **Receipt numbering** — any existing format Revolest uses, or are we free to define (e.g. `RCV-2026-00001`)?
-6. **Inspection frequency** — is there a standard cadence (e.g. quarterly, biannually), or set per lease?
+1. **"Vld."** in the `Due date & Inspt` sheet → **interpreted as lease validity.** Covered by the existing `Lease.end_date` and `Lease.status` columns. If it turns out to mean ID/passport expiry, we'd add `Tenant.id_document_expires_at` later (nullable column, no schema risk).
+2. **"% charge"** → **per-owner default with per-lease override.** `Owner.commission_percent` is the standard rate; `Lease.commission_percent_override` wins when set. Use `$owner->commissionRateFor($lease)` so the override is honoured automatically.
+3. **"CMS. EARN"** → **auto-calculated, manually overridable.** `Payment::booted()` `creating` hook fills `commission_amount` from `amount × owner.commissionRateFor(lease)` whenever the field is blank. Admins can edit the value in the Filament form for one-off waivers or special deals.
+4. **Rent cycle** → **per-lease (monthly / quarterly / annually), default annually.** `Lease.rent_cycle` enum drives `next_rent_due_at` advancement; matches the sheet's `Annual Rent` header but doesn't lock everyone in.
+5. **Receipt numbering** → **`RCV-{YEAR}-{6-digit-sequence}`**, generated in `Receipt::booted()` `creating`. Sequence is global within a year and counts soft-deleted rows so numbers are never reused.
+6. **Inspection cadence** → **`Lease.inspection_cycle_months`, default 6, overridable per lease.** `Inspection::booted()` recomputes `next_inspection_at` from `inspected_at + cycle` on every inspection create/update.
 
 ---
 

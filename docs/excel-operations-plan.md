@@ -8,24 +8,16 @@ This plan is ordered by phase. Each phase ships independently and is safe to dep
 
 ---
 
-## Open questions to resolve before phase 2
+## Decisions locked in (formerly open questions)
 
-The audit lists 6 questions for Revolest. The schema we ship works either way, but answers affect defaults and UI labels:
+The six product-level decisions that the Excel sheets didn't document have been resolved with pragmatic defaults. Each is captured in `excel-operations-audit.md` and can be reversed later by changing one column or constant.
 
-1. What does **"Vld."** mean?
-2. Is **% commission** fixed per owner, or per-property?
-3. Is **CMS. EARN** auto-calculated or manually entered?
-4. Is rent always **annual**, or do some tenants pay monthly/quarterly?
-5. Existing **receipt number** format?
-6. Standard **inspection cadence**?
-
-Suggested defaults if no answer comes back:
-- `Vld.` → interpret as Lease validity (already covered by `end_date`).
-- `commission_percent` → on `owners`, with **per-lease override** column for flexibility. Set default 10% on seed.
-- `CMS. EARN` → auto-calculated, editable.
-- `rent_cycle` → default `annually` (matches sheet headers), but support all three.
-- Receipt format → `RCV-{YEAR}-{6-digit-seq}` starting at 1 each year.
-- Inspection cadence → `inspection_cycle_months` on `leases`, default `6`.
+- `Vld.` → lease validity, already covered by `Lease.end_date` + `Lease.status`. No new column.
+- Commission rate → `Owner.commission_percent` (default), `Lease.commission_percent_override` (per-lease). Access via `$owner->commissionRateFor($lease)`.
+- `CMS. EARN` → auto-calculated in `Payment::booted()` `creating` hook, admin-overridable in the form.
+- Rent cycle → `Lease.rent_cycle` enum (`monthly` / `quarterly` / `annually`), default `annually`.
+- Receipt number → `RCV-{YEAR}-{6-digit-sequence}`, generated in `Receipt::booted()` `creating`.
+- Inspection cadence → `Lease.inspection_cycle_months`, default 6, overridable per lease.
 
 ---
 
