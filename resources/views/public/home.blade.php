@@ -97,7 +97,7 @@
                             $hasRent = $property->purpose === 'rent'
                                 || ($property->purpose === 'mixed' && $property->listings->contains(fn ($l) => $l->status === 'for_rent'));
                         @endphp
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
+                        <a href="{{ route('properties.show', $property) }}" class="flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition group">
                             <!-- Property Image -->
                             <div class="relative h-56 bg-gray-200 dark:bg-gray-700">
                                 @if($property->images)
@@ -126,12 +126,10 @@
                             </div>
 
                             <!-- Property Details -->
-                            <div class="p-5">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#1c4736] dark:group-hover:text-emerald-400 transition">
-                                        <a href="{{ route('properties.show', $property) }}">{{ $property->title }}</a>
-                                    </h3>
-                                </div>
+                            <div class="p-5 flex flex-col flex-1">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#1c4736] dark:group-hover:text-emerald-400 transition mb-2">
+                                    {{ $property->title }}
+                                </h3>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm mb-3 flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                                     {{ $property->address }}
@@ -156,27 +154,33 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="flex justify-between items-center pt-4 border-t dark:border-gray-700">
-                                    <div class="text-right">
-                                        <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $priceLabel }}</div>
-                                        <span class="text-2xl font-bold text-[#1c4736] dark:text-emerald-400">D{{ number_format($displayPrice ?? 0) }}</span>
-                                    </div>
-                                    <a href="{{ route('properties.show', $property) }}" class="text-[#1c4736] dark:text-emerald-400 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium">
-                                        View Details →
-                                    </a>
+                                <div class="pt-4 border-t dark:border-gray-700">
+                                    <div class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $priceLabel }}</div>
+                                    <span class="text-2xl font-bold text-[#1c4736] dark:text-emerald-400">D{{ number_format($displayPrice ?? 0) }}</span>
                                 </div>
                                 @if($displayDeposit || $displayAgentFee)
-                                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <div class="mt-3 flex flex-wrap gap-2">
                                         @if($displayDeposit)
-                                            <span>Deposit: D{{ number_format($displayDeposit) }}</span>
+                                            <span class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-md text-sm">
+                                                <span class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Deposit</span>
+                                                <span class="font-semibold">D{{ number_format($displayDeposit) }}</span>
+                                            </span>
                                         @endif
                                         @if($displayAgentFee)
-                                            <span class="ml-2">Agent Fee: D{{ number_format($displayAgentFee) }}</span>
+                                            <span class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2.5 py-1 rounded-md text-sm">
+                                                <span class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Agent Fee</span>
+                                                <span class="font-semibold">D{{ number_format($displayAgentFee) }}</span>
+                                            </span>
                                         @endif
                                     </div>
                                 @endif
+                                <div class="mt-auto pt-4">
+                                    <span class="inline-flex items-center text-[#1c4736] dark:text-emerald-400 group-hover:text-[#a94a2a] dark:group-hover:text-[#a94a2a] font-medium transition">
+                                        View Details →
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
 

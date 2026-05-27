@@ -28,7 +28,7 @@
 @endphp
 <!DOCTYPE html>
 <html lang="en" x-data="{
-    darkMode: localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches),
+    darkMode: localStorage.getItem('theme') === 'dark',
     toggleDarkMode() {
         this.darkMode = !this.darkMode;
         localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');

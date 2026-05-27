@@ -83,8 +83,13 @@
                             $priceLabel = $property->publicPriceLabel($primaryListing);
                             $displayDeposit = $property->publicDeposit($primaryListing);
                             $displayAgentFee = $property->publicAgentFee($primaryListing);
+
+                            $hasSale = $property->purpose === 'sale'
+                                || ($property->purpose === 'mixed' && $property->listings->contains(fn ($l) => $l->status === 'for_sale'));
+                            $hasRent = $property->purpose === 'rent'
+                                || ($property->purpose === 'mixed' && $property->listings->contains(fn ($l) => $l->status === 'for_rent'));
                         @endphp
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition group">
+                        <a href="{{ route('properties.show', $property) }}" class="flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition group">
                             <!-- Property Image -->
                             <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
                                 @if($property->images)
@@ -102,12 +107,20 @@
                                 <div class="absolute top-3 left-3">
                                     <span class="bg-[#a94a2a] text-white px-2 py-1 rounded-full text-xs font-medium capitalize">{{ $property->type }}</span>
                                 </div>
+                                <div class="absolute top-3 right-3 flex flex-col items-end gap-1">
+                                    @if($hasSale)
+                                        <span class="bg-[#1c4736] text-white px-2 py-1 rounded-full text-xs font-semibold shadow">For Sale</span>
+                                    @endif
+                                    @if($hasRent)
+                                        <span class="bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">For Rent</span>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Property Details -->
-                            <div class="p-4">
+                            <div class="p-4 flex flex-col flex-1">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#a94a2a] dark:group-hover:text-[#a94a2a] transition mb-1 truncate">
-                                    <a href="{{ route('properties.show', $property) }}">{{ $property->title }}</a>
+                                    {{ $property->title }}
                                 </h3>
                                 <p class="text-gray-500 dark:text-gray-400 text-sm mb-3 flex items-center truncate">
                                     <svg class="w-4 h-4 mr-1 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
@@ -133,27 +146,33 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="flex justify-between items-center pt-3 border-t dark:border-gray-700">
-                                    <div class="text-right">
-                                        <div class="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $priceLabel }}</div>
-                                        <span class="text-xl font-bold text-[#a94a2a]">D{{ number_format($displayPrice ?? 0) }}</span>
-                                    </div>
-                                    <a href="{{ route('properties.show', $property) }}" class="text-[#a94a2a] hover:text-[#990e0e] text-sm font-medium">
-                                        Details →
-                                    </a>
+                                <div class="pt-3 border-t dark:border-gray-700">
+                                    <div class="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400">{{ $priceLabel }}</div>
+                                    <span class="text-xl font-bold text-[#a94a2a]">D{{ number_format($displayPrice ?? 0) }}</span>
                                 </div>
                                 @if($displayDeposit || $displayAgentFee)
-                                    <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                    <div class="mt-3 flex flex-wrap gap-2">
                                         @if($displayDeposit)
-                                            <span>Deposit: D{{ number_format($displayDeposit) }}</span>
+                                            <span class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-md text-xs">
+                                                <span class="uppercase tracking-wide text-gray-500 dark:text-gray-400">Deposit</span>
+                                                <span class="font-semibold">D{{ number_format($displayDeposit) }}</span>
+                                            </span>
                                         @endif
                                         @if($displayAgentFee)
-                                            <span class="ml-2">Agent Fee: D{{ number_format($displayAgentFee) }}</span>
+                                            <span class="inline-flex items-center gap-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-md text-xs">
+                                                <span class="uppercase tracking-wide text-gray-500 dark:text-gray-400">Agent Fee</span>
+                                                <span class="font-semibold">D{{ number_format($displayAgentFee) }}</span>
+                                            </span>
                                         @endif
                                     </div>
                                 @endif
+                                <div class="mt-auto pt-3">
+                                    <span class="inline-flex items-center text-[#a94a2a] group-hover:text-[#990e0e] text-sm font-medium transition">
+                                        View Details →
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     @endforeach
                 </div>
 

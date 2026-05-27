@@ -10,6 +10,9 @@ use Filament\Navigation\MenuItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Support\HtmlString;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -59,6 +62,10 @@ class AdminPanelProvider extends PanelProvider
             ->globalSearch(true)
             ->globalSearchKeyBindings(['ctrl+k', 'cmd+k'])
             ->darkMode(true)
+            ->renderHook(
+                PanelsRenderHook::HEAD_START,
+                fn (): HtmlString => new HtmlString('<script>if(!localStorage.getItem("theme")){localStorage.setItem("theme","light");}</script>')
+            )
             ->colors([
                 'primary' => [
                     50 => '240, 253, 246',
