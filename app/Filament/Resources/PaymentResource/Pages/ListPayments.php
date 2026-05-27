@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\PaymentResource\Pages;
 
 use App\Filament\Resources\PaymentResource;
+use App\Models\Payment;
+use App\Support\CsvDownload;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -14,71 +16,54 @@ class ListPayments extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
-            Actions\Action::make('export')
-                ->label('Export to CSV')
-                ->icon('heroicon-o-arrow-down-tray')
-                ->color('success')
-                ->visible(fn () => auth()->check() && auth()->user()->role === 'super_admin')
-                ->action(function () {
-                    $filename = 'payments_' . now()->format('Y-m-d_H-i-s') . '.csv';
-
-                    $headers = [
-                        'Content-Type' => 'text/csv',
-                        'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-                    ];
-
-                    $callback = function() {
-                        $file = fopen('php://output', 'w');
-
-                        // CSV Headers
-                        fputcsv($file, [
-                            'ID',
-                            'Lease ID',
-                            'Property Title',
-                            'Tenant Name',
-                            'Tenant Email',
-                            'Owner Name',
-                            'Owner Email',
-                            'Amount (GMD)',
-                            'Payment Date',
-                            'Method',
-                            'Status',
-                            'Reference Number',
-                            'Receipt File',
-                            'Notes',
-                            'Created At',
-                            'Updated At',
-                            'Deleted At'
-                        ]);
-
-                        // Get all payments including soft deleted ones with relationships
-                        \App\Models\Payment::withTrashed()->with(['lease.property', 'tenant', 'owner'])->get()->each(function ($payment) use ($file) {
-                            fputcsv($file, [
-                                $payment->id,
-                                $payment->lease_id,
-                                $payment->lease?->property?->title,
-                                $payment->tenant?->name,
-                                $payment->tenant?->email,
-                                $payment->owner?->name,
-                                $payment->owner?->email,
-                                $payment->amount,
-                                $payment->payment_date?->format('Y-m-d'),
-                                $payment->method,
-                                $payment->status,
-                                $payment->reference_number,
-                                $payment->receipt_file,
-                                $payment->notes,
-                                $payment->created_at?->format('Y-m-d H:i:s'),
-                                $payment->updated_at?->format('Y-m-d H:i:s'),
-                                $payment->deleted_at?->format('Y-m-d H:i:s')
-                            ]);
-                        });
-
-                        fclose($file);
-                    };
-
-                    return response()->stream($callback, 200, $headers);
-                }),
+            CsvDownload::action(
+                'payments',
+                [
+                    'Nu',
+                    'Tenant Name',
+                    'Unit Occupied - Nu',
+                    'Address',
+                    'Duration',
+                    'Amount Paid',
+                    'Purpose',
+                    'Payment date',
+                    'Receipt Nu',
+                    'Payment Method',
+                    'Outstanding Balance',
+                    'Paid by',
+                    'Received by',
+                    'CMS. EARN',
+                    'Payment Status',
+                    'Remarks',
+                    'Property Owner',
+                ],
+                fn () => Payment::withTrashed()
+                    ->with(['lease.property.owner', 'tenant', 'owner', 'receivedBy', 'receipt'])
+                    ->orderBy('payment_date', 'desc')
+                    ->cursor()
+                    ->map(fn (Payment $p) => [
+                        $p->id,
+                        $p->tenant?->name,
+                        $p->lease?->property?->title,
+                        $p->lease?->property?->address,
+                        $p->period_label ?: trim(
+                            ($p->period_start?->format('Y-m-d') ?? '')
+                            . ($p->period_end ? ' → ' . $p->period_end->format('Y-m-d') : '')
+                        ),
+                        $p->amount,
+                        Payment::PURPOSES[$p->purpose] ?? $p->purpose,
+                        $p->payment_date?->format('Y-m-d'),
+                        $p->receipt?->receipt_number,
+                        $p->method,
+                        $p->outstandingBalance(),
+                        $p->paid_by_name,
+                        $p->receivedBy?->name,
+                        $p->commission_amount,
+                        Payment::STATUSES[$p->status] ?? $p->status,
+                        $p->notes,
+                        $p->owner?->name ?: $p->lease?->property?->owner?->name,
+                    ])
+            ),
         ];
     }
 }

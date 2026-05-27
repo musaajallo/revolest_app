@@ -196,12 +196,13 @@ class LandSaleLeadResource extends Resource
                             'title' => 'Land at '.($record->land_location ?? 'unspecified'),
                             'description' => $record->land_history,
                             'address' => $record->land_location ?? 'Unknown',
-                            'price' => $record->asking_price ?? 0,
-                            'sale_price' => $record->asking_price,
+                            'price' => $record->asking_price ?? $record->budget_max ?? $record->budget_min ?? 0,
+                            'sale_price' => $record->asking_price ?? $record->budget_max ?? $record->budget_min,
                             'type' => 'land',
                             'purpose' => 'sale',
                             'listing_category' => 'land',
                             'status' => 'inactive',
+                            'bathrooms' => $record->bathrooms,
                         ]);
 
                         $record->update([

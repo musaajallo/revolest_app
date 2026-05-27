@@ -246,12 +246,15 @@ class BuiltPropertyListingLeadResource extends Resource
                             'title' => trim(($record->property_type ? ucfirst(str_replace('_', ' ', $record->property_type)).' at ' : 'Property at ').$record->property_address),
                             'description' => $record->amenities,
                             'address' => $record->property_address,
-                            'price' => $record->asking_price ?? 0,
-                            'sale_price' => $record->asking_price,
+                            'price' => $record->asking_price ?? $record->budget_max ?? $record->budget_min ?? 0,
+                            'sale_price' => $record->asking_price ?? $record->budget_max ?? $record->budget_min,
                             'type' => $type,
                             'purpose' => 'sale',
                             'listing_category' => $type === 'land' ? 'land' : 'building',
                             'status' => 'inactive',
+                            'bedrooms' => $record->bedrooms,
+                            'bathrooms' => $record->bathrooms,
+                            'area' => is_numeric($record->square_footage) ? (int) $record->square_footage : null,
                         ]);
 
                         $record->update([

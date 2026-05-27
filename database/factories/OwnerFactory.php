@@ -13,6 +13,11 @@ class OwnerFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'bio' => $this->faker->paragraph(),
             'photo' => $this->faker->imageUrl(),
+            'bank_name' => $this->faker->randomElement(['EcoBank', 'Trust Bank', 'GTBank', 'Standard Chartered']),
+            'bank_account_name' => $this->faker->name(),
+            'bank_account_number' => (string) $this->faker->numerify('##########'),
+            'bank_branch' => $this->faker->randomElement(['Kairaba Avenue', 'Senegambia', 'Westfield', 'Brusubi']),
+            'commission_percent' => $this->faker->randomFloat(2, 5, 15),
         ];
     }
 }

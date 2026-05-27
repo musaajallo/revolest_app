@@ -14,6 +14,7 @@ class InquiryFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'message' => $this->faker->sentence(),
             'status' => $this->faker->randomElement(['new', 'viewed', 'closed']),
+            'referred_by_name' => $this->faker->optional(0.6)->randomElement(['CEO', 'AJ', 'Penda', 'Ebrima', 'E.Camara', 'Self']),
         ];
     }
 }

@@ -13,6 +13,8 @@ class TenantFactory extends Factory
             'phone' => $this->faker->phoneNumber(),
             'photo' => $this->faker->imageUrl(),
             'user_id' => null,
+            'id_document_type' => $this->faker->randomElement(['national_id', 'passport', 'driver_license']),
+            'id_document_number' => strtoupper($this->faker->bothify('?#######')),
         ];
     }
 }
