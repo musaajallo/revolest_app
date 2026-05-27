@@ -35,28 +35,59 @@ class OwnerResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('unique_id')
-                    ->label('Owner ID')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->visible(fn ($record) => $record !== null),
-                Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\TextInput::make('email')->email()->required(),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->placeholder('+220 123 4567'),
-                Forms\Components\Textarea::make('bio'),
-                Forms\Components\FileUpload::make('photo')
-                    ->label('Owner Photo')
-                    ->image()
-                    ->disk('public')
-                    ->directory('owners')
-                    ->visibility('public'),
-                Forms\Components\Select::make('user_id')
-                    ->label('Linked Login User')
-                    ->relationship('user', 'name')
-                    ->searchable()
-                    ->helperText('The User account this owner uses to log in. Required for owners who need access to /admin.'),
+                Forms\Components\Section::make('Identity')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('unique_id')
+                            ->label('Owner ID')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->visible(fn ($record) => $record !== null),
+                        Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\TextInput::make('email')->email()->required(),
+                        Forms\Components\TextInput::make('phone')
+                            ->tel()
+                            ->placeholder('+220 123 4567'),
+                        Forms\Components\Textarea::make('bio')->columnSpanFull(),
+                        Forms\Components\FileUpload::make('photo')
+                            ->label('Owner Photo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('owners')
+                            ->visibility('public')
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('user_id')
+                            ->label('Linked Login User')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->helperText('The User account this owner uses to log in. Required for owners who need access to /admin.')
+                            ->columnSpanFull(),
+                    ]),
+
+                Forms\Components\Section::make('Bank Details')
+                    ->description('Account where rent payouts and balances are remitted.')
+                    ->collapsible()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('bank_name'),
+                        Forms\Components\TextInput::make('bank_branch'),
+                        Forms\Components\TextInput::make('bank_account_name'),
+                        Forms\Components\TextInput::make('bank_account_number'),
+                    ]),
+
+                Forms\Components\Section::make('Commission')
+                    ->description("Revolest's % cut on this owner's rent collections. Can be overridden per lease.")
+                    ->schema([
+                        Forms\Components\TextInput::make('commission_percent')
+                            ->label('Commission %')
+                            ->numeric()
+                            ->suffix('%')
+                            ->default(10.00)
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->step(0.01)
+                            ->required(),
+                    ]),
             ]);
     }
 
@@ -74,6 +105,14 @@ class OwnerResource extends Resource
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('phone')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('commission_percent')
+                    ->label('Commission')
+                    ->suffix('%')
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('bank_name')
+                    ->label('Bank')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

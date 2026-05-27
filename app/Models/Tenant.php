@@ -18,6 +18,15 @@ class Tenant extends Model
         'phone',
         'photo',
         'user_id',
+        'id_document_type',
+        'id_document_number',
+    ];
+
+    public const ID_DOCUMENT_TYPES = [
+        'national_id' => 'National ID',
+        'passport' => 'Passport',
+        'driver_license' => 'Driver License',
+        'other' => 'Other',
     ];
 
     protected static function booted(): void

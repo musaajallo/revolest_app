@@ -19,11 +19,29 @@ class Owner extends Model
         'phone',
         'bio',
         'photo',
+        'bank_name',
+        'bank_account_name',
+        'bank_account_number',
+        'bank_branch',
+        'commission_percent',
+    ];
+
+    protected $casts = [
+        'commission_percent' => 'decimal:2',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function commissionRateFor(?Lease $lease = null): float
+    {
+        if ($lease && $lease->commission_percent_override !== null) {
+            return (float) $lease->commission_percent_override;
+        }
+
+        return (float) ($this->commission_percent ?? 0);
     }
 
     protected static function booted(): void

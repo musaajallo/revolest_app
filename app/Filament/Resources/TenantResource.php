@@ -36,20 +36,42 @@ class TenantResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('unique_id')
-                    ->label('Tenant ID')
-                    ->disabled()
-                    ->dehydrated(false)
-                    ->visible(fn ($record) => $record !== null),
-                Forms\Components\TextInput::make('name')->required(),
-                Forms\Components\TextInput::make('email')->email()->required(),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->placeholder('+220 123 4567'),
-                Forms\Components\TextInput::make('photo'),
-                Forms\Components\Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->searchable(),
+                Forms\Components\Section::make('Identity')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('unique_id')
+                            ->label('Tenant ID')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->visible(fn ($record) => $record !== null),
+                        Forms\Components\TextInput::make('name')->required(),
+                        Forms\Components\TextInput::make('email')->email()->required(),
+                        Forms\Components\TextInput::make('phone')
+                            ->tel()
+                            ->placeholder('+220 123 4567'),
+                        Forms\Components\FileUpload::make('photo')
+                            ->image()
+                            ->disk('public')
+                            ->directory('tenants')
+                            ->visibility('public')
+                            ->columnSpanFull(),
+                        Forms\Components\Select::make('user_id')
+                            ->label('Linked Login User')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->columnSpanFull(),
+                    ]),
+
+                Forms\Components\Section::make('Identification')
+                    ->description('Government-issued ID for lease records.')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('id_document_type')
+                            ->label('Document Type')
+                            ->options(\App\Models\Tenant::ID_DOCUMENT_TYPES),
+                        Forms\Components\TextInput::make('id_document_number')
+                            ->label('Document Number'),
+                    ]),
             ]);
     }
 
@@ -67,6 +89,13 @@ class TenantResource extends Resource
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('email')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('phone')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('id_document_type')
+                    ->label('ID Type')
+                    ->formatStateUsing(fn (?string $state) => $state ? (\App\Models\Tenant::ID_DOCUMENT_TYPES[$state] ?? $state) : null)
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('id_document_number')
+                    ->label('ID Number')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

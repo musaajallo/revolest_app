@@ -36,23 +36,97 @@ class LeaseResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('property_id')
-                    ->relationship('property', 'title')
-                    ->searchable()
-                    ->required(),
-                Forms\Components\Select::make('tenant_id')
-                    ->relationship('tenant', 'name')
-                    ->searchable()
-                    ->required(),
-                Forms\Components\DatePicker::make('start_date')->required(),
-                Forms\Components\DatePicker::make('end_date')->required(),
-                Forms\Components\TextInput::make('rent_amount')
-                    ->numeric()
-                    ->required()
-                    ->prefix('D')
-                    ->label('Rent Amount (GMD)'),
-                Forms\Components\TextInput::make('status')->required(),
-                Forms\Components\TextInput::make('contract_file'),
+                Forms\Components\Section::make('Parties & Term')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('property_id')
+                            ->relationship('property', 'title')
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\Select::make('tenant_id')
+                            ->relationship('tenant', 'name')
+                            ->searchable()
+                            ->required(),
+                        Forms\Components\DatePicker::make('start_date')->required(),
+                        Forms\Components\DatePicker::make('end_date')->required(),
+                        Forms\Components\TextInput::make('rent_amount')
+                            ->numeric()
+                            ->required()
+                            ->prefix('D')
+                            ->label('Rent Amount (GMD)'),
+                        Forms\Components\Select::make('status')
+                            ->options([
+                                'active' => 'Active',
+                                'pending' => 'Pending',
+                                'expired' => 'Expired',
+                                'terminated' => 'Terminated',
+                            ])
+                            ->default('active')
+                            ->required(),
+                        Forms\Components\FileUpload::make('contract_file')
+                            ->disk('public')
+                            ->directory('contracts')
+                            ->columnSpanFull(),
+                    ]),
+
+                Forms\Components\Section::make('Security Deposit')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('security_deposit_amount')
+                            ->numeric()
+                            ->prefix('D')
+                            ->label('Deposit Amount (GMD)'),
+                        Forms\Components\Select::make('security_deposit_status')
+                            ->options(\App\Models\Lease::DEPOSIT_STATUSES)
+                            ->default('pending')
+                            ->required(),
+                    ]),
+
+                Forms\Components\Section::make('Rent Schedule')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\Select::make('rent_cycle')
+                            ->options(\App\Models\Lease::RENT_CYCLES)
+                            ->default('annually')
+                            ->required(),
+                        Forms\Components\DatePicker::make('next_rent_due_at')
+                            ->label('Next Rent Due')
+                            ->helperText('Auto-computed from start date + cycle if left blank.'),
+                        Forms\Components\TextInput::make('commission_percent_override')
+                            ->label('Commission % Override')
+                            ->numeric()
+                            ->suffix('%')
+                            ->minValue(0)
+                            ->maxValue(100)
+                            ->step(0.01)
+                            ->helperText("Leave blank to use the owner's default rate."),
+                    ]),
+
+                Forms\Components\Section::make('Inspections')
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('inspection_cycle_months')
+                            ->label('Inspection Cycle (months)')
+                            ->numeric()
+                            ->default(6)
+                            ->minValue(1)
+                            ->maxValue(36),
+                        Forms\Components\DatePicker::make('next_inspection_at')->label('Next Inspection'),
+                        Forms\Components\DatePicker::make('last_inspection_at')
+                            ->label('Last Inspection')
+                            ->disabled()
+                            ->helperText('Updated automatically when an inspection is recorded.'),
+                        Forms\Components\TextInput::make('last_inspection_status')
+                            ->label('Last Status')
+                            ->disabled(),
+                    ]),
+
+                Forms\Components\Section::make('Notes')
+                    ->schema([
+                        Forms\Components\Textarea::make('notes')
+                            ->rows(4)
+                            ->columnSpanFull(),
+                    ]),
             ]);
     }
 
@@ -62,14 +136,37 @@ class LeaseResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('property.title')->label('Property')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('tenant.name')->label('Tenant')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('start_date')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('end_date')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('rent_amount')
-                    ->money('GMD')
-                    ->searchable()
+                Tables\Columns\TextColumn::make('start_date')->date()->sortable(),
+                Tables\Columns\TextColumn::make('end_date')->date()->sortable(),
+                Tables\Columns\TextColumn::make('rent_amount')->money('GMD')->sortable(),
+                Tables\Columns\TextColumn::make('rent_cycle')
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state) => $state ? (\App\Models\Lease::RENT_CYCLES[$state] ?? $state) : null)
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('next_rent_due_at')->label('Next Due')->date()->sortable(),
+                Tables\Columns\TextColumn::make('security_deposit_status')
+                    ->label('Deposit')
+                    ->badge()
+                    ->color(fn (?string $state) => match ($state) {
+                        'paid' => 'success',
+                        'partial' => 'warning',
+                        'pending' => 'gray',
+                        'forfeited' => 'danger',
+                        'refunded' => 'info',
+                        default => 'gray',
+                    })
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('next_inspection_at')->label('Next Inspect.')->date()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (?string $state) => match ($state) {
+                        'active' => 'success',
+                        'pending' => 'warning',
+                        'expired' => 'gray',
+                        'terminated' => 'danger',
+                        default => 'gray',
+                    })
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('contract_file')->searchable()->sortable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
