@@ -190,6 +190,31 @@ class OversightHooksTest extends TestCase
         $this->assertSame('2026-11-01', $lease->next_inspection_at->format('Y-m-d'));
     }
 
+    public function test_all_leads_report_renders_for_admin(): void
+    {
+        $admin = \App\Models\User::factory()->create(['role' => 'super_admin']);
+
+        // Seed at least one lead in each category so the page has content
+        \App\Models\LandPurchaseLead::create([
+            'full_name' => 'Test Buyer', 'phone' => '111', 'status' => 'new',
+        ]);
+        \App\Models\LandSaleLead::create([
+            'full_name' => 'Test Seller', 'phone_primary' => '222', 'status' => 'new',
+        ]);
+        \App\Models\RentalConsultation::create([
+            'full_name' => 'Test Renter', 'phone' => '333', 'status' => 'in_review',
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin/all-leads-report');
+
+        $response->assertOk();
+        $response->assertSee('All Client Requests');
+        $response->assertSee('Land Purchase');
+        $response->assertSee('Test Buyer');
+        $response->assertSee('Test Seller');
+        $response->assertSee('Test Renter');
+    }
+
     public function test_inspection_delete_clears_cache_when_last_one_removed(): void
     {
         $lease = $this->makeLeaseWithOwner();
