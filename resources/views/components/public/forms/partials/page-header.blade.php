@@ -11,7 +11,7 @@
 >
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <p class="text-sm uppercase tracking-wider text-[#a94a2a] mb-2">
-            <a href="{{ route('forms.index') }}" class="hover:text-white">Forms</a>
+            <a href="{{ route('home') }}" class="hover:text-white">Home</a>
             <span class="text-gray-500"> / </span>
             <span class="text-gray-300">Submit</span>
         </p>
