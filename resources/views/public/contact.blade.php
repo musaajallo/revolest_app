@@ -160,6 +160,18 @@
                             </div>
                         </div>
                     @endif
+
+                    <!-- Customer Feedback -->
+                    <a href="{{ route('forms.customer-feedback') }}"
+                       class="mt-6 flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg hover:ring-1 hover:ring-[#a94a2a] transition group">
+                        <span class="w-12 h-12 bg-red-100 dark:bg-[#a94a2a]/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-[#a94a2a]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
+                        </span>
+                        <span>
+                            <span class="block font-semibold text-gray-900 dark:text-white group-hover:text-[#a94a2a]">Share Your Feedback</span>
+                            <span class="block text-sm text-gray-600 dark:text-gray-300">Compliments, complaints, or suggestions — we'd love to hear it.</span>
+                        </span>
+                    </a>
                 </div>
 
                 <!-- Contact Form -->

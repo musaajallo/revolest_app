@@ -264,11 +264,6 @@
                 @endforeach
             </div>
 
-            <div class="text-center mt-10">
-                <a href="{{ route('forms.index') }}" class="text-[#1c4736] dark:text-emerald-400 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium">
-                    See all forms &amp; consultations →
-                </a>
-            </div>
         </div>
     </section>
 
