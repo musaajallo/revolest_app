@@ -28,7 +28,7 @@ class SiteSettings extends Page implements Forms\Contracts\HasForms
     {
         $this->form->fill([
             'site_name' => Setting::get('site_name', 'Revolest'),
-            'site_tagline' => Setting::get('site_tagline', 'Your trusted real estate partner'),
+            'site_tagline' => Setting::get('site_tagline', 'Real Estate Refined'),
             'site_logo' => Setting::get('site_logo'),
             'footer_logo' => Setting::get('footer_logo'),
             'site_favicon' => Setting::get('site_favicon'),

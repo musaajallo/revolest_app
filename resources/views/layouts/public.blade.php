@@ -1,6 +1,6 @@
 @php
     $siteName = \App\Models\Setting::get('site_name', 'Revolest');
-    $siteTagline = \App\Models\Setting::get('site_tagline', 'Your trusted real estate partner');
+    $siteTagline = \App\Models\Setting::get('site_tagline', 'Real Estate Refined');
     $contactEmail = \App\Models\Setting::get('contact_email', 'info@revolest.com');
     $contactPhone = \App\Models\Setting::get('contact_phone', '+220 123 4567');
     $contactPhone2 = \App\Models\Setting::get('contact_phone_2');
@@ -38,7 +38,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="@yield('meta_description', $siteName . ' - ' . $siteTagline)">
-    <title>@yield('title', $siteName) - Real Estate Management</title>
+    <title>@yield('title', $siteName) - {{ $siteTagline }}</title>
 
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
