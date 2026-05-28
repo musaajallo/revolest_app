@@ -213,7 +213,8 @@
                             <span class="text-xl font-bold">{{ $siteName }}</span>
                         @endif
                     </div>
-                    <p class="text-gray-400 mb-4">
+                    <p class="text-lg font-semibold text-white mb-1">{{ $siteTagline }}</p>
+                    <p class="text-gray-400 mb-4 max-w-md">
                         {{ $footerText }}
                     </p>
                     <div class="flex space-x-4">
