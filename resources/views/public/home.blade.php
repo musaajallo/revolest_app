@@ -198,6 +198,80 @@
         </div>
     </section>
 
+    <!-- List or Find a Property -->
+    <section class="py-16 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">List or Find a Property</h2>
+                <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">Whether you're selling, renting out, buying, or looking for a rental — submit a request and an agent will be in touch.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @php
+                    $formCards = [
+                        [
+                            'title' => 'Sell Your Property',
+                            'desc' => 'List a built house, apartment, or compound for sale.',
+                            'route' => 'forms.property-listing',
+                            'badge' => 'For Sale',
+                            'badgeClass' => 'bg-[#1c4736] text-white',
+                            'iconBg' => 'bg-[#1c4736]/10 text-[#1c4736] dark:bg-emerald-500/15 dark:text-emerald-400',
+                            'icon' => 'M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01',
+                        ],
+                        [
+                            'title' => 'Sell Your Land',
+                            'desc' => 'Submit a plot you would like us to help you sell.',
+                            'route' => 'forms.land-sale',
+                            'badge' => 'For Sale',
+                            'badgeClass' => 'bg-[#1c4736] text-white',
+                            'iconBg' => 'bg-amber-500/10 text-amber-600 dark:bg-amber-500/15 dark:text-amber-400',
+                            'icon' => 'M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7',
+                        ],
+                        [
+                            'title' => 'Find a Rental',
+                            'desc' => 'Tell us what you need and your budget for a rental.',
+                            'route' => 'forms.rental-consultation',
+                            'badge' => 'For Rent',
+                            'badgeClass' => 'bg-blue-600 text-white',
+                            'iconBg' => 'bg-blue-600/10 text-blue-600 dark:bg-blue-500/15 dark:text-blue-400',
+                            'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+                        ],
+                        [
+                            'title' => 'Buy a Property',
+                            'desc' => 'Looking to buy a home, land, or investment? Start here.',
+                            'route' => 'forms.purchase-build-property',
+                            'badge' => 'Buy',
+                            'badgeClass' => 'bg-[#a94a2a] text-white',
+                            'iconBg' => 'bg-[#a94a2a]/10 text-[#a94a2a] dark:bg-[#a94a2a]/20 dark:text-[#d2845f]',
+                            'icon' => 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+                        ],
+                    ];
+                @endphp
+
+                @foreach($formCards as $card)
+                    <a href="{{ route($card['route']) }}"
+                       class="flex flex-col bg-white dark:bg-gray-800 rounded-xl p-6 ring-1 ring-gray-200 dark:ring-gray-700 hover:ring-[#a94a2a] hover:shadow-lg hover:-translate-y-0.5 transition group">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="w-12 h-12 rounded-xl flex items-center justify-center {{ $card['iconBg'] }}">
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $card['icon'] }}" /></svg>
+                            </span>
+                            <span class="text-[10px] font-semibold uppercase tracking-wide px-2 py-1 rounded-full {{ $card['badgeClass'] }}">{{ $card['badge'] }}</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">{{ $card['title'] }}</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 flex-1">{{ $card['desc'] }}</p>
+                        <span class="mt-4 text-sm font-semibold text-[#a94a2a] group-hover:text-[#8a3c22]">Open form →</span>
+                    </a>
+                @endforeach
+            </div>
+
+            <div class="text-center mt-10">
+                <a href="{{ route('forms.index') }}" class="text-[#1c4736] dark:text-emerald-400 hover:text-[#a94a2a] dark:hover:text-[#a94a2a] font-medium">
+                    See all forms &amp; consultations →
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Why Choose Us -->
     <section class="py-16 bg-gray-100 dark:bg-gray-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

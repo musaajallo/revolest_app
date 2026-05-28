@@ -228,10 +228,49 @@
                                 </div>
                             </form>
                         @else
-                            <div class="text-center py-4 bg-gray-100 rounded-lg">
-                                <p class="text-gray-600">Contact form is currently unavailable for this property.</p>
-                                <a href="{{ route('contact') }}" class="text-[#a94a2a] hover:text-[#990e0e] font-medium mt-2 inline-block">
-                                    Contact us directly →
+                            <div class="space-y-3">
+                                <p class="text-gray-600 text-sm">
+                                    This property isn't open for direct inquiries right now. Use one of the forms below and an agent will be in touch.
+                                </p>
+
+                                <a href="{{ route('forms.purchase-build-property') }}"
+                                   class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-[#1c4736] hover:bg-gray-50 transition group">
+                                    <span class="flex-shrink-0 w-9 h-9 rounded-lg bg-[#1c4736]/10 text-[#1c4736] flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                                    </span>
+                                    <span class="flex-1">
+                                        <span class="block font-semibold text-gray-900 group-hover:text-[#1c4736]">Looking to buy?</span>
+                                        <span class="block text-xs text-gray-500">Submit a purchase request</span>
+                                    </span>
+                                    <span class="text-[#a94a2a]">→</span>
+                                </a>
+
+                                <a href="{{ route('forms.rental-consultation') }}"
+                                   class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-600 hover:bg-gray-50 transition group">
+                                    <span class="flex-shrink-0 w-9 h-9 rounded-lg bg-blue-600/10 text-blue-600 flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6a2 2 0 012 2v12M3 17h18m0 0v-6a2 2 0 00-2-2h-4M9 9h1m-1 4h1" /></svg>
+                                    </span>
+                                    <span class="flex-1">
+                                        <span class="block font-semibold text-gray-900 group-hover:text-blue-600">Looking to rent?</span>
+                                        <span class="block text-xs text-gray-500">Book a rental consultation</span>
+                                    </span>
+                                    <span class="text-[#a94a2a]">→</span>
+                                </a>
+
+                                <a href="{{ route('forms.property-listing') }}"
+                                   class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-[#a94a2a] hover:bg-gray-50 transition group">
+                                    <span class="flex-shrink-0 w-9 h-9 rounded-lg bg-[#a94a2a]/10 text-[#a94a2a] flex items-center justify-center">
+                                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                                    </span>
+                                    <span class="flex-1">
+                                        <span class="block font-semibold text-gray-900 group-hover:text-[#a94a2a]">Have a property to sell?</span>
+                                        <span class="block text-xs text-gray-500">List your property with us</span>
+                                    </span>
+                                    <span class="text-[#a94a2a]">→</span>
+                                </a>
+
+                                <a href="{{ route('contact') }}" class="block text-center text-sm text-[#a94a2a] hover:text-[#990e0e] font-medium pt-1">
+                                    Or contact us directly →
                                 </a>
                             </div>
                         @endif
